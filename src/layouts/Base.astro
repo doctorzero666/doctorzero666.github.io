@@ -18,7 +18,7 @@ const { locale, title, description } = Astro.props;
 const ui = useUI(locale);
 const siteName = pick(profile.name, locale);
 const fullTitle = title ? `${title} · ${siteName}` : `${siteName} · ${pick(profile.headline, locale)}`;
-const introFirst = (pick(profile.intro, locale) || '').replace(/[\[\]]/g, '').match(/^.*?(?:。|\. |\.$|$)/)?.[0].trim() ?? '';
+const introFirst = (pick(profile.intro, locale) || '').replace(/[\[\]]/g, '').replace(/\s+(?=[\u3000-\u9fff\uff00-\uffef])|(?<=[\u3000-\u9fff\uff00-\uffef])\s+/g, '').match(/^.*?(?:。|\. |\.$|$)/)?.[0].trim() ?? '';
 const desc = description || pick(profile.tagline, locale) || introFirst || pick(profile.headline, locale) || ui.meta.description;
 const page = pageFromPath(Astro.url.pathname);
 const canonical = new URL(localePath(locale, page), Astro.site);
