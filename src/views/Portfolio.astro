@@ -8,7 +8,7 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
 ---
-<Base locale={locale} title={ui.sections.portfolio_title}>
+<Base locale={locale} title={ui.sections.portfolio_title} description={ui.portfolio.intro}>
   <div class="container">
     <header class="page-head">
       <h1 class="display reveal">{ui.sections.portfolio_title}</h1>

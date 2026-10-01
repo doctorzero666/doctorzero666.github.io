@@ -77,6 +77,14 @@ export function pick(value: Bi | undefined, locale: Locale): string {
   return v && v.trim() ? v : value.zh ?? '';
 }
 
+/** First sentence of a text, for meta descriptions: drops [brackets] and spaces between CJK and Latin. */
+export function firstSentence(text: string): string {
+  return (text || '')
+    .replace(/[\[\]]/g, '')
+    .replace(/\s+(?=[\u3000-\u9fff\uff00-\uffef])|(?<=[\u3000-\u9fff\uff00-\uffef])\s+/g, '')
+    .match(/^.*?(?:。|\. |\.$|$)/)?.[0].trim() ?? '';
+}
+
 /** Same as pick, for bilingual lists. */
 export function pickList(value: Bi<string[]> | undefined, locale: Locale): string[] {
   if (!value) return [];

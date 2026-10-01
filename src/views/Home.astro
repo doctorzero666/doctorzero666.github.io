@@ -13,7 +13,7 @@ const ui = useUI(locale);
 // "[phrase]" in the intro is rendered as a bracketed, bold highlight.
 const introParts = pick(profile.lab_intro, locale).split(/(\[[^\]]+\])/g).filter(Boolean);
 ---
-<Base locale={locale}>
+<Base locale={locale} fullTitle={pick(profile.seo.home_title, locale)} description={pick(profile.seo.home_description, locale)}>
   <Hero locale={locale} />
   <section id="work" class="container grid-12 work">
     <div class="intro reveal">
