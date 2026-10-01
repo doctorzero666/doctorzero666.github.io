@@ -19,7 +19,6 @@ const ui = useUI(locale);
     <p class="sub small muted page-sub">{ui.portfolio.intro}</p>
     <ol class="works">
       {featuredProjects.map((p, i) => (
-        <>
         <li class="work grid-12 reveal" id={p.slug}>
           <p class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
           <div class="body">
@@ -50,8 +49,6 @@ const ui = useUI(locale);
             <ProjectLinks project={p} locale={locale} />
           </div>
         </li>
-        {'\n'}
-        </>
       ))}
     </ol>
   </div>

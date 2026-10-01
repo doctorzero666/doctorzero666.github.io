@@ -17,7 +17,6 @@ const external = (url: string) => /^https?:\/\//.test(url);
   {projects.map((p) => {
     const link = primaryLink(p);
     return (
-      <>
       <article class="prow" role="listitem" aria-labelledby={`p-${p.slug}`}>
         <div class="pline">
           <h3 class="pname" id={`p-${p.slug}`}>
@@ -39,8 +38,6 @@ const external = (url: string) => /^https?:\/\//.test(url);
           </div>
         </div>
       </article>
-      {'\n'}
-      </>
     );
   })}
 </div>
