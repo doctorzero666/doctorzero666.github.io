@@ -17,10 +17,8 @@
     "demo": "Demo",
     "repo": "Repo",
     "package": "Package",
-    "status": "Status",
     "scroll_down": "ENTER THE LAB",
-    "hover_hint": "Hover a row for details",
-    "built_with": "Built with"
+    "hover_hint": "Hover a row for details"
   },
   "table": { "name": "Name", "category": "Category", "years": "Years" },
   "index": { "hint": "Hover for a summary, click for the full entry", "full_entry": "Full entry" },

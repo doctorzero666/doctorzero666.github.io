@@ -17,10 +17,8 @@
     "demo": "演示",
     "repo": "仓库",
     "package": "包",
-    "status": "状态",
     "scroll_down": "进入实验室",
-    "hover_hint": "悬停查看详情",
-    "built_with": "技术栈"
+    "hover_hint": "悬停查看详情"
   },
   "table": { "name": "名称", "category": "类别", "years": "年份" },
   "index": { "hint": "悬停看简介，点击看全文", "full_entry": "查看详情" },

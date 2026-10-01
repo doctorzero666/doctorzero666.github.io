@@ -95,7 +95,8 @@ const rows = (p: (typeof featuredProjects)[number]) => [
   .facts { display: grid; gap: calc(var(--u) * 1.5); }
   .facts div { display: grid; grid-template-columns: 10em minmax(0, 1fr); gap: calc(var(--u) * 2); }
   @media (max-width: 768px) {
-    .num { grid-column: 1 / -1; }
+    /* Narrow screens: the EXPERIMENT / 00N line already carries the number. */
+    .num { display: none; }
     .body { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
