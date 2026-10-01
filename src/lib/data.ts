@@ -87,11 +87,10 @@ export function brandTitle(page: string, locale: Locale): string {
   return `${page} · ${pick(profile.brand, locale)}`;
 }
 
-/** First sentence of a text, for meta descriptions: drops [brackets] and spaces between CJK and Latin. */
+/** First sentence of a text, for meta descriptions: drops [brackets]; spacing between CJK and Latin is kept as written. */
 export function firstSentence(text: string): string {
   return (text || '')
     .replace(/[\[\]]/g, '')
-    .replace(/\s+(?=[\u3000-\u9fff\uff00-\uffef])|(?<=[\u3000-\u9fff\uff00-\uffef])\s+/g, '')
     .match(/^.*?(?:。|\. |\.$|$)/)?.[0].trim() ?? '';
 }
 

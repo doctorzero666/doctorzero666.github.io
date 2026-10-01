@@ -1,14 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import { useUI } from '../i18n';
-import { firstSentence, pick, pickList, resume, type Locale } from '../lib/data';
+import { firstSentence, pick, pickList, profile, resume, type Locale } from '../lib/data';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
 const r = resume;
 ---
-<Base locale={locale} title={ui.sections.resume_title} description={firstSentence(pick(r.summary, locale))}>
+<Base locale={locale} fullTitle={`${ui.page_titles.resume} · ${profile.name.en}`} description={firstSentence(pick(r.summary, locale))}>
   <div class="container">
     <header class="page-head">
       <h1 class="display reveal">{ui.sections.resume_title}</h1>

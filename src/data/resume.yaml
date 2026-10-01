@@ -1,7 +1,7 @@
 # personal-site resume v1 — PS-WP-01 产出（2026-10-01）。数字来源见 claims.md。
 summary:
-  zh: "AI 产品工程师，从事智能体系统与 LLM 应用工程。近期作品包括已部署的多 Agent 劳动力平台和一个黑客松 LLM 赛道第一名项目。我习惯在入库、结算和硬件三处边界上隔离模型的不确定性，并用测试证明。"
-  en: "AI product engineer working on agent systems and LLM application engineering. Recent work includes a deployed multi-agent labour platform and a first-place hackathon LLM-track project. I contain model uncertainty at three boundaries (persistence, settlement and hardware) and prove it with tests."
+  zh: "我主要构建 AI 与智能体系统，尤其关注模型之外的工程边界：验证、降级、权限、对账与可复现性。我的项目横跨多智能体、开源工具、量化研究与嵌入式系统。"
+  en: "I mainly build AI and agent systems, with a focus on the engineering boundaries outside the model: verification, graceful degradation, permissions, reconciliation and reproducibility. My projects span multi-agent systems, open-source tools, quantitative research and embedded systems."
 education:
   - school: {zh: "悉尼大学", en: "The University of Sydney"}
     degree: {zh: "计算机科学 硕士", en: "Master of Computer Science"}
