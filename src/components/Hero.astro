@@ -11,7 +11,8 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   <canvas class="field" data-field aria-hidden="true"></canvas>
   <div class="container inner">
     <div class="intro-line">
-      <p class="headline">{pick(profile.headline, locale)}</p>
+      <p class="headline"><span class="brand" lang="zh-CN">{pick(profile.brand, locale)}</span> <span class="sep">/</span> <span class="brand-sub">{profile.brand_sub}</span></p>
+      {pick(profile.tagline, locale) && <p class="tagline small">{pick(profile.tagline, locale)}</p>}
     </div>
     <h1 class="name" id="hero-name">
       <span class="sr-only">{pick(profile.name, locale)}</span>
@@ -52,6 +53,10 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   }
   .headline { font-size: 0.95rem; font-weight: 500; letter-spacing: 0.08em; }
   :global(:root[lang^="zh"]) .headline { letter-spacing: 0.04em; }
+  .headline .brand { font-family: var(--font-cjk); font-weight: 600; letter-spacing: 0.04em; }
+  .headline .sep { opacity: var(--muted); }
+  .headline .brand-sub { text-transform: uppercase; }
+  .tagline { margin-top: calc(var(--u) * 0.5); opacity: var(--muted); }
   .name {
     font-family: var(--font-hero);
     text-transform: uppercase;

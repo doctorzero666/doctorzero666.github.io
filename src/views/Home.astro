@@ -10,13 +10,16 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
 // "[phrase]" in the intro is rendered as a bracketed, bold highlight.
-const introParts = pick(profile.intro, locale).split(/(\[[^\]]+\])/g).filter(Boolean);
+const introParts = pick(profile.lab_intro, locale).split(/(\[[^\]]+\])/g).filter(Boolean);
 ---
 <Base locale={locale}>
   <Hero locale={locale} />
   <section id="work" class="container grid-12 work">
     <div class="intro reveal">
-      <p class="micro muted">{ui.sections.featured_intro}</p>
+      <h2 class="lab-title">
+        <span class="lab-name">{ui.sections.featured_intro}</span>
+        <span class="lab-sub micro muted">{ui.sections.featured_sub}</span>
+      </h2>
       <p class="intro-text">
         {introParts.map((part) => part.startsWith('[') ? <span class="hl">{part}</span> : part)}
       </p>
@@ -37,6 +40,8 @@ const introParts = pick(profile.intro, locale).split(/(\[[^\]]+\])/g).filter(Boo
   }
   .intro { grid-column: 1 / span 5; align-self: start; position: sticky; top: calc(var(--u) * 10); }
   .table { grid-column: 6 / -1; min-width: 0; }
+  .lab-title { display: flex; flex-direction: column; gap: calc(var(--u) * 0.5); font-weight: 400; }
+  .lab-name { font-size: 1rem; font-weight: 600; letter-spacing: 0.04em; }
   /* Small sans, faded ink; the [bracketed] phrase stays at full ink and bold. */
   .intro-text {
     font-family: var(--font-body);

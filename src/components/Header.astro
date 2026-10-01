@@ -7,36 +7,40 @@ const { locale } = Astro.props;
 const ui = useUI(locale);
 const page = pageFromPath(Astro.url.pathname);
 const section = page.split('/')[0];
+// Display order only; the URLs stay /, /portfolio/, /blog/, /now/, /resume/.
 const nav = [
   { key: '', label: ui.nav.home },
-  { key: 'resume', label: ui.nav.resume },
   { key: 'portfolio', label: ui.nav.portfolio },
   { key: 'blog', label: ui.nav.blog },
+  { key: 'now', label: ui.nav.now },
+  { key: 'resume', label: ui.nav.resume },
 ] as const;
 // Blog posts only exist in one language, so switching from a post goes to the blog index.
 const switchPage = page.startsWith('blog/') ? 'blog' : page;
 ---
 <header class="site-header">
   <div class="container bar small">
-    <div class="switches">
-      <span class="group" role="group" aria-label={ui.meta.theme_label}>
-        <span aria-hidden="true">[</span>
-        <button type="button" class="opt" data-set-theme="light">{ui.theme.light}</button>
-        <span aria-hidden="true">|</span>
-        <button type="button" class="opt" data-set-theme="dark">{ui.theme.dark}</button>
-        <span aria-hidden="true">]</span>
-      </span>
-      <span class="group" role="group" aria-label={ui.meta.lang_label}>
-        <span aria-hidden="true">[</span>
-        <a class="opt" href={localePath('en', switchPage)} hreflang="en" lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
-        <span aria-hidden="true">|</span>
-        <a class="opt" href={localePath('zh', switchPage)} hreflang="zh-CN" lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
-        <span aria-hidden="true">]</span>
-      </span>
+    <div class="left">
+      <!-- The brand is never translated, so it is marked zh-CN on the English pages too. -->
+      <a class="brand" href={localePath(locale)} lang="zh-CN">{pick(profile.brand, locale)}</a>
+      <div class="switches">
+        <span class="group" role="group" aria-label={ui.meta.theme_label}>
+          <span aria-hidden="true">[</span>
+          <button type="button" class="opt" data-set-theme="light">{ui.theme.light}</button>
+          <span aria-hidden="true">|</span>
+          <button type="button" class="opt" data-set-theme="dark">{ui.theme.dark}</button>
+          <span aria-hidden="true">]</span>
+        </span>
+        <span class="group" role="group" aria-label={ui.meta.lang_label}>
+          <span aria-hidden="true">[</span>
+          <a class="opt" href={localePath('en', switchPage)} hreflang="en" lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
+          <span aria-hidden="true">|</span>
+          <a class="opt" href={localePath('zh', switchPage)} hreflang="zh-CN" lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
+          <span aria-hidden="true">]</span>
+        </span>
+      </div>
     </div>
-    <p class="clock" aria-label={ui.meta.clock_label}>
-      <span>{pick(profile.location.city, locale)}</span><span data-clock data-tz={profile.location.timezone} data-locale={locale === 'zh' ? 'zh-CN' : 'en-AU'}></span>
-    </p>
+    <p class="status" aria-label={ui.meta.clock_label}>{ui.header.status}</p>
     <nav class="nav" aria-label={ui.meta.nav_label}>
       {nav.map((item) => (
         <a class="bracket" href={localePath(locale, item.key)} aria-current={section === item.key ? 'page' : undefined}>{item.label}</a>
@@ -62,6 +66,15 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
     padding-block: var(--u);
     letter-spacing: -0.01em;
   }
+  .left { display: flex; align-items: baseline; gap: var(--u) calc(var(--u) * 3); flex-wrap: wrap; min-width: 0; }
+  .brand {
+    font-family: var(--font-cjk);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
   .switches { display: flex; gap: calc(var(--u) * 2); flex-wrap: wrap; }
   .group { display: inline-flex; gap: 0.4em; align-items: baseline; white-space: nowrap; }
   .opt { opacity: var(--muted); transition: opacity 0.3s ease; }
@@ -74,7 +87,7 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .clock { text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .status { text-align: center; white-space: nowrap; letter-spacing: 0.04em; }
   .nav {
     display: flex;
     justify-content: flex-end;
@@ -95,11 +108,12 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
 
   @media (max-width: 900px) {
     .bar { grid-template-columns: 1fr auto; }
-    .clock { text-align: right; }
+    .status { text-align: right; }
     .nav { grid-column: 1 / -1; justify-content: flex-start; }
   }
   @media (max-width: 480px) {
     .bar { gap: var(--u); }
+    .left { column-gap: calc(var(--u) * 2); }
     .switches { gap: var(--u); }
     .nav { justify-content: space-between; gap: 4px; font-size: 0.78rem; }
   }
@@ -123,20 +137,5 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
     const setH = () => root.style.setProperty('--header-h', `${Math.ceil(header.getBoundingClientRect().height)}px`);
     setH();
     new ResizeObserver(setH).observe(header);
-  }
-
-  // Local clock in the profile's time zone. Without JS only the city name shows.
-  const clock = document.querySelector<HTMLElement>('[data-clock]');
-  if (clock) {
-    const fmt = new Intl.DateTimeFormat(clock.dataset.locale || 'en-AU', {
-      timeZone: clock.dataset.tz || 'Australia/Sydney',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    });
-    const tick = () => { clock.textContent = ` · ${fmt.format(new Date())}`; };
-    tick();
-    setInterval(tick, 1000);
   }
 </script>
