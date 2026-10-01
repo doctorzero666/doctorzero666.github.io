@@ -30,6 +30,23 @@ const page = pageFromPath(Astro.url.pathname);
 const canonical = new URL(localePath(locale, page), Astro.site);
 const altZh = new URL(localePath('zh', page), Astro.site);
 const altEn = new URL(localePath('en', page), Astro.site);
+const siteRoot = new URL('/', Astro.site).href;
+const brand = pick(profile.brand, locale);
+const shareImage = profile.seo.share_image ? new URL(profile.seo.share_image, Astro.site).href : '';
+// Structured identity, home pages only (zh and en); sub-pages do not repeat it.
+const person = profile.seo.person;
+const personLd = page === '' && person
+  ? JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: profile.name.en,
+      alternateName: profile.brand.zh,
+      url: siteRoot,
+      sameAs: profile.links.map((l) => l.url).filter(Boolean),
+      alumniOf: person.alumni.map((n) => ({ '@type': 'CollegeOrUniversity', name: n })),
+      knowsAbout: person.knows_about.slice(0, 5),
+    })
+  : '';
 ---
 <!doctype html>
 <html lang={htmlLang[locale]} data-theme="light">
@@ -61,6 +78,13 @@ const altEn = new URL(localePath('en', page), Astro.site);
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:site_name" content={brand} />
+    {shareImage && <meta property="og:image" content={shareImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={desc} />
+    {shareImage && <meta name="twitter:image" content={shareImage} />}
+    {personLd && <script type="application/ld+json" set:html={personLd} />}
     <meta name="theme-color" content="#F3EEE4" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />

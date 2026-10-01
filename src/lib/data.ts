@@ -23,7 +23,13 @@ export interface Profile {
   human_intent: { line1: string; line2: string; note: Bi };
   email: string;
   links: { id: string; label: string; url: string }[];
-  seo: { home_title: Bi; home_description: Bi };
+  seo: {
+    home_title: Bi;
+    home_description: Bi;
+    /** Share card image path; empty means no og:image / twitter:image. */
+    share_image?: string;
+    person?: { alumni: string[]; knows_about: string[] };
+  };
   copyright_name: Bi;
 }
 
