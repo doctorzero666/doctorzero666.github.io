@@ -7,6 +7,11 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
 const plate = pick(profile.footer_plate, locale);
+// Split the plate into Latin words and the CJK name so each can take its own colour.
+const plateParts = plate
+  ? plate.split(/([\u3400-\u9fff\uf900-\ufaff]+)/).map((t) => t.trim()).filter(Boolean)
+      .map((text) => ({ text, cjk: /[\u3400-\u9fff\uf900-\ufaff]/.test(text) }))
+  : [];
 const links = profile.links.filter((l) => l.url && l.url.trim());
 const year = new Date().getFullYear();
 ---
@@ -14,7 +19,11 @@ const year = new Date().getFullYear();
   <div class="rule-bleed"></div>
   <div class="container grid-12 top">
     <div class="plate-wrap reveal">
-      {plate && <p class="plate">{plate}</p>}
+      {plateParts.length > 0 && (
+        <p class="plate">
+          {plateParts.map((part, i) => <>{i > 0 && ' '}<span class={part.cjk ? 'p-name' : 'p-word'}>{part.text}</span></>)}
+        </p>
+      )}
     </div>
     <div class="contact reveal">
       <p class="micro muted">{ui.sections.contact}</p>
@@ -43,18 +52,37 @@ const year = new Date().getFullYear();
   }
   .plate-wrap { grid-column: 1 / span 5; }
   .contact { grid-column: 6 / -1; text-align: right; min-width: 0; }
+  /* Nameplate: deep red ground with a faint horizontal sheen and a 1px inner
+     keyline (inset only, no outer shadow); Koulen caps in gold, the CJK name in cream. */
   .plate {
-    display: inline-block;
-    background: var(--plate);
-    color: var(--plate-ink);
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.45em;
+    row-gap: 2px;
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--plate) 74%, #000) 0%,
+      var(--plate) 50%,
+      color-mix(in srgb, var(--plate) 74%, #000) 100%);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--plate-gold) 38%, transparent),
+      inset 0 0 0 3px color-mix(in srgb, var(--plate) 74%, #000);
+    color: var(--plate-gold);
     font-family: var(--font-plate);
     text-transform: uppercase;
-    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
-    line-height: 1.1;
-    letter-spacing: 0.04em;
-    padding: calc(var(--u) * 1.5) calc(var(--u) * 2.5) var(--u);
-    outline: 1px solid var(--plate);
+    font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+    padding: calc(var(--u) * 1.25) calc(var(--u) * 2.5) var(--u);
+    outline: 1px solid color-mix(in srgb, var(--plate) 74%, #000);
     outline-offset: 3px;
+  }
+  .p-word { white-space: nowrap; }
+  .p-name {
+    color: var(--plate-ink);
+    font-family: var(--font-display);
+    letter-spacing: 0.12em;
+    font-size: 0.92em;
   }
   .mail {
     display: inline-block;

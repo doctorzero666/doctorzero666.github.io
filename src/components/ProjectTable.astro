@@ -45,7 +45,22 @@ const ui = useUI(locale);
     align-items: baseline;
   }
   .phead { padding-block: var(--u); border-bottom: var(--line); }
-  .prow { border-bottom: var(--line); outline-offset: -1px; }
+  .prow { position: relative; border-bottom: var(--line); outline-offset: -1px; }
+  /* Ruler tick on the active row: a 1px spine with 8px ticks, just left of the table. Fades only. */
+  .prow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: -1px;
+    left: calc(var(--u) * -2);
+    width: 6px;
+    border-left: var(--line);
+    background: repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 8px) left / 6px 100% no-repeat;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .prow:hover::before, .prow:focus-within::before { opacity: 0.5; }
   .pline { padding-block: calc(var(--u) * 2); transition: padding 0.35s ease; }
   .pname { font-size: 0.9rem; font-weight: 600; }
   .pcat, .pyear { font-size: 0.85rem; }
@@ -61,13 +76,22 @@ const ui = useUI(locale);
   .prow:hover .pline, .prow:focus-within .pline { padding-block: calc(var(--u) * 3) var(--u); }
   .pmore-inner > * + * { margin-top: var(--u); }
   .pmore-inner > :last-child { margin-bottom: calc(var(--u) * 3); }
-  .psum { font-size: 0.85rem; max-width: 520px; }
-  .pdetails { font-size: 0.8rem; opacity: var(--muted); max-width: 560px; }
-  .pdetails li { padding-left: 1.1em; position: relative; }
+  .psum { font-size: 0.85rem; line-height: 1.6; max-width: 36em; }
+  .psum, .pdetails, .pstack, .pcat { overflow-wrap: anywhere; }
+  .pdetails {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--ink) 60%, transparent);
+    max-width: 40em;
+    display: grid;
+    gap: 2px;
+  }
+  .pdetails li { padding-left: 1.4em; position: relative; }
   .pdetails li::before { content: '—'; position: absolute; left: 0; }
   /* Touch screens have no hover: show everything. */
   @media (hover: none) {
     .pmore { grid-template-rows: 1fr; }
+    .prow::before { display: none; }
   }
   @media (max-width: 480px) {
     .phead { display: none; }
@@ -76,5 +100,6 @@ const ui = useUI(locale);
     .pyear { grid-column: 2; grid-row: 1; }
     .pcat { grid-column: 1 / -1; }
     .pmore { grid-template-rows: 1fr; }
+    .prow::before { display: none; }
   }
 </style>

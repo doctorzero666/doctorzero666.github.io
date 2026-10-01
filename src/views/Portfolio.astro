@@ -39,10 +39,13 @@ const ui = useUI(locale);
               {pick(p.status, locale) && (
                 <div><dt class="muted">{ui.labels.status}</dt><dd>{pick(p.status, locale)}</dd></div>
               )}
-              {pick(p.disclosure, locale) && (
-                <div><dt class="muted">{ui.portfolio.disclosure}</dt><dd>{pick(p.disclosure, locale)}</dd></div>
-              )}
             </dl>
+            {pick(p.disclosure, locale) && (
+              <aside class="scope small" aria-label={ui.portfolio.disclosure}>
+                <p class="scope-label micro">{ui.portfolio.disclosure}</p>
+                <p class="scope-text">{pick(p.disclosure, locale)}</p>
+              </aside>
+            )}
             <ProjectLinks project={p} locale={locale} />
           </div>
         </li>
@@ -69,7 +72,21 @@ const ui = useUI(locale);
   .summary { font-size: 1.05rem; max-width: 40em; }
   .details li { padding-left: 1.1em; position: relative; }
   .details li::before { content: '—'; position: absolute; left: 0; opacity: var(--muted); }
+  .summary, .details, .facts dd, .scope-text { overflow-wrap: anywhere; }
+  .details { display: grid; gap: 4px; max-width: 46em; }
   .facts { display: grid; gap: 4px; }
+  /* Scope note: a ruled box with a bracketed caps label, set apart from the status facts. */
+  .scope {
+    max-width: 46em;
+    border: var(--line);
+    border-left-width: 3px;
+    padding: calc(var(--u) * 1.5) calc(var(--u) * 2);
+    background: var(--paper-2);
+  }
+  .scope-label::before { content: '[\00a0'; }
+  .scope-label::after { content: '\00a0]'; }
+  .scope-label { font-weight: 600; margin-bottom: 4px; }
+  .scope-text { color: color-mix(in srgb, var(--ink) 78%, transparent); line-height: 1.6; }
   .facts div { display: grid; grid-template-columns: 8em minmax(0, 1fr); gap: calc(var(--u) * 2); }
   @media (max-width: 768px) {
     .num { grid-column: 1 / -1; }
