@@ -12,7 +12,7 @@ export function useUI(locale: Locale): UI {
   return dict[locale] as UI;
 }
 
-/** Path for a page in a given locale. `page` is '' | 'resume' | 'portfolio' | 'blog' | 'blog/slug'. */
+/** Path for a page in a given locale. `page` is '' | 'resume' | 'portfolio' | 'blog' | 'now' | 'blog/slug'. */
 export function localePath(locale: Locale, page = ''): string {
   const clean = page.replace(/^\/+|\/+$/g, '');
   const prefix = locale === 'zh' ? '' : `/${locale}`;
