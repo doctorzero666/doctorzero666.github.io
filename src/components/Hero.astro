@@ -12,7 +12,6 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   <div class="container inner">
     <div class="intro-line">
       <p class="headline">{pick(profile.headline, locale)}</p>
-      {pick(profile.tagline, locale) && <p class="tagline small">{pick(profile.tagline, locale)}</p>}
     </div>
     <h1 class="name" id="hero-name">
       <span class="sr-only">{pick(profile.name, locale)}</span>
@@ -52,7 +51,6 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
     gap: calc(var(--u) * 6);
   }
   .headline { font-size: 0.95rem; font-weight: 500; letter-spacing: -0.01em; }
-  .tagline { opacity: var(--muted); max-width: 32ch; margin-top: calc(var(--u) * 0.5); }
   .name {
     font-family: var(--font-hero);
     text-transform: uppercase;

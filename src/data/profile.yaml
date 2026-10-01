@@ -2,7 +2,7 @@
 name: {zh: "蒋志超", en: "Zhichao Jiang"}
 display: {first: "ZHICHAO", last: "JIANG."}
 headline: {zh: "AI 产品工程师 · 智能体系统", en: "AI Product Engineer · Agent Systems"}
-tagline: {zh: "模型很少是问题，系统死在接缝处。", en: "The model is rarely the problem. Systems die at the seams."}
+tagline: {zh: "", en: ""}
 location: {city: {zh: "悉尼", en: "Sydney"}, timezone: "Australia/Sydney"}
 intro:
   zh: "我构建 [智能体系统]，工作范围覆盖协议、结算和产品上线。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
