@@ -2,19 +2,23 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { localePath, useUI } from '../i18n';
+import { txOf } from '../lib/blog';
+import { brandTitle } from '../lib/data';
 
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const locale = post.data.lang;
 const ui = useUI(locale);
 const { Content } = await render(post);
+const tx = await txOf(post);
 const fmt = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Base locale={locale} title={post.data.title} description={post.data.description}>
+<Base locale={locale} fullTitle={brandTitle(post.data.title, locale)} description={post.data.description}>
   <article class="container post">
     <div class="article">
       <a class="micro link back" href={localePath(locale, 'blog')}>← {ui.blog.back}</a>
       <p class="micro muted meta">{fmt.format(post.data.date)}</p>
+      {tx && <p class="micro muted tx">{tx}</p>}
       <h1 class="ptitle serif">{post.data.title}</h1>
       <p class="dek serif muted">{post.data.description}</p>
       <div class="prose"><Content /></div>
@@ -26,6 +30,7 @@ const fmt = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-AU', { year:
   .post { padding-block: calc(var(--u) * 6) calc(var(--u) * 12); }
   .article { margin-inline: auto; }
   .meta { margin-top: calc(var(--u) * 4); }
+  .tx { margin-top: var(--u); }
   .ptitle { font-size: clamp(2.5rem, 6vw, 3.5rem); line-height: 1.1; margin-top: var(--u); letter-spacing: -0.02em; }
   .dek { font-style: italic; font-size: 1.4rem; margin-top: var(--u); }
   .prose { margin-top: calc(var(--u) * 5); line-height: 1.5; }

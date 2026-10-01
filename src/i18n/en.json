@@ -39,7 +39,7 @@
     "stack": "STACK",
     "source": "SOURCE"
   },
-  "blog": { "back": "BACK TO TRANSMISSIONS", "tx": "TX" },
+  "blog": { "back": "BACK TO TRANSMISSIONS" },
   "page_titles": { "portfolio": "THE LAB", "blog": "TRANSMISSIONS", "now": "NOW", "resume": "CV" },
   "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Location and status" },
   "footer": { "rights": "All rights reserved." },
