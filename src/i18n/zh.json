@@ -24,7 +24,7 @@
   },
   "table": { "name": "名称", "category": "类别", "years": "年份" },
   "resume": { "summary": "概述", "education": "教育", "experience": "经历", "awards": "奖项", "skills": "技能", "download": "下载 PDF" },
-  "portfolio": { "intro": "按时间与重要性排列的五个项目，每个都写清楚做了什么、用了什么、现在在哪。", "disclosure": "口径说明" },
+  "portfolio": { "intro": "五个项目，按重要性排列。每个都写清楚做了什么、用了什么、现在在哪。", "disclosure": "口径说明" },
   "blog": { "back": "返回博客" },
   "meta": { "description": "个人网站：项目、简历与写作。", "theme_label": "颜色主题", "lang_label": "语言", "nav_label": "主导航", "clock_label": "当地时间" },
   "footer": { "rights": "保留所有权利。" }
