@@ -1,5 +1,4 @@
 ---
-import Icon from './Icon.astro';
 import { useUI } from '../i18n';
 import { pick, profile, type Locale } from '../lib/data';
 
@@ -9,7 +8,6 @@ const ui = useUI(locale);
 // Three identity layers: brand (never translated), real name, technical handle.
 const brand = pick(profile.brand, locale);
 const realName = `${profile.display.first} ${profile.display.last}`.replace(/\.$/, '').toUpperCase();
-const principles = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean).join(' · ');
 const links = profile.links.filter((l) => l.url && l.url.trim());
 const year = new Date().getFullYear();
 ---
@@ -18,23 +16,15 @@ const year = new Date().getFullYear();
   <div class="container grid-12 top">
     <div class="ident reveal">
       {brand && <p class="f-brand" lang="zh-CN">{brand}</p>}
-      <p class="f-name">{realName}</p>
-      {profile.handle && <p class="f-handle small muted">{profile.handle}</p>}
-      {principles && <p class="f-principles micro">{principles}</p>}
-    </div>
-    <div class="contact reveal">
-      <p class="micro muted">{ui.sections.contact}</p>
-      <a class="mail serif link" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <p class="f-name">{realName}{profile.handle && ` / ${profile.handle}`}</p>
+      <ul class="f-links micro">
+        <li><a class="bracket" href={`mailto:${profile.email}`}>EMAIL</a></li>
+        {links.map((l) => <li><a class="bracket" href={l.url} rel="me noopener" target="_blank">{l.label.toUpperCase()}</a></li>)}
+      </ul>
     </div>
   </div>
   <div class="container bottom small">
     <p class="muted">© {year} {pick(profile.copyright_name, locale)}. {ui.footer.rights}</p>
-    <ul class="icons">
-      {links.map((l) => (
-        <li><a href={l.url} aria-label={l.label} title={l.label} rel="me noopener" target="_blank"><Icon name={l.id} /></a></li>
-      ))}
-      <li><a href={`mailto:${profile.email}`} aria-label="Email" title="Email"><Icon name="mail" /></a></li>
-    </ul>
   </div>
   <div class="ruler" aria-hidden="true"></div>
 </footer>
@@ -61,16 +51,7 @@ const year = new Date().getFullYear();
     line-height: 1.1;
     letter-spacing: 0.05em;
   }
-  .f-principles { margin-top: var(--u); letter-spacing: 0.08em; }
-  .contact { grid-column: 6 / -1; text-align: right; min-width: 0; }
-  .mail {
-    display: inline-block;
-    margin-top: var(--u);
-    font-size: clamp(1.75rem, 4.6vw, 3.5rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
-  }
+  .f-links { display: flex; gap: calc(var(--u) * 3); margin-top: var(--u); letter-spacing: 0.08em; }
   .bottom {
     display: flex;
     justify-content: space-between;
@@ -80,9 +61,6 @@ const year = new Date().getFullYear();
     padding-block: calc(var(--u) * 2);
     border-top: var(--line);
   }
-  .icons { display: flex; gap: calc(var(--u) * 2); }
-  .icons a { display: block; transition: opacity 0.3s ease; }
-  .icons a:hover { opacity: var(--muted); }
   .ruler {
     height: 12px;
     margin-top: calc(var(--u) * 2);
@@ -93,7 +71,6 @@ const year = new Date().getFullYear();
     opacity: 0.5;
   }
   @media (max-width: 768px) {
-    .ident, .contact { grid-column: 1 / -1; }
-    .contact { text-align: left; }
+    .ident { grid-column: 1 / -1; }
   }
 </style>

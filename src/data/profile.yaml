@@ -11,8 +11,8 @@ intro:
   zh: "我构建 [智能体系统]，工作范围覆盖协议、结算和产品上线。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
   en: "I build [agent systems], covering protocol, settlement and product launch. I care about what surrounds the model: validation, fallbacks, reconciliation and tests. Based in Sydney."
 lab_intro:
-  zh: "我喜欢把奇怪的想法做成能运行的系统。这里记录它们从脑洞到代码的过程，也记录证据、边界和没做成的部分。"
-  en: "I turn strange ideas into working systems. This is where I keep the evidence, limits, and unfinished edges."
+  zh: "我喜欢把奇怪的想法做成能运行的系统。这里记录它们从脑洞到代码的过程，也记录证据、边界，以及还没做成的部分。"
+  en: "I like turning strange ideas into systems that actually run. This is where I record how they go from idea to code, along with the evidence, the limits, and the parts that never got finished."
 hero_badges:
   - {zh: "THINK WEIRD", en: "THINK WEIRD"}
   - {zh: "BUILD FOR REAL", en: "BUILD FOR REAL"}
