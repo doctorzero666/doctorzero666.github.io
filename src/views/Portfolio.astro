@@ -2,16 +2,28 @@
 import Base from '../layouts/Base.astro';
 import ProjectLinks from '../components/ProjectLinks.astro';
 import { useUI } from '../i18n';
-import { featuredProjects, pick, pickList, type Locale } from '../lib/data';
+import { brandTitle, featuredProjects, pick, pickList, type Locale } from '../lib/data';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
+const pad = (n: number) => String(n).padStart(3, '0');
+const count = `${ui.portfolio.sub} / ${pad(featuredProjects.length)} ${ui.portfolio.experiments}`;
+// Each entry is an experiment record. Rows with no content are skipped (e.g. no disclosure -> no LIMITS).
+const rows = (p: (typeof featuredProjects)[number]) => [
+  { label: ui.portfolio.why, text: pick(p.why, locale) },
+  { label: ui.portfolio.system, list: pickList(p.system, locale) },
+  { label: ui.portfolio.evidence, list: pickList(p.evidence, locale) },
+  { label: ui.portfolio.status, text: pick(p.status, locale) },
+  { label: ui.portfolio.limits, text: pick(p.disclosure, locale) },
+  { label: ui.portfolio.stack, text: p.stack.join(' / ') },
+].filter((r) => (r.list ? r.list.length > 0 : !!r.text));
 ---
-<Base locale={locale} title={ui.sections.portfolio_title} description={ui.portfolio.intro}>
+<Base locale={locale} fullTitle={brandTitle(ui.page_titles.portfolio, locale)} description={ui.portfolio.intro}>
   <div class="container">
     <header class="page-head">
-      <h1 class="display reveal">{ui.sections.portfolio_title}</h1>
+      <h1 class="display reveal">{ui.portfolio.title}</h1>
+      <p class="micro muted lab-count">{count}</p>
     </header>
   </div>
   <div class="rule-bleed"></div>
@@ -20,33 +32,32 @@ const ui = useUI(locale);
     <ol class="works">
       {featuredProjects.map((p, i) => (
         <li class="work grid-12 reveal" id={p.slug}>
-          <p class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+          <p class="num serif" aria-hidden="true">{pad(i + 1)}</p>
           <div class="body">
             <div class="head">
+              <p class="micro muted exp">{ui.portfolio.experiment} / {pad(i + 1)}</p>
               <h2 class="title serif">{p.name}</h2>
               <p class="small muted">{pick(p.category, locale)} · [{p.years}]</p>
             </div>
             <p class="summary">{pick(p.summary, locale)}</p>
-            {pickList(p.details, locale).length > 0 && (
-              <ul class="details small">
-                {pickList(p.details, locale).map((d) => <li>{d}</li>)}
-              </ul>
-            )}
             <dl class="facts small">
-              {p.stack.length > 0 && (
-                <div><dt class="muted">{ui.labels.built_with}</dt><dd>{p.stack.join(' / ')}</dd></div>
-              )}
-              {pick(p.status, locale) && (
-                <div><dt class="muted">{ui.labels.status}</dt><dd>{pick(p.status, locale)}</dd></div>
+              {rows(p).map((r) => (
+                <div>
+                  <dt class="muted">{r.label}</dt>
+                  <dd>
+                    {r.list ? (
+                      <ul class="details">{r.list.map((d) => <li>{d}</li>)}</ul>
+                    ) : r.text}
+                  </dd>
+                </div>
+              ))}
+              {p.links.some((l) => l.url && l.url.trim()) && (
+                <div>
+                  <dt class="muted">{ui.portfolio.source}</dt>
+                  <dd><ProjectLinks project={p} locale={locale} /></dd>
+                </div>
               )}
             </dl>
-            {pick(p.disclosure, locale) && (
-              <aside class="scope small" aria-label={ui.portfolio.disclosure}>
-                <p class="scope-label micro">{ui.portfolio.disclosure}</p>
-                <p class="scope-text">{pick(p.disclosure, locale)}</p>
-              </aside>
-            )}
-            <ProjectLinks project={p} locale={locale} />
           </div>
         </li>
       ))}
@@ -55,6 +66,7 @@ const ui = useUI(locale);
 </Base>
 
 <style>
+  .lab-count { margin-top: var(--u); }
   .page-sub { padding-block: calc(var(--u) * 3) calc(var(--u) * 2); max-width: 560px; }
   .works { padding-bottom: calc(var(--u) * 12); }
   .work {
@@ -72,33 +84,22 @@ const ui = useUI(locale);
   }
   .body { grid-column: 3 / span 8; min-width: 0; }
   .body > * + * { margin-top: calc(var(--u) * 2); }
+  .exp { margin-bottom: 4px; }
   .title { font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.02em; }
   .head .small { margin-top: 4px; }
   .summary { font-size: 1.05rem; max-width: 40em; }
   .details li { padding-left: 1.1em; position: relative; }
   .details li::before { content: '—'; position: absolute; left: 0; opacity: var(--muted); }
-  .summary, .details, .facts dd, .scope-text { overflow-wrap: anywhere; }
+  .summary, .facts dd { overflow-wrap: anywhere; }
   .details { display: grid; gap: 4px; max-width: 46em; }
-  .facts { display: grid; gap: 4px; }
-  /* Scope note: a ruled box with a bracketed caps label, set apart from the status facts. */
-  .scope {
-    max-width: 46em;
-    border: var(--line);
-    border-left-width: 3px;
-    padding: calc(var(--u) * 1.5) calc(var(--u) * 2);
-    background: var(--paper-2);
-  }
-  .scope-label::before { content: '[\00a0'; }
-  .scope-label::after { content: '\00a0]'; }
-  .scope-label { font-weight: 600; margin-bottom: 4px; }
-  .scope-text { color: color-mix(in srgb, var(--ink) 78%, transparent); line-height: 1.6; }
-  .facts div { display: grid; grid-template-columns: 8em minmax(0, 1fr); gap: calc(var(--u) * 2); }
+  .facts { display: grid; gap: calc(var(--u) * 1.5); }
+  .facts div { display: grid; grid-template-columns: 10em minmax(0, 1fr); gap: calc(var(--u) * 2); }
   @media (max-width: 768px) {
     .num { grid-column: 1 / -1; }
     .body { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
-    .facts div { grid-template-columns: 1fr; gap: 0; }
+    .facts div { grid-template-columns: 1fr; gap: 2px; }
     .title { font-size: 2rem; }
   }
 </style>

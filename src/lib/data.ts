@@ -82,6 +82,11 @@ export function pick(value: Bi | undefined, locale: Locale): string {
   return v && v.trim() ? v : value.zh ?? '';
 }
 
+/** Sub-page <title>: "<page> · <brand>". */
+export function brandTitle(page: string, locale: Locale): string {
+  return `${page} · ${pick(profile.brand, locale)}`;
+}
+
 /** First sentence of a text, for meta descriptions: drops [brackets] and spaces between CJK and Latin. */
 export function firstSentence(text: string): string {
   return (text || '')
