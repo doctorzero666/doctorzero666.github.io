@@ -1,0 +1,80 @@
+---
+import ProjectLinks from './ProjectLinks.astro';
+import { useUI } from '../i18n';
+import { pick, pickList, type Locale, type Project } from '../lib/data';
+
+interface Props { projects: Project[]; locale: Locale }
+const { projects, locale } = Astro.props;
+const ui = useUI(locale);
+---
+<div class="ptable" role="list">
+  <div class="phead micro muted" aria-hidden="true">
+    <span>{ui.table.name}</span><span>{ui.table.category}</span><span>{ui.table.years}</span>
+  </div>
+  {projects.map((p) => (
+    <article class="prow" role="listitem" tabindex="0" aria-labelledby={`p-${p.slug}`}>
+      <div class="pline">
+        <h3 class="pname" id={`p-${p.slug}`}>{p.name}</h3>
+        <p class="pcat muted">{pick(p.category, locale)}</p>
+        <p class="pyear muted">[{p.years}]</p>
+      </div>
+      <div class="pmore">
+        <div class="pmore-inner">
+          <p class="psum">{pick(p.summary, locale)}</p>
+          {pickList(p.details, locale).length > 0 && (
+            <ul class="pdetails">
+              {pickList(p.details, locale).map((d) => <li>{d}</li>)}
+            </ul>
+          )}
+          {p.stack.length > 0 && (
+            <p class="pstack micro"><span class="muted">{ui.labels.built_with}:</span> {p.stack.join(' / ')}</p>
+          )}
+          <ProjectLinks project={p} locale={locale} />
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
+
+<style>
+  .ptable { border-top: var(--line); }
+  .phead, .pline {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr) auto;
+    gap: calc(var(--u) * 2);
+    align-items: baseline;
+  }
+  .phead { padding-block: var(--u); border-bottom: var(--line); }
+  .prow { border-bottom: var(--line); outline-offset: -1px; }
+  .pline { padding-block: calc(var(--u) * 2); transition: padding 0.35s ease; }
+  .pname { font-size: 0.9rem; font-weight: 600; }
+  .pcat, .pyear { font-size: 0.85rem; }
+  .pyear { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* Collapsed by default; expands on hover or keyboard focus. */
+  .pmore {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease;
+  }
+  .pmore-inner { overflow: hidden; min-height: 0; }
+  .prow:hover .pmore, .prow:focus-within .pmore { grid-template-rows: 1fr; }
+  .prow:hover .pline, .prow:focus-within .pline { padding-block: calc(var(--u) * 3) var(--u); }
+  .pmore-inner > * + * { margin-top: var(--u); }
+  .pmore-inner > :last-child { margin-bottom: calc(var(--u) * 3); }
+  .psum { font-size: 0.85rem; max-width: 520px; }
+  .pdetails { font-size: 0.8rem; opacity: var(--muted); max-width: 560px; }
+  .pdetails li { padding-left: 1.1em; position: relative; }
+  .pdetails li::before { content: '—'; position: absolute; left: 0; }
+  /* Touch screens have no hover: show everything. */
+  @media (hover: none) {
+    .pmore { grid-template-rows: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .phead { display: none; }
+    .pline { grid-template-columns: 1fr auto; row-gap: 2px; }
+    .pname { grid-column: 1; }
+    .pyear { grid-column: 2; grid-row: 1; }
+    .pcat { grid-column: 1 / -1; }
+    .pmore { grid-template-rows: 1fr; }
+  }
+</style>

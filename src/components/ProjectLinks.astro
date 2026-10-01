@@ -1,0 +1,21 @@
+---
+import { pick, type Locale, type Project } from '../lib/data';
+interface Props { project: Project; locale: Locale }
+const { project, locale } = Astro.props;
+const links = project.links.filter((l) => l.url && l.url.trim());
+const external = (url: string) => /^https?:\/\//.test(url);
+---
+{links.length > 0 && (
+  <ul class="plinks small">
+    {links.map((l) => (
+      <li>
+        <a class="link bracket" href={l.url} target={external(l.url) ? '_blank' : undefined} rel={external(l.url) ? 'noopener' : undefined}>
+          {pick(l.label, locale)} ↗
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+<style>
+  .plinks { display: flex; flex-wrap: wrap; gap: var(--u) calc(var(--u) * 2); }
+</style>

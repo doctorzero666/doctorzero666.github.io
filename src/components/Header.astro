@@ -1,0 +1,133 @@
+---
+import { localePath, pageFromPath, useUI } from '../i18n';
+import { pick, profile, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+const page = pageFromPath(Astro.url.pathname);
+const section = page.split('/')[0];
+const nav = [
+  { key: '', label: ui.nav.home },
+  { key: 'resume', label: ui.nav.resume },
+  { key: 'portfolio', label: ui.nav.portfolio },
+  { key: 'blog', label: ui.nav.blog },
+] as const;
+// Blog posts only exist in one language, so switching from a post goes to the blog index.
+const switchPage = page.startsWith('blog/') ? 'blog' : page;
+---
+<header class="site-header">
+  <div class="container bar small">
+    <div class="switches">
+      <span class="group" role="group" aria-label={ui.meta.theme_label}>
+        <span aria-hidden="true">[</span>
+        <button type="button" class="opt" data-set-theme="light">{ui.theme.light}</button>
+        <span aria-hidden="true">|</span>
+        <button type="button" class="opt" data-set-theme="dark">{ui.theme.dark}</button>
+        <span aria-hidden="true">]</span>
+      </span>
+      <span class="group" role="group" aria-label={ui.meta.lang_label}>
+        <span aria-hidden="true">[</span>
+        <a class="opt" href={localePath('en', switchPage)} hreflang="en" lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
+        <span aria-hidden="true">|</span>
+        <a class="opt" href={localePath('zh', switchPage)} hreflang="zh-CN" lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
+        <span aria-hidden="true">]</span>
+      </span>
+    </div>
+    <p class="clock" aria-label={ui.meta.clock_label}>
+      <span>{pick(profile.location.city, locale)}</span><span data-clock data-tz={profile.location.timezone} data-locale={locale === 'zh' ? 'zh-CN' : 'en-AU'}></span>
+    </p>
+    <nav class="nav" aria-label={ui.meta.nav_label}>
+      {nav.map((item) => (
+        <a class="bracket" href={localePath(locale, item.key)} aria-current={section === item.key ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
+  <div class="rule-bleed"></div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+  }
+  .bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: calc(var(--u) * 2);
+    min-height: calc(var(--u) * 6);
+    padding-block: var(--u);
+    letter-spacing: -0.01em;
+  }
+  .switches { display: flex; gap: calc(var(--u) * 2); flex-wrap: wrap; }
+  .group { display: inline-flex; gap: 0.4em; align-items: baseline; white-space: nowrap; }
+  .opt { opacity: var(--muted); transition: opacity 0.3s ease; }
+  .opt:hover { opacity: 1; }
+  .opt[aria-current='true'],
+  :global(:root[data-theme='light']) [data-set-theme='light'],
+  :global(:root[data-theme='dark']) [data-set-theme='dark'] {
+    opacity: 1;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .clock { text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: calc(var(--u) * 1.5);
+    font-size: 0.9rem;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .nav a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.3s ease;
+  }
+  .nav a:hover { text-decoration-color: currentColor; }
+  .nav a[aria-current='page'] { font-weight: 600; text-decoration-color: currentColor; }
+
+  @media (max-width: 900px) {
+    .bar { grid-template-columns: 1fr auto; }
+    .clock { text-align: right; }
+    .nav { grid-column: 1 / -1; justify-content: flex-start; }
+  }
+  @media (max-width: 480px) {
+    .bar { gap: var(--u); }
+    .switches { gap: var(--u); }
+    .nav { justify-content: space-between; gap: 4px; font-size: 0.78rem; }
+  }
+</style>
+
+<script>
+  // Theme toggle: manual choice, persisted. The initial value is set by the inline script in <head>.
+  const root = document.documentElement;
+  document.querySelectorAll<HTMLButtonElement>('[data-set-theme]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.setTheme === 'dark' ? 'dark' : 'light';
+      root.setAttribute('data-theme', t);
+      try { localStorage.setItem('theme', t); } catch { /* storage unavailable */ }
+    });
+  });
+
+  // Local clock in the profile's time zone. Without JS only the city name shows.
+  const clock = document.querySelector<HTMLElement>('[data-clock]');
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat(clock.dataset.locale || 'en-AU', {
+      timeZone: clock.dataset.tz || 'Australia/Sydney',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+    const tick = () => { clock.textContent = ` · ${fmt.format(new Date())}`; };
+    tick();
+    setInterval(tick, 1000);
+  }
+</script>

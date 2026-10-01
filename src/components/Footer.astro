@@ -1,0 +1,92 @@
+---
+import Icon from './Icon.astro';
+import { useUI } from '../i18n';
+import { pick, profile, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+const plate = pick(profile.footer_plate, locale);
+const links = profile.links.filter((l) => l.url && l.url.trim());
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="rule-bleed"></div>
+  <div class="container grid-12 top">
+    <div class="plate-wrap reveal">
+      {plate && <p class="plate">{plate}</p>}
+    </div>
+    <div class="contact reveal">
+      <p class="micro muted">{ui.sections.contact}</p>
+      <a class="mail serif link" href={`mailto:${profile.email}`}>{profile.email}</a>
+    </div>
+  </div>
+  <div class="container bottom small">
+    <p class="muted">© {year} {pick(profile.copyright_name, locale)}. {ui.footer.rights}</p>
+    <ul class="icons">
+      {links.map((l) => (
+        <li><a href={l.url} aria-label={l.label} title={l.label} rel="me noopener" target="_blank"><Icon name={l.id} /></a></li>
+      ))}
+      <li><a href={`mailto:${profile.email}`} aria-label="Email" title="Email"><Icon name="mail" /></a></li>
+    </ul>
+  </div>
+  <div class="ruler" aria-hidden="true"></div>
+</footer>
+
+<style>
+  .site-footer { padding-bottom: calc(var(--u) * 3); }
+  .top {
+    padding-top: calc(var(--u) * 8);
+    padding-bottom: calc(var(--u) * 6);
+    row-gap: calc(var(--u) * 4);
+    align-items: end;
+  }
+  .plate-wrap { grid-column: 1 / span 5; }
+  .contact { grid-column: 6 / -1; text-align: right; min-width: 0; }
+  .plate {
+    display: inline-block;
+    background: var(--plate);
+    color: var(--plate-ink);
+    font-family: var(--font-plate);
+    text-transform: uppercase;
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    padding: calc(var(--u) * 1.5) calc(var(--u) * 2.5) var(--u);
+    outline: 1px solid var(--plate);
+    outline-offset: 3px;
+  }
+  .mail {
+    display: inline-block;
+    margin-top: var(--u);
+    font-size: clamp(1.75rem, 4.6vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: calc(var(--u) * 2);
+    flex-wrap: wrap;
+    padding-block: calc(var(--u) * 2);
+    border-top: var(--line);
+  }
+  .icons { display: flex; gap: calc(var(--u) * 2); }
+  .icons a { display: block; transition: opacity 0.3s ease; }
+  .icons a:hover { opacity: var(--muted); }
+  .ruler {
+    height: 12px;
+    margin-top: calc(var(--u) * 2);
+    border-top: var(--line);
+    background:
+      repeating-linear-gradient(to right, var(--ink) 0 1px, transparent 1px 40px) top / 100% 12px no-repeat,
+      repeating-linear-gradient(to right, var(--ink) 0 1px, transparent 1px 8px) top / 100% 5px no-repeat;
+    opacity: 0.5;
+  }
+  @media (max-width: 768px) {
+    .plate-wrap, .contact { grid-column: 1 / -1; }
+    .contact { text-align: left; }
+  }
+</style>

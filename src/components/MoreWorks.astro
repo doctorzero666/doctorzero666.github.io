@@ -1,0 +1,72 @@
+---
+import { useUI } from '../i18n';
+import { pick, type Locale, type Project } from '../lib/data';
+
+interface Props { projects: Project[]; locale: Locale }
+const { projects, locale } = Astro.props;
+const ui = useUI(locale);
+const firstUrl = (p: Project) => p.links.find((l) => l.url && l.url.trim())?.url;
+---
+<section class="more container" aria-labelledby="more-title">
+  <h2 id="more-title" class="more-title reveal">
+    <span class="bracket hl">{ui.sections.more_works}</span>
+    <span class="muted">{ui.sections.more_works_sub}</span>
+  </h2>
+  {projects.length > 0 && (
+    <ul class="cards">
+      {projects.map((p) => {
+        const url = firstUrl(p);
+        const Tag = url ? 'a' : 'div';
+        return (
+          <li class="reveal">
+            <Tag class="card" href={url} target={url ? '_blank' : undefined} rel={url ? 'noopener' : undefined}>
+              <span class="mark" aria-hidden="true">{p.name.slice(0, 1)}</span>
+              <span class="cname">{p.name}</span>
+              <span class="ccat muted">{pick(p.category, locale)}</span>
+              <span class="cyear muted micro">[{p.years}]</span>
+            </Tag>
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</section>
+
+<style>
+  .more { padding-bottom: calc(var(--u) * 12); }
+  .more-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--u);
+    padding-bottom: calc(var(--u) * 3);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+    padding: calc(var(--u) * 3);
+    border: var(--line);
+    transition: background-color 0.3s ease;
+  }
+  a.card:hover { background: var(--paper-2); }
+  .mark {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    border: var(--line);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    margin-bottom: calc(var(--u) * 2);
+  }
+  .cname { font-weight: 600; font-size: 0.9rem; }
+  .ccat { font-size: 0.75rem; }
+  @media (max-width: 900px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { .cards { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,182 @@
+---
+import { useUI } from '../i18n';
+import { pick, profile, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
+---
+<section class="hero" aria-labelledby="hero-name">
+  <canvas class="field" data-field aria-hidden="true"></canvas>
+  <div class="container inner">
+    <div class="intro-line">
+      <p class="headline">{pick(profile.headline, locale)}</p>
+      {pick(profile.tagline, locale) && <p class="tagline small">{pick(profile.tagline, locale)}</p>}
+    </div>
+    <h1 class="name" id="hero-name">
+      <span class="sr-only">{pick(profile.name, locale)}</span>
+      <span class="first" aria-hidden="true">{profile.display.first}</span>
+      <span class="last" aria-hidden="true">{profile.display.last}</span>
+    </h1>
+    <div class="foot">
+      <ul class="badges small">
+        {badges.map((b) => <li>{b}</li>)}
+      </ul>
+      <a class="scroll small" href="#work">{ui.labels.scroll_down} <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: calc(100svh - 49px);
+    background-color: var(--hero-ground);
+    /* Static fallback field when JS is off: a sparse dot screen. */
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 22%, transparent) 1px, transparent 1.5px);
+    background-size: 16px 16px;
+    display: flex;
+    overflow: hidden;
+  }
+  :global(:root[data-theme='dark']) .hero { color: #ECE9E4; }
+  .hero.is-live { background-image: none; }
+  .field { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: calc(var(--u) * 4) calc(var(--u) * 3);
+    gap: calc(var(--u) * 6);
+  }
+  .headline { font-size: 0.95rem; font-weight: 500; letter-spacing: -0.01em; }
+  .tagline { opacity: var(--muted); max-width: 32ch; margin-top: calc(var(--u) * 0.5); }
+  .name {
+    font-family: var(--font-hero);
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    margin-top: auto;
+  }
+  .first {
+    font-weight: 300;
+    font-size: clamp(2.3rem, 0.5rem + 10.3vw, 10.3rem);
+  }
+  .last {
+    font-weight: 900;
+    color: var(--accent);
+    font-size: clamp(3.5rem, 0.8rem + 14.8vw, 14.8rem);
+  }
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: calc(var(--u) * 2);
+  }
+  .badges { display: flex; flex-wrap: wrap; gap: var(--u) calc(var(--u) * 3); }
+  .badges li { display: inline-flex; align-items: center; gap: var(--u); }
+  .badges li::before { content: ''; width: 7px; height: 7px; background: currentColor; flex: none; }
+  .scroll { white-space: nowrap; opacity: var(--muted); transition: opacity 0.3s ease; }
+  .scroll:hover { opacity: 1; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  @media (max-width: 480px) {
+    .first { font-size: clamp(2rem, 13vw, 3.4rem); }
+    .last { font-size: clamp(2.6rem, 17vw, 4.4rem); }
+    .foot { flex-direction: column; align-items: flex-start; }
+    .badges { flex-direction: column; gap: var(--u); }
+  }
+</style>
+
+<script>
+  // Original dot field: a lattice of small squares whose size follows two slow
+  // interfering waves; the pointer swells nearby cells. Static frame when reduced motion.
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-field]');
+  const host = canvas?.parentElement;
+  const ctx = canvas?.getContext('2d');
+  if (canvas && host && ctx) {
+    const STEP = 16;
+    const MAX = 5;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w = 0, h = 0, dpr = 1, raf = 0, visible = true;
+    let ink = '#2B2926', accent = '#002FA7';
+    const pointer = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+
+    const readColors = () => {
+      const cs = getComputedStyle(document.documentElement);
+      ink = cs.getPropertyValue('--ink').trim() || ink;
+      accent = cs.getPropertyValue('--accent').trim() || accent;
+    };
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = host.clientWidth;
+      h = host.clientHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    // Cheap hash so a few fixed cells take the accent colour.
+    const hash = (i: number, j: number) => {
+      const s = Math.sin(i * 127.1 + j * 311.7) * 43758.5453;
+      return s - Math.floor(s);
+    };
+
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, w, h);
+      pointer.x += (pointer.tx - pointer.x) * 0.12;
+      pointer.y += (pointer.ty - pointer.y) * 0.12;
+      const cols = Math.ceil(w / STEP) + 1;
+      const rows = Math.ceil(h / STEP) + 1;
+      const time = t * 0.00025;
+      for (let j = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          const x = i * STEP, y = j * STEP;
+          // Two crossing waves give a slowly drifting moiré of density.
+          let v = 0.5 + 0.25 * Math.sin(x * 0.011 + time * 3) + 0.25 * Math.sin(y * 0.017 - x * 0.004 + time * 2);
+          // Fade the field toward the left so text stays legible.
+          v *= 0.35 + 0.65 * (x / w);
+          const dx = x - pointer.x, dy = y - pointer.y;
+          const d2 = dx * dx + dy * dy;
+          v += Math.exp(-d2 / 9000) * 0.9;
+          const s = Math.min(MAX, v * MAX) - 1.2;
+          if (s <= 0.3) continue;
+          const special = hash(i, j) > 0.992;
+          ctx.globalAlpha = special ? 0.85 : 0.16 + Math.min(0.3, v * 0.2);
+          ctx.fillStyle = special ? accent : ink;
+          ctx.fillRect(x - s / 2, y - s / 2, s, s);
+        }
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    const loop = (t: number) => {
+      draw(t);
+      raf = visible ? requestAnimationFrame(loop) : 0;
+    };
+    const start = () => { if (!raf && !reduce) raf = requestAnimationFrame(loop); };
+
+    readColors();
+    resize();
+    host.classList.add('is-live');
+    draw(0);
+    start();
+
+    new ResizeObserver(() => { resize(); draw(performance.now()); }).observe(host);
+    new MutationObserver(() => { readColors(); draw(performance.now()); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); }).observe(host);
+    if (!reduce) {
+      host.addEventListener('pointermove', (e) => {
+        const r = host.getBoundingClientRect();
+        pointer.tx = e.clientX - r.left;
+        pointer.ty = e.clientY - r.top;
+      });
+      host.addEventListener('pointerleave', () => { pointer.tx = pointer.ty = -9999; });
+    }
+  }
+</script>
