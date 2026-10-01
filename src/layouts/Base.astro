@@ -15,9 +15,11 @@ interface Props {
   /** Complete <title>, used as is (the home page passes seo.home_title). */
   fullTitle?: string;
   description?: string;
+  /** Keep the page out of search results (the 404 page). */
+  noindex?: boolean;
 }
 
-const { locale, title, fullTitle: fullTitleProp, description } = Astro.props;
+const { locale, title, fullTitle: fullTitleProp, description, noindex = false } = Astro.props;
 const ui = useUI(locale);
 const siteName = pick(profile.name, locale);
 const fullTitle = fullTitleProp || (title ? `${title} · ${siteName}` : pick(profile.seo.home_title, locale) || siteName);
@@ -49,6 +51,7 @@ const altEn = new URL(localePath('en', page), Astro.site);
     </script>
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical.href} />
     <link rel="alternate" hreflang="zh-CN" href={altZh.href} />
     <link rel="alternate" hreflang="en" href={altEn.href} />

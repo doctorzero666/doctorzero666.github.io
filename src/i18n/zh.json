@@ -1,4 +1,12 @@
 {
+  "notfound": {
+    "title": "404 / SIGNAL LOST · 中二大魔王",
+    "description": "这个节点不存在。This node does not exist.",
+    "heading": "404 / SIGNAL LOST",
+    "line_zh": "这个节点不存在。",
+    "line_en": "This node does not exist.",
+    "back": "← RETURN TO INDEX / 返回主页"
+  },
   "nav": { "home": "主页", "portfolio": "实验室", "blog": "通信", "now": "NOW", "resume": "简历" },
   "theme": { "light": "浅色", "dark": "深色" },
   "lang": { "zh": "中", "en": "EN" },

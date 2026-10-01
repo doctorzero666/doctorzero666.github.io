@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-core';
 
 const BASE = process.env.BASE_URL || 'http://localhost:4321';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const PAGES = ['/', '/resume/', '/portfolio/', '/blog/', '/now/', '/en/', '/en/resume/', '/en/portfolio/', '/en/blog/', '/en/now/'];
+const PAGES = ['/', '/resume/', '/portfolio/', '/blog/', '/now/', '/en/', '/en/resume/', '/en/portfolio/', '/en/blog/', '/en/now/', '/404.html'];
 const VIEWPORTS = [
   { width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
   { width: 1280, height: 800 },

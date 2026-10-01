@@ -1,0 +1,37 @@
+---
+// Served by GitHub Pages for any missing path. One bilingual page; no locale detection.
+import Base from '../layouts/Base.astro';
+import { useUI } from '../i18n';
+
+const t = useUI('zh').notfound;
+---
+<Base locale="zh" fullTitle={t.title} description={t.description} noindex>
+  <section class="notfound container">
+    <h1 class="nf-title">{t.heading}</h1>
+    <p class="small muted" lang="zh-CN">{t.line_zh}</p>
+    <p class="small muted" lang="en">{t.line_en}</p>
+    <p class="nf-back"><a href="/">{t.back}</a></p>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: calc(var(--u) * 1);
+    padding-block: calc(var(--u) * 12) calc(var(--u) * 14);
+  }
+  .nf-title {
+    font-family: var(--font-plate);
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    margin-bottom: calc(var(--u) * 1);
+  }
+  .nf-back { margin-top: calc(var(--u) * 3); }
+</style>
