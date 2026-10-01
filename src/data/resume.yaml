@@ -1,6 +1,6 @@
 # personal-site resume v1 — PS-WP-01 产出（2026-10-01）。数字来源见 claims.md。
 summary:
-  zh: "我主要构建 AI 与智能体系统，尤其关注模型之外的工程边界：验证、降级、权限、对账与可复现性。我的项目横跨多智能体、开源工具、量化研究与嵌入式系统。"
+  zh: "我喜欢把模糊的想法变成可以运行、验证和迭代的系统。我的项目横跨 AI Agent、开源工具、量化研究与嵌入式系统。相比单纯追求模型能力，我更关注一个系统在真实约束下如何可靠地工作——如何验证输出、处理失败、限制权限，并留下可复现的证据。"
   en: "I mainly build AI and agent systems, with a focus on the engineering boundaries outside the model: verification, graceful degradation, permissions, reconciliation and reproducibility. My projects span multi-agent systems, open-source tools, quantitative research and embedded systems."
 education:
   - school: {zh: "悉尼大学", en: "The University of Sydney"}

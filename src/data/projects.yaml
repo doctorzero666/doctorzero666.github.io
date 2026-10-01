@@ -33,8 +33,8 @@
     - {label: {zh: "在线演示", en: "Live demo"}, url: "https://frontend-nine-gamma-37.vercel.app"}
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/HireNet"}
   status:
-    zh: "已封存，作为面试讲解项目；在线演示仍可访问。"
-    en: "Sealed as an interview walkthrough project; the live demo is still online."
+    zh: "已封存；在线演示仍可访问，代码与项目记录保留作为实验档案。"
+    en: "Archived; the live demo remains available, with the code and project records preserved as an experiment archive."
   disclosure:
     zh: "黑客松两人团队作品，本人任队长与技术负责人，141 次提交中 130 次由本人提交。链上活动全部在测试网。"
     en: "Two-person hackathon project; I was team lead and technical owner and made 130 of 141 commits. All on-chain activity is on testnets."
@@ -176,16 +176,18 @@
       - "PC 麦克风录音 5 秒，经云端 whisper-1 转写、GPT 判定，映射为 4 级颜色。"
       - "颜色指令经白名单校验后通过蓝牙经典 SPP 下发；未知指令回 ERR，不触发动作。"
       - "LLM 只能影响灯显，风扇、加热片和舵机只受板上规则与实体按钮控制。"
+      - "温控低于 20 °C 加热、高于 25 °C 送风，区间内保持；任一雨滴传感器触发，双舵机镜像开合 ±45°。"
     en:
       - "Three ESP32 boards handle thermal control, the visor and the display; thermal and visor control run standalone on sensor thresholds with no network."
       - "A PC microphone records 5 s of speech, cloud whisper-1 transcribes it, and GPT maps it to one of 4 colour levels."
       - "Colour commands pass an allowlist and travel over Bluetooth Classic SPP; unknown commands get ERR and trigger nothing."
       - "The LLM can only change the display; fans, heaters and servos obey on-board rules and physical buttons only."
+      - "Heats below 20 °C, cools above 25 °C and holds in between; either raindrop sensor swings two mirrored servos ±45°."
   evidence:
     zh:
-      - "温控低于 20 °C 加热、高于 25 °C 送风，区间内保持；任一雨滴传感器触发，双舵机镜像开合 ±45°。"
+      - "完成可运行硬件原型，并保留项目演示视频与公开源码。"
     en:
-      - "Heats below 20 °C, cools above 25 °C and holds in between; either raindrop sensor swings two mirrored servos ±45°."
+      - "A working hardware prototype was completed; the demo video and public source code are preserved."
   stack: ["ESP32", "Arduino C++", "Python", "OpenAI whisper-1", "GPT-4o mini", "Bluetooth Classic SPP", "KiCad"]
   links:
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/universal-smart-clothing"}
