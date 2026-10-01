@@ -33,19 +33,21 @@ const introParts = pick(profile.intro, locale).split(/(\[[^\]]+\])/g).filter(Boo
   .work {
     padding-block: calc(var(--u) * 6) calc(var(--u) * 12);
     row-gap: calc(var(--u) * 4);
-    scroll-margin-top: calc(var(--u) * 7);
+    scroll-margin-top: calc(var(--header-h) + var(--u) * 2);
   }
   .intro { grid-column: 1 / span 5; align-self: start; position: sticky; top: calc(var(--u) * 10); }
   .table { grid-column: 6 / -1; min-width: 0; }
+  /* Small sans, faded ink; the [bracketed] phrase stays at full ink and bold. */
   .intro-text {
-    font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    margin-top: var(--u);
-    max-width: 18em;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+    color: color-mix(in srgb, var(--ink) 60%, transparent);
+    margin-top: calc(var(--u) * 1.5);
+    max-width: 34em;
   }
-  .intro-text .hl { font-weight: 400; font-style: italic; }
+  .intro-text .hl { color: var(--ink); font-weight: 600; }
   .hint { margin-top: calc(var(--u) * 3); }
   @media (max-width: 900px) {
     .intro, .table { grid-column: 1 / -1; }

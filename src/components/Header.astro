@@ -116,6 +116,15 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
     });
   });
 
+  // Publish the real header height (it wraps to two rows on narrow screens) so the
+  // hero can fill exactly one screen below it.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (header) {
+    const setH = () => root.style.setProperty('--header-h', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    setH();
+    new ResizeObserver(setH).observe(header);
+  }
+
   // Local clock in the profile's time zone. Without JS only the city name shows.
   const clock = document.querySelector<HTMLElement>('[data-clock]');
   if (clock) {

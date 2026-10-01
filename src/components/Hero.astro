@@ -23,7 +23,7 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
       <ul class="badges small">
         {badges.map((b) => <li>{b}</li>)}
       </ul>
-      <a class="scroll small" href="#work">{ui.labels.scroll_down} <span aria-hidden="true">↓</span></a>
+      <a class="scroll small" href="#work">{ui.labels.scroll_down} <span class="arrow" aria-hidden="true">↓</span></a>
     </div>
   </div>
 </section>
@@ -31,7 +31,8 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
 <style>
   .hero {
     position: relative;
-    min-height: calc(100svh - 49px);
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
     background-color: var(--hero-ground);
     /* Static fallback field when JS is off: a sparse dot screen. */
     background-image: radial-gradient(color-mix(in srgb, var(--ink) 22%, transparent) 1px, transparent 1.5px);
@@ -61,6 +62,7 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
     letter-spacing: -0.02em;
     margin-top: auto;
   }
+  .first, .last { display: block; white-space: nowrap; }
   .first {
     font-weight: 300;
     font-size: clamp(2.3rem, 0.5rem + 10.3vw, 10.3rem);
@@ -81,11 +83,28 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   .badges li::before { content: ''; width: 7px; height: 7px; background: currentColor; flex: none; }
   .scroll { white-space: nowrap; opacity: var(--muted); transition: opacity 0.3s ease; }
   .scroll:hover { opacity: 1; }
+  .arrow { display: inline-block; }
+  /* One-off entrance for the name and a slow nudge on the scroll arrow. Off for reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .first, .last { animation: rise 0.7s var(--reveal-curve) both; }
+    .first { animation-delay: 0.15s; }
+    .last { animation-delay: 0.27s; }
+    .arrow { animation: nudge 1.6s ease-in-out 1.2s infinite alternate; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(0.25em); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes nudge {
+    from { transform: translateY(-1px); }
+    to { transform: translateY(3px); }
+  }
   .sr-only {
     position: absolute; width: 1px; height: 1px; overflow: hidden;
     clip: rect(0 0 0 0); white-space: nowrap;
   }
   @media (max-width: 480px) {
+    .inner { gap: calc(var(--u) * 4); padding-block: calc(var(--u) * 3); }
     .first { font-size: clamp(2rem, 13vw, 3.4rem); }
     .last { font-size: clamp(2.6rem, 17vw, 4.4rem); }
     .foot { flex-direction: column; align-items: flex-start; }

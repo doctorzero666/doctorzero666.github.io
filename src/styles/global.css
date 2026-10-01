@@ -11,6 +11,7 @@
   --hero-ground: #F3EEE4;
   --plate: #B23A2E;           /* footer plate, the single saturated block */
   --plate-ink: #F6EBE3;
+  --plate-gold: #E8C97A;      /* nameplate lettering */
   --muted: 0.6;
 
   --font-cjk: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
@@ -25,12 +26,15 @@
   --u: 8px;                   /* baseline unit; all spacing is a multiple */
   --article: 792px;
   --line: 1px solid var(--ink);
+  --header-h: 49px;           /* measured at runtime by Header; static fallback here */
 
   --reveal-shift: 16px;
   --reveal-time: 420ms;
   --reveal-curve: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: light;
 }
+
+@media (max-width: 900px) { :root { --header-h: 69px; } }
 
 :root[data-theme="dark"] {
   --paper: #2B2926;
