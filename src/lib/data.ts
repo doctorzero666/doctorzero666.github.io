@@ -1,4 +1,4 @@
-// Loads the content YAML files at build time. Key names follow content-schema.md v1.
+// Loads the content YAML files at build time. Key names follow content-schema.md v3.
 import { parse } from 'yaml';
 import profileSrc from '../data/profile.yaml?raw';
 import projectsSrc from '../data/projects.yaml?raw';
@@ -35,7 +35,12 @@ export interface Project {
   years: string;
   category: Bi;
   summary: Bi;
-  details: Bi<string[]>;
+  /** Why the project exists, first person. */
+  why: Bi;
+  /** Architecture, mechanisms, behaviour and fallbacks. */
+  system: Bi<string[]>;
+  /** Numbers, test counts, measured values, release and on-chain records. */
+  evidence: Bi<string[]>;
   stack: string[];
   links: { label: Bi; url: string }[];
   status: Bi;

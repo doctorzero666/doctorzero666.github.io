@@ -1,4 +1,5 @@
 # personal-site projects v1 — PS-WP-01 产出（2026-10-01）。每个数字的来源见 claims.md。
+# v3（PS-WP-10）：details 原文逐字拆入 system（架构与机制）与 evidence（数字、测试、发布与链上记录）；新增 why。
 - slug: hirenet
   name: "HireNet"
   featured: true
@@ -8,17 +9,23 @@
   summary:
     zh: "AI 劳动力调度平台：判断一项工作该交给人、Agent 还是人机协同。"
     en: "An AI labour platform that decides whether a task should go to a person, an agent, or both."
-  details:
+  why:
+    zh: "我想知道：当 AI 不再只是工具，而开始成为劳动力市场中的参与者，会发生什么？"
+    en: "I wanted to know what happens when AI stops being just a tool and starts taking part in the labour market."
+  system:
     zh:
-      - "1617 个测试完全隔离：每个用例注入临时数据库和 Mock 结算，不访问外部 API 与链节点。"
       - "LLM 输出入库前经 13 个 JSON Schema 校验，失败先回传重生成，再改用同样通过校验的兜底值。"
       - "结算层用一个抽象接口统一 Mock、Anvil、Sepolia、x402 四种 provider，切换只改配置。"
+    en:
+      - "LLM output is validated against 13 JSON Schemas before persistence; failures are fed back for regeneration, then fall back to defaults that pass the same schema."
+      - "One abstract settlement interface covers four providers (Mock, Anvil, Sepolia, x402), switchable by configuration alone."
+  evidence:
+    zh:
+      - "1617 个测试完全隔离：每个用例注入临时数据库和 Mock 结算，不访问外部 API 与链节点。"
       - "x402 在 Base Sepolia 测试网完成两笔真实 USDC 结算，交易可在链上查到。"
       - "需求分析 Agent 有 v1、v2 两版，用 20 条黄金用例做对比评测。"
     en:
       - "1,617 hermetic tests: each case gets a temporary database and a mock settlement provider, with no external APIs or chain nodes."
-      - "LLM output is validated against 13 JSON Schemas before persistence; failures are fed back for regeneration, then fall back to defaults that pass the same schema."
-      - "One abstract settlement interface covers four providers (Mock, Anvil, Sepolia, x402), switchable by configuration alone."
       - "Two real USDC settlements via x402 on the Base Sepolia testnet, verifiable on-chain."
       - "Two versions of the requirement-analysis agent, compared on a 20-case golden evaluation set."
   stack: ["Python", "Flask", "SQLite", "React 19", "Vite", "GLM-4", "MCP", "x402", "pytest"]
@@ -42,17 +49,23 @@
   summary:
     zh: "面向编码智能体的本地优先管线：任务卡、独立工作树、交接检查点与评审门禁。"
     en: "A local-first pipeline for coding agents: task cards, isolated worktrees, handoff checkpoints and review gates."
-  details:
+  why:
+    zh: "Coding Agent 越来越聪明，但我的工作流没有。所以我开始给 Agent 设计一套能交接、能审查、也能停下来的工作系统。"
+    en: "Coding agents kept getting smarter, but my workflow didn't. So I started designing a work system for agents: one that can hand off, be reviewed, and stop."
+  system:
     zh:
       - "5 个命令行入口，覆盖初始化工作区与任务、启动 Agent、写检查点、目录检查和有界运行。"
       - "支持 Claude Code、Codex、Hermes 3 种命令行；按单写入者设计，各任务用独立工作树并行。"
       - "studio-run 前台有界执行，超时即停；额度错误后换用备用命令行须显式授权，且最多 1 次。"
-      - "349 个本地测试，用临时仓库和模拟命令行运行，不调用模型 API；CI 也只用合成 Agent。"
-      - "主干须经 PR 合并并通过 ci 检查，禁止强推与删除；v0.1.0a1 已在 GitHub Releases 预发布。"
     en:
       - "Five CLI entry points cover workspace and task setup, agent launch, checkpoints, workspace checks and bounded runs."
       - "Supports three agent CLIs (Claude Code, Codex, Hermes); the workflow is designed for a single writer per task, and tasks run in parallel in isolated worktrees."
       - "studio-run executes in the foreground and stops on timeout; switching to a fallback CLI after a quota error needs explicit opt-in and happens at most once."
+  evidence:
+    zh:
+      - "349 个本地测试，用临时仓库和模拟命令行运行，不调用模型 API；CI 也只用合成 Agent。"
+      - "主干须经 PR 合并并通过 ci 检查，禁止强推与删除；v0.1.0a1 已在 GitHub Releases 预发布。"
+    en:
       - "349 local tests run against temporary repositories and synthetic CLIs without calling any model API; CI also uses synthetic agents only."
       - "A ruleset on main requires merging through a PR with the ci check passing and blocks force pushes and deletion; v0.1.0a1 has been released as a pre-release on GitHub Releases."
   stack: ["Python", "Git worktree", "uv", "just", "pytest", "ruff", "lefthook", "commitlint", "GitHub Actions"]
@@ -75,16 +88,22 @@
   summary:
     zh: "风控优先的多资产模拟盘研究系统，把「不失控」放在收益之前。"
     en: "A risk-first, multi-asset paper-trading research system that puts staying in control ahead of returns."
-  details:
+  why:
+    zh: "我不想先问“怎么赚更多”，而想先回答“怎样让一个自动交易系统不失控”。"
+    en: "I didn't want to start with “how do I make more?” I wanted to answer “how do I keep an automated trading system from running out of control?” first."
+  system:
     zh:
       - "每笔新开仓订单都要通过 ExecutionGuard 的 7 项检查；资金与状态类检查在信息缺失时判为不通过，不开仓。"
       - "止损单挂在券商一侧；持仓账本只有一个写入方，由对账器定期核对，不一致即冻结。"
+    en:
+      - "Every new order must pass the seven checks of ExecutionGuard; funding and state checks fail when data is missing, so no position is opened."
+      - "Stop orders sit on the broker side; the position ledger has a single writer and is reconciled periodically, freezing on mismatch."
+  evidence:
+    zh:
       - "一轮模型审查列出 12 个 Critical、15 个 Major 问题，按阶段全部修复。"
       - "514 个测试，另有金样本回归锁定信号行为。"
       - "Alpaca 模拟盘在 2026-07-21 至 08-07 期间连续运行，留存 1542 条权益快照后按流程封存。"
     en:
-      - "Every new order must pass the seven checks of ExecutionGuard; funding and state checks fail when data is missing, so no position is opened."
-      - "Stop orders sit on the broker side; the position ledger has a single writer and is reconciled periodically, freezing on mismatch."
       - "A model review listed 12 Critical and 15 Major findings, all fixed in staged phases."
       - "514 tests, plus a golden-sample regression that pins signal behaviour."
       - "Ran on an Alpaca paper account from 2026-07-21 to 08-07, kept 1,542 equity snapshots, then paused by procedure."
@@ -108,17 +127,23 @@
   summary:
     zh: "多 LLM 审议引擎：多个模型并行作答、互评、修订，再由评审模型合成。"
     en: "A multi-LLM deliberation engine: models answer in parallel, critique, revise, then a judge synthesizes."
-  details:
+  why:
+    zh: "一个模型给答案太容易了。我更想知道：不同模型互相反驳以后，还剩下什么？"
+    en: "Getting an answer from one model is too easy. I wanted to know what is left once different models start arguing with each other."
+  system:
     zh:
       - "一条命令把同一问题发给多个后端，按独立作答、互评、修订三类轮次推进，轮次可选 1 到 3 轮。"
       - "插件式后端：Claude Code、Codex 命令行与 OpenAI、Anthropic、DeepSeek API。"
       - "线程池并行调用，逐后端超时；子进程不经 shell，超时先 terminate 再 kill，输出上限为 10 MB。"
-      - "60 个测试，CI 在 Python 3.10 到 3.12 上运行 pytest 与 ruff。"
-      - "已发布到 PyPI，包名 conclave-llm，当前版本 3.0.0。"
     en:
       - "One command fans a prompt out to several backends through independent-answer, critique and revision rounds; 1 to 3 rounds are selectable."
       - "Plugin backends: the Claude Code and Codex CLIs, plus the OpenAI, Anthropic and DeepSeek APIs."
       - "Thread-pool scheduler with per-backend timeouts; subprocesses run without a shell, are terminated then killed on timeout, and stdout is capped at 10 MB."
+  evidence:
+    zh:
+      - "60 个测试，CI 在 Python 3.10 到 3.12 上运行 pytest 与 ruff。"
+      - "已发布到 PyPI，包名 conclave-llm，当前版本 3.0.0。"
+    en:
       - "60 tests; CI runs pytest and ruff on Python 3.10 to 3.12."
       - "Published on PyPI as conclave-llm, current version 3.0.0."
   stack: ["Python", "click", "rich", "YAML", "pytest", "ruff", "GitHub Actions"]
@@ -142,19 +167,25 @@
   summary:
     zh: "可穿戴原型：自动温控、遇雨自动开合的头盔雨棚，以及语音驱动的社交状态灯。"
     en: "A wearable prototype with automatic thermal control, a rain-triggered visor and a voice-driven social-status light."
-  details:
+  why:
+    zh: "如果衣服不只是被动穿戴，而能感知环境、做出反应、表达状态，会怎样？"
+    en: "What if clothes weren't just worn, but could sense their surroundings, respond, and show how you are doing?"
+  system:
     zh:
       - "三块 ESP32 分管温控、雨棚和灯显；温控与雨棚在板上按传感器阈值独立运行，不联网。"
-      - "温控低于 20 °C 加热、高于 25 °C 送风，区间内保持；任一雨滴传感器触发，双舵机镜像开合 ±45°。"
       - "PC 麦克风录音 5 秒，经云端 whisper-1 转写、GPT 判定，映射为 4 级颜色。"
       - "颜色指令经白名单校验后通过蓝牙经典 SPP 下发；未知指令回 ERR，不触发动作。"
       - "LLM 只能影响灯显，风扇、加热片和舵机只受板上规则与实体按钮控制。"
     en:
       - "Three ESP32 boards handle thermal control, the visor and the display; thermal and visor control run standalone on sensor thresholds with no network."
-      - "Heats below 20 °C, cools above 25 °C and holds in between; either raindrop sensor swings two mirrored servos ±45°."
       - "A PC microphone records 5 s of speech, cloud whisper-1 transcribes it, and GPT maps it to one of 4 colour levels."
       - "Colour commands pass an allowlist and travel over Bluetooth Classic SPP; unknown commands get ERR and trigger nothing."
       - "The LLM can only change the display; fans, heaters and servos obey on-board rules and physical buttons only."
+  evidence:
+    zh:
+      - "温控低于 20 °C 加热、高于 25 °C 送风，区间内保持；任一雨滴传感器触发，双舵机镜像开合 ±45°。"
+    en:
+      - "Heats below 20 °C, cools above 25 °C and holds in between; either raindrop sensor swings two mirrored servos ±45°."
   stack: ["ESP32", "Arduino C++", "Python", "OpenAI whisper-1", "GPT-4o mini", "Bluetooth Classic SPP", "KiCad"]
   links:
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/universal-smart-clothing"}
@@ -176,18 +207,24 @@
   summary:
     zh: "多人实时英语拼写对战：AI 出题，答错触发概率淘汰，赢家获得奖池。"
     en: "A real-time multiplayer spelling battle: AI sets the questions, wrong answers risk elimination, the winner takes the pool."
-  details:
+  why:
+    zh: "我想把背单词变成一场真正有压力、有反馈，而且有点荒诞的对战游戏。"
+    en: "I wanted to turn vocabulary drills into a real battle game: one with pressure, feedback, and a touch of the absurd."
+  system:
     zh:
       - "服务端权威：判题、计分、难度与淘汰全部由 FastAPI + WebSocket 服务端裁定，客户端只提交答案。"
       - "每位玩家预取 3 道题，把秒级的 LLM 出题移出对局关键路径；难度在 1 到 5 级间随连对上调。"
       - "LLM 不可用时逐级降级到静态题库与字符串比对，没有 API key 也能完整对局。"
       - "合约只有 deposit、payout、totalPot，没有测试；VRF、NFT、USDT 入场只停留在设计阶段。"
-      - "SPARK AI Hackathon SpoonOS LLM 应用赛道第一名，该届共 52 个提交项目。"
     en:
       - "Server-authoritative: grading, scoring, difficulty and elimination are all decided by the FastAPI + WebSocket server; clients only submit answers."
       - "A 3-question prefetch queue per player keeps seconds-long LLM generation off the critical path; difficulty rises from 1 to 5 on streaks."
       - "When the LLM is unavailable it degrades step by step to a static question bank and string matching, so a full round works without an API key."
       - "The contract has only deposit, payout and totalPot and no tests; VRF, NFT rewards and USDT entry exist only as design."
+  evidence:
+    zh:
+      - "SPARK AI Hackathon SpoonOS LLM 应用赛道第一名，该届共 52 个提交项目。"
+    en:
       - "1st place, SpoonOS LLM Application Track, SPARK AI Hackathon (52 projects submitted)."
   stack: ["Next.js 14", "TypeScript", "FastAPI", "WebSocket", "SpoonOS", "Solidity", "Hardhat", "viem"]
   links:
