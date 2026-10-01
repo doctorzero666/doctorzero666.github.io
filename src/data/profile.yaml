@@ -34,4 +34,5 @@ seo:
   person:                             # PS-WP-11：首页 JSON-LD Person
     alumni: ["The University of Sydney", "Jiangsu University, Jingjiang College"]   # 与 resume.yaml education 的 en 名一致
     knows_about: ["AI agent systems", "Multi-LLM deliberation", "Verifiable software", "Quantitative trading research", "Embedded systems"]   # ≤ 5 项
+obsessions: ["AGENT AUTONOMY", "SYSTEMS THAT FAIL SAFELY", "MULTI-AGENT COORDINATION", "VERIFIABLE SOFTWARE", "MARKETS AS INFORMATION SYSTEMS", "WEIRD THINGS WORTH BUILDING"]   # PS-WP-12：首页 CURRENT OBSESSIONS，英文不翻译，编号由组件生成
 copyright_name: {zh: "蒋志超", en: "Zhichao Jiang"}

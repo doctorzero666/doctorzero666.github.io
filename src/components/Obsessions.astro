@@ -1,0 +1,22 @@
+---
+import { profile } from '../lib/data';
+const items = profile.obsessions ?? [];
+---
+<section class="container obs" aria-labelledby="obs-title">
+  <h2 id="obs-title" class="micro muted obs-title">CURRENT OBSESSIONS</h2>
+  <ol class="obs-list">
+    {items.map((t, i) => (
+      <li><span class="obs-n micro muted">{String(i + 1).padStart(2, '0')}</span><span class="obs-t">{t}</span></li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .obs { padding-block: 0 calc(var(--u) * 10); }
+  .obs-title { font-weight: 400; padding-bottom: var(--u); border-bottom: var(--line); }
+  .obs-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--u) * 4); }
+  .obs-list li { display: flex; gap: calc(var(--u) * 2); align-items: baseline; padding-block: calc(var(--u) * 1.25); border-bottom: var(--line); }
+  .obs-n { font-family: var(--font-plate); font-variant-numeric: tabular-nums; }
+  .obs-t { font-size: 0.8rem; letter-spacing: 0.06em; overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .obs-list { grid-template-columns: 1fr; } }
+</style>
