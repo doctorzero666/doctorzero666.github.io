@@ -69,10 +69,14 @@ const personLd = page === '' && person
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="canonical" href={canonical.href} />
-    <link rel="alternate" hreflang="zh-CN" href={altZh.href} />
-    <link rel="alternate" hreflang="en" href={altEn.href} />
-    <link rel="alternate" hreflang="x-default" href={altZh.href} />
+    {!noindex && (
+      <>
+        <link rel="canonical" href={canonical.href} />
+        <link rel="alternate" hreflang="zh-CN" href={altZh.href} />
+        <link rel="alternate" hreflang="en" href={altEn.href} />
+        <link rel="alternate" hreflang="x-default" href={altZh.href} />
+      </>
+    )}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
@@ -91,7 +95,7 @@ const personLd = page === '' && person
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
-    <Header locale={locale} />
+    <Header locale={locale} switchHome={noindex} />
     <main id="main">
       <slot />
     </main>

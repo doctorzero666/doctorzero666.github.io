@@ -2,8 +2,12 @@
 import { localePath, pageFromPath, useUI } from '../i18n';
 import { pick, profile, type Locale } from '../lib/data';
 
-interface Props { locale: Locale }
-const { locale } = Astro.props;
+interface Props {
+  locale: Locale;
+  /** Language switch goes to the home pages (used by the 404 page, which has no locale twin). */
+  switchHome?: boolean;
+}
+const { locale, switchHome = false } = Astro.props;
 const ui = useUI(locale);
 const page = pageFromPath(Astro.url.pathname);
 const section = page.split('/')[0];
@@ -16,7 +20,7 @@ const nav = [
   { key: 'resume', label: ui.nav.resume },
 ] as const;
 // Blog posts only exist in one language, so switching from a post goes to the blog index.
-const switchPage = page.startsWith('blog/') ? 'blog' : page;
+const switchPage = switchHome ? '' : page.startsWith('blog/') ? 'blog' : page;
 ---
 <header class="site-header">
   <div class="container bar small">
@@ -33,9 +37,9 @@ const switchPage = page.startsWith('blog/') ? 'blog' : page;
         </span>
         <span class="group" role="group" aria-label={ui.meta.lang_label}>
           <span aria-hidden="true">[</span>
-          <a class="opt" href={localePath('en', switchPage)} hreflang="en" lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
+          <a class="opt" href={localePath('en', switchPage)} hreflang={switchHome ? undefined : 'en'} lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
           <span aria-hidden="true">|</span>
-          <a class="opt" href={localePath('zh', switchPage)} hreflang="zh-CN" lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
+          <a class="opt" href={localePath('zh', switchPage)} hreflang={switchHome ? undefined : 'zh-CN'} lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
           <span aria-hidden="true">]</span>
         </span>
       </div>
