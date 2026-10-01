@@ -5,14 +5,15 @@ import { pick, type Locale, type Project } from '../lib/data';
 interface Props { projects: Project[]; locale: Locale }
 const { projects, locale } = Astro.props;
 const ui = useUI(locale);
+// With no non-featured projects the whole section (title, cards, spacing) is omitted.
 const firstUrl = (p: Project) => p.links.find((l) => l.url && l.url.trim())?.url;
 ---
+{projects.length > 0 && (
 <section class="more container" aria-labelledby="more-title">
   <h2 id="more-title" class="more-title reveal">
     <span class="bracket hl">{ui.sections.more_works}</span>
     <span class="muted">{ui.sections.more_works_sub}</span>
   </h2>
-  {projects.length > 0 && (
     <ul class="cards">
       {projects.map((p) => {
         const url = firstUrl(p);
@@ -29,8 +30,8 @@ const firstUrl = (p: Project) => p.links.find((l) => l.url && l.url.trim())?.url
         );
       })}
     </ul>
-  )}
 </section>
+)}
 
 <style>
   .more { padding-bottom: calc(var(--u) * 12); }
