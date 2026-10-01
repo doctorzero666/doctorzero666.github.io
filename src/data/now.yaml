@@ -1,0 +1,11 @@
+# /now/ 页数据（PS-WP-09 最小版，2026-10-01）。英文页复用同一份数据。
+subtitle: "2026.10 / CURRENT STATE"
+building:
+  - "Agent Studio Pipeline"
+exploring:
+  - "Agent workflows"
+  - "Multi-LLM deliberation"
+  - "Verifiable AI systems"
+thinking:
+  - "How much autonomy should an agent have before a human must re-enter the loop?"
+last_updated: "2026.10"

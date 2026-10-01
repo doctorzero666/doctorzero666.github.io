@@ -1,19 +1,34 @@
-# personal-site profile v1 — PS-WP-01 产出（2026-10-01）。键名遵守 content-schema.md，不得增删。
+# personal-site profile v2 — PS-WP-09 品牌重构（2026-10-01）。键名遵守 content-schema.md，增删须同步 schema。
 name: {zh: "蒋志超", en: "Zhichao Jiang"}
+brand: {zh: "中二大魔王", en: "中二大魔王"}
+brand_sub: "PERSONAL LAB"
+handle: "@doctorzero666"
 display: {first: "ZHICHAO", last: "JIANG."}
-headline: {zh: "建造者 · 探索者 · 系统思考者", en: "BUILDER · EXPLORER · SYSTEM THINKER"}
-tagline: {zh: "", en: ""}
+headline: {zh: "中二大魔王 / PERSONAL LAB", en: "中二大魔王 / PERSONAL LAB"}
+tagline: {zh: "把中二妄想，编译成现实。", en: "Compiling wild ideas into reality."}
 location: {city: {zh: "悉尼", en: "Sydney"}, timezone: "Australia/Sydney"}
 intro:
   zh: "我构建 [智能体系统]，工作范围覆盖协议、结算和产品上线。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
   en: "I build [agent systems], covering protocol, settlement and product launch. I care about what surrounds the model: validation, fallbacks, reconciliation and tests. Based in Sydney."
+lab_intro:
+  zh: "我喜欢把奇怪的想法做成能运行的系统。这里记录它们从脑洞到代码的过程，也记录证据、边界和没做成的部分。"
+  en: "I turn strange ideas into working systems. This is where I keep the evidence, limits, and unfinished edges."
 hero_badges:
-  - {zh: "做我相信的事", en: "BUILD WHAT I BELIEVE"}
-  - {zh: "验证 > 信任", en: "VERIFY > TRUST"}
-  - {zh: "保持好奇", en: "STAY CURIOUS"}
+  - {zh: "THINK WEIRD", en: "THINK WEIRD"}
+  - {zh: "BUILD FOR REAL", en: "BUILD FOR REAL"}
+  - {zh: "VERIFY EVERYTHING", en: "VERIFY EVERYTHING"}
+human_intent:
+  line1: "HUMAN INTENT"
+  line2: "MACHINE EXECUTION"
+  note: {zh: "这是我一直感兴趣的人机接口。", en: "One interface I keep coming back to."}
 email: "zhichao.jiang42@gmail.com"
 links:
   - {id: github, label: "GitHub", url: "https://github.com/doctorzero666"}
   - {id: linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/zhichao-jiang-2146b82a0/"}
+seo:
+  home_title: {zh: "中二大魔王 · Zhichao Jiang", en: "中二大魔王 · Zhichao Jiang"}
+  home_description:
+    zh: "把中二妄想编译成现实。Zhichao Jiang 的个人实验室，记录 AI、Agent、系统工程，以及其他值得动手验证的奇怪想法。"
+    en: "Compiling wild ideas into reality. Zhichao Jiang's personal lab for AI, agents, systems engineering, and strange ideas worth testing."
 footer_plate: {zh: "HUMAN INTENT → MACHINE EXECUTION", en: "HUMAN INTENT → MACHINE EXECUTION"}
 copyright_name: {zh: "蒋志超", en: "Zhichao Jiang"}

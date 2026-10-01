@@ -1,9 +1,10 @@
 {
-  "nav": { "home": "Home", "resume": "Resume", "portfolio": "Portfolio", "blog": "Blog" },
+  "nav": { "home": "INDEX", "portfolio": "LAB", "blog": "TRANSMISSIONS", "now": "NOW", "resume": "CV" },
   "theme": { "light": "Light", "dark": "Dark" },
   "lang": { "zh": "中", "en": "EN" },
   "sections": {
-    "featured_intro": "Selected projects",
+    "featured_intro": "THE LAB",
+    "featured_sub": "PROOF OF WORK",
     "more_works": "More work",
     "more_works_sub": "Small tools, experiments and side projects.",
     "contact": "Contact",
@@ -18,7 +19,7 @@
     "repo": "Repo",
     "package": "Package",
     "status": "Status",
-    "scroll_down": "Scroll",
+    "scroll_down": "ENTER THE LAB",
     "hover_hint": "Hover a row for details",
     "built_with": "Built with"
   },
@@ -27,6 +28,8 @@
   "resume": { "summary": "Summary", "education": "Education", "experience": "Experience", "awards": "Awards", "skills": "Skills", "download": "Download PDF" },
   "portfolio": { "intro": "Six projects, ordered by importance. Each one says what it does, what it is built with and where it stands now.", "disclosure": "Scope note" },
   "blog": { "back": "Back to blog" },
-  "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Local time" },
-  "footer": { "rights": "All rights reserved." }
+  "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Location and status" },
+  "footer": { "rights": "All rights reserved." },
+  "header": { "status": "SYD // ONLINE" },
+  "now": { "title": "NOW", "building": "BUILDING", "exploring": "EXPLORING", "thinking": "THINKING ABOUT", "last_updated": "LAST UPDATED" }
 }

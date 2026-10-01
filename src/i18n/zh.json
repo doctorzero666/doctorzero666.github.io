@@ -1,9 +1,10 @@
 {
-  "nav": { "home": "主页", "resume": "简历", "portfolio": "作品集", "blog": "博客" },
+  "nav": { "home": "主页", "portfolio": "实验室", "blog": "通信", "now": "现在", "resume": "简历" },
   "theme": { "light": "浅色", "dark": "深色" },
   "lang": { "zh": "中", "en": "EN" },
   "sections": {
-    "featured_intro": "精选项目",
+    "featured_intro": "魔王实验室",
+    "featured_sub": "PROOF OF WORK",
     "more_works": "更多作品",
     "more_works_sub": "小工具、实验与旁支项目。",
     "contact": "联系",
@@ -18,7 +19,7 @@
     "repo": "仓库",
     "package": "包",
     "status": "状态",
-    "scroll_down": "向下滚动",
+    "scroll_down": "进入实验室",
     "hover_hint": "悬停查看详情",
     "built_with": "技术栈"
   },
@@ -27,6 +28,8 @@
   "resume": { "summary": "概述", "education": "教育", "experience": "经历", "awards": "奖项", "skills": "技能", "download": "下载 PDF" },
   "portfolio": { "intro": "六个项目，按重要性排列。每个都写清楚做了什么、用了什么、现在在哪。", "disclosure": "口径说明" },
   "blog": { "back": "返回博客" },
-  "meta": { "description": "个人网站：项目、简历与写作。", "theme_label": "颜色主题", "lang_label": "语言", "nav_label": "主导航", "clock_label": "当地时间" },
-  "footer": { "rights": "保留所有权利。" }
+  "meta": { "description": "个人网站：项目、简历与写作。", "theme_label": "颜色主题", "lang_label": "语言", "nav_label": "主导航", "clock_label": "所在地与状态" },
+  "footer": { "rights": "保留所有权利。" },
+  "header": { "status": "SYD // ONLINE" },
+  "now": { "title": "NOW", "building": "BUILDING", "exploring": "EXPLORING", "thinking": "THINKING ABOUT", "last_updated": "LAST UPDATED" }
 }

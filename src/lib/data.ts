@@ -1,22 +1,29 @@
-// Loads the three content YAML files at build time. Key names follow content-schema.md v1.
+// Loads the content YAML files at build time. Key names follow content-schema.md v1.
 import { parse } from 'yaml';
 import profileSrc from '../data/profile.yaml?raw';
 import projectsSrc from '../data/projects.yaml?raw';
 import resumeSrc from '../data/resume.yaml?raw';
+import nowSrc from '../data/now.yaml?raw';
 
 export type Locale = 'zh' | 'en';
 export type Bi<T = string> = { zh: T; en: T };
 
 export interface Profile {
   name: Bi;
+  brand: Bi;
+  brand_sub: string;
+  handle: string;
   display: { first: string; last: string };
   headline: Bi;
   tagline: Bi;
   location: { city: Bi; timezone: string };
   intro: Bi;
+  lab_intro: Bi;
   hero_badges: Bi[];
+  human_intent: { line1: string; line2: string; note: Bi };
   email: string;
   links: { id: string; label: string; url: string }[];
+  seo: { home_title: Bi; home_description: Bi };
   footer_plate: Bi;
   copyright_name: Bi;
 }
@@ -46,9 +53,18 @@ export interface Resume {
   pdf: string;
 }
 
+export interface Now {
+  subtitle: string;
+  building: string[];
+  exploring: string[];
+  thinking: string[];
+  last_updated: string;
+}
+
 export const profile = parse(profileSrc) as Profile;
 export const projects = ((parse(projectsSrc) as Project[] | null) ?? []).slice();
 export const resume = parse(resumeSrc) as Resume;
+export const now = parse(nowSrc) as Now;
 
 export const featuredProjects = projects
   .filter((p) => p.featured)
