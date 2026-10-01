@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { useUI } from '../i18n';
-import { now, type Locale } from '../lib/data';
+import { brandTitle, now, type Locale } from '../lib/data';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -14,7 +14,7 @@ const sections = [
   { label: ui.now.thinking, items: now.thinking },
 ].filter((s) => s.items && s.items.length > 0);
 ---
-<Base locale={locale} title={ui.now.title} description={now.subtitle}>
+<Base locale={locale} fullTitle={brandTitle(ui.page_titles.now, locale)} description={now.subtitle}>
   <div class="container">
     <header class="page-head">
       <h1 class="display reveal">{ui.now.title}</h1>
