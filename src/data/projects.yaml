@@ -44,17 +44,17 @@
     en: "A local-first pipeline for coding agents: task cards, isolated worktrees, handoff checkpoints and review gates."
   details:
     zh:
-      - "5 个命令行入口，覆盖建工作区与任务、启动 Agent、写检查点、目录检查和有界运行。"
-      - "支持 Claude Code、Codex、Hermes 3 种命令行；同一任务只有一个写入者，各任务用独立工作树并行。"
+      - "5 个命令行入口，覆盖初始化工作区与任务、启动 Agent、写检查点、目录检查和有界运行。"
+      - "支持 Claude Code、Codex、Hermes 3 种命令行；按单写入者设计，各任务用独立工作树并行。"
       - "studio-run 前台有界执行，超时即停；额度错误后换用备用命令行须显式授权，且最多 1 次。"
       - "349 个本地测试，用临时仓库和模拟命令行运行，不调用模型 API；CI 也只用合成 Agent。"
-      - "主干须经 PR 合并并通过 ci 检查，禁止强推与删除；v0.1.0a1 预发布于 GitHub Releases。"
+      - "主干须经 PR 合并并通过 ci 检查，禁止强推与删除；v0.1.0a1 已在 GitHub Releases 预发布。"
     en:
       - "Five CLI entry points cover workspace and task setup, agent launch, checkpoints, workspace checks and bounded runs."
-      - "Supports three agent CLIs (Claude Code, Codex, Hermes); each task has one writer, and tasks run in parallel in isolated worktrees."
+      - "Supports three agent CLIs (Claude Code, Codex, Hermes); the workflow is designed for a single writer per task, and tasks run in parallel in isolated worktrees."
       - "studio-run executes in the foreground and stops on timeout; switching to a fallback CLI after a quota error needs explicit opt-in and happens at most once."
       - "349 local tests run against temporary repositories and synthetic CLIs without calling any model API; CI also uses synthetic agents only."
-      - "A ruleset on main requires merging through a PR with the ci check passing and blocks force pushes and deletion; v0.1.0a1 is published as a pre-release on GitHub Releases."
+      - "A ruleset on main requires merging through a PR with the ci check passing and blocks force pushes and deletion; v0.1.0a1 has been released as a pre-release on GitHub Releases."
   stack: ["Python", "Git worktree", "uv", "just", "pytest", "ruff", "lefthook", "commitlint", "GitHub Actions"]
   links:
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/agent-studio-pipeline"}
