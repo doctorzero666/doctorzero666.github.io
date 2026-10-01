@@ -5,8 +5,8 @@ headline: {zh: "AI 产品工程师 · 智能体系统", en: "AI Product Engineer
 tagline: {zh: "模型很少是问题，系统死在接缝处。", en: "The model is rarely the problem. Systems die at the seams."}
 location: {city: {zh: "悉尼", en: "Sydney"}, timezone: "Australia/Sydney"}
 intro:
-  zh: "我构建 [智能体系统]，从协议、结算到上线的产品。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
-  en: "I build [agent systems], from protocol and settlement to shipped product. I care about what surrounds the model: validation, fallbacks, reconciliation and tests. Based in Sydney."
+  zh: "我构建 [智能体系统]，工作范围覆盖协议、结算和产品上线。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
+  en: "I build [agent systems], covering protocol, settlement and product launch. I care about what surrounds the model: validation, fallbacks, reconciliation and tests. Based in Sydney."
 hero_badges:
   - {zh: "智能体编排与结算", en: "Agent orchestration & settlement"}
   - {zh: "黑客松 LLM 赛道第一", en: "1st place, hackathon LLM track"}

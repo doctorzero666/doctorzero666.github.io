@@ -11,7 +11,7 @@
   details:
     zh:
       - "1617 个测试完全隔离：每个用例注入临时数据库和 Mock 结算，不访问外部 API 与链节点。"
-      - "LLM 输出入库前经 13 个 JSON Schema 校验，失败先回传重生成，再退到同样过校验的兜底值。"
+      - "LLM 输出入库前经 13 个 JSON Schema 校验，失败先回传重生成，再改用同样通过校验的兜底值。"
       - "结算层用一个抽象接口统一 Mock、Anvil、Sepolia、x402 四种 provider，切换只改配置。"
       - "x402 在 Base Sepolia 测试网完成两笔真实 USDC 结算，交易可在链上查到。"
       - "需求分析 Agent 有 v1、v2 两版，用 20 条黄金用例做对比评测。"
@@ -21,12 +21,12 @@
       - "One abstract settlement interface covers four providers (Mock, Anvil, Sepolia, x402), switchable by configuration alone."
       - "Two real USDC settlements via x402 on the Base Sepolia testnet, verifiable on-chain."
       - "Two versions of the requirement-analysis agent, compared on a 20-case golden evaluation set."
-  stack: ["Python", "Flask", "SQLite", "React 18", "Vite", "GLM-4", "MCP", "x402", "pytest"]
+  stack: ["Python", "Flask", "SQLite", "React 19", "Vite", "GLM-4", "MCP", "x402", "pytest"]
   links:
     - {label: {zh: "在线演示", en: "Live demo"}, url: "https://frontend-nine-gamma-37.vercel.app"}
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/HireNet"}
   status:
-    zh: "已封存，作面试讲解项目；在线演示仍可访问。"
+    zh: "已封存，作为面试讲解项目；在线演示仍可访问。"
     en: "Sealed as an interview walkthrough project; the live demo is still online."
   disclosure:
     zh: "黑客松两人团队作品，本人任队长与技术负责人，141 次提交中 130 次由本人提交。链上活动全部在测试网。"
@@ -44,14 +44,14 @@
     en: "A risk-first, multi-asset paper-trading research system that puts staying in control ahead of returns."
   details:
     zh:
-      - "每笔新开仓订单都要通过 ExecutionGuard 的 7 项检查，任一信息缺失即拒绝下单。"
-      - "止损驻留券商侧；持仓账本只有一个写入方，由对账器定期核对，不一致即冻结。"
+      - "每笔新开仓订单都要通过 ExecutionGuard 的 7 项检查；资金与状态类检查在信息缺失时判为不通过，不开仓。"
+      - "止损单挂在券商一侧；持仓账本只有一个写入方，由对账器定期核对，不一致即冻结。"
       - "一轮模型审查列出 12 个 Critical、15 个 Major 问题，按阶段全部修复。"
       - "514 个测试，另有金样本回归锁定信号行为。"
-      - "Alpaca 模拟盘于 2026-07-21 至 08-07 连续运行，留存 1542 条权益快照后按流程封存。"
+      - "Alpaca 模拟盘在 2026-07-21 至 08-07 期间连续运行，留存 1542 条权益快照后按流程封存。"
     en:
-      - "Every new order must pass the seven checks of ExecutionGuard; missing data means rejection."
-      - "Stops live on the broker side; the position ledger has a single writer and is reconciled continuously, freezing on mismatch."
+      - "Every new order must pass the seven checks of ExecutionGuard; funding and state checks fail when data is missing, so no position is opened."
+      - "Stop orders sit on the broker side; the position ledger has a single writer and is reconciled periodically, freezing on mismatch."
       - "A model review listed 12 Critical and 15 Major findings, all fixed in staged phases."
       - "514 tests, plus a golden-sample regression that pins signal behaviour."
       - "Ran on an Alpaca paper account from 2026-07-21 to 08-07, kept 1,542 equity snapshots, then paused by procedure."
@@ -79,7 +79,7 @@
     zh:
       - "一条命令把同一问题发给多个后端，按独立作答、互评、修订三类轮次推进，轮次可选 1 到 3 轮。"
       - "插件式后端：Claude Code、Codex 命令行与 OpenAI、Anthropic、DeepSeek API。"
-      - "线程池并行调用，逐后端超时；子进程不经 shell，超时先 terminate 再 kill，输出限 10 MB。"
+      - "线程池并行调用，逐后端超时；子进程不经 shell，超时先 terminate 再 kill，输出上限为 10 MB。"
       - "60 个测试，CI 在 Python 3.10 到 3.12 上运行 pytest 与 ruff。"
       - "已发布到 PyPI，包名 conclave-llm，当前版本 3.0.0。"
     en:
@@ -96,12 +96,12 @@
     zh: "v3.0.0 已发布，日常自用。"
     en: "v3.0.0 released and in personal daily use."
   disclosure:
-    zh: "个人项目。只用一个后端运行时不产生合成报告；当前默认配置只启用两个命令行后端。"
-    en: "Personal project. Single-backend runs produce no synthesis report; the default configuration enables only the two CLI backends."
+    zh: "个人项目。命令行只在 3 轮审议时调用评审模型生成合成报告，1 到 2 轮只输出各轮回答；默认配置启用 Claude Code 与 Codex 两个命令行后端。"
+    en: "Personal project. The CLI asks a judge model for a synthesis report only in 3-round runs; 1- and 2-round runs return the round outputs alone. The default configuration enables the two CLI backends, Claude Code and Codex."
   image: ""
 
 - slug: universal-smart-clothes
-  name: "Universal Smart Clothes"
+  name: "Universal Smart Clothing"
   featured: true
   order: 4
   years: "2025"
@@ -127,11 +127,11 @@
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/universal-smart-clothing"}
     - {label: {zh: "演示视频", en: "Demo video"}, url: "https://drive.google.com/file/d/1oV1fuQtE0dcCo-77d4Z6uI0Q4Gp4H9nE/view"}
   status:
-    zh: "课程原型，仓库已于 2026-08-10 公开归档。"
-    en: "Course prototype; the repository was archived publicly on 2026-08-10."
+    zh: "课程原型，仓库已在 2026-08-10 公开，不再推进。"
+    en: "Course prototype; the repository was made public on 2026-08-10 and is no longer under development."
   disclosure:
-    zh: "悉尼大学 ELEC5047 课程 4 人团队项目。本人负责部分待用户确认。电子件未做防水，加热无独立温度切断。"
-    en: "Four-person team project for ELEC5047 at the University of Sydney. My share of the work is pending confirmation. Electronics are not waterproof and heating has no independent thermal cutoff."
+    zh: "悉尼大学 ELEC5047 课程 4 人团队项目。电子件未做防水，加热无独立温度切断。"
+    en: "Four-person team project for ELEC5047 at the University of Sydney. Electronics are not waterproof and heating has no independent thermal cutoff."
   image: ""
 
 - slug: wit-or-die
@@ -141,22 +141,22 @@
   years: "2026"
   category: {zh: "实时对战、LLM 出题、链上奖池", en: "Real-time multiplayer, LLM questions, on-chain pool"}
   summary:
-    zh: "多人实时英语拼写对战：AI 出题，答错触发概率淘汰，赢家拿走奖池。"
+    zh: "多人实时英语拼写对战：AI 出题，答错触发概率淘汰，赢家获得奖池。"
     en: "A real-time multiplayer spelling battle: AI sets the questions, wrong answers risk elimination, the winner takes the pool."
   details:
     zh:
       - "服务端权威：判题、计分、难度与淘汰全部由 FastAPI + WebSocket 服务端裁定，客户端只提交答案。"
       - "每位玩家预取 3 道题，把秒级的 LLM 出题移出对局关键路径；难度在 1 到 5 级间随连对上调。"
       - "LLM 不可用时逐级降级到静态题库与字符串比对，没有 API key 也能完整对局。"
-      - "合约只有 deposit、payout、totalPot，没有测试；VRF、NFT、USDT 入场仅为设计。"
+      - "合约只有 deposit、payout、totalPot，没有测试；VRF、NFT、USDT 入场只停留在设计阶段。"
       - "SPARK AI Hackathon SpoonOS LLM 应用赛道第一名，该届共 52 个提交项目。"
     en:
       - "Server-authoritative: grading, scoring, difficulty and elimination are all decided by the FastAPI + WebSocket server; clients only submit answers."
       - "A 3-question prefetch queue per player keeps seconds-long LLM generation off the critical path; difficulty rises from 1 to 5 on streaks."
       - "When the LLM is unavailable it degrades step by step to a static question bank and string matching, so a full round works without an API key."
       - "The contract has only deposit, payout and totalPot and no tests; VRF, NFT rewards and USDT entry exist only as design."
-      - "1st place, SpoonOS LLM application track, SPARK AI Hackathon (52 projects submitted)."
-  stack: ["Next.js 14", "TypeScript", "FastAPI", "WebSocket", "SpoonOS", "Solidity", "Hardhat", "wagmi"]
+      - "1st place, SpoonOS LLM Application Track, SPARK AI Hackathon (52 projects submitted)."
+  stack: ["Next.js 14", "TypeScript", "FastAPI", "WebSocket", "SpoonOS", "Solidity", "Hardhat", "viem"]
   links:
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/Wit-or-die"}
     - {label: {zh: "参赛提交", en: "Submission"}, url: "https://github.com/CasualHackathon/SPARK-AI-Hackathon/tree/main/submissions/JadeTwinkle"}
