@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectLinks from '../components/ProjectLinks.astro';
+import { useUI } from '../i18n';
+import { featuredProjects, pick, pickList, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+---
+<Base locale={locale} title={ui.sections.portfolio_title}>
+  <div class="container">
+    <header class="page-head">
+      <h1 class="display reveal">{ui.sections.portfolio_title}</h1>
+    </header>
+  </div>
+  <div class="rule-bleed"></div>
+  <div class="container">
+    <p class="sub small muted page-sub">{ui.portfolio.intro}</p>
+    <ol class="works">
+      {featuredProjects.map((p, i) => (
+        <li class="work grid-12 reveal" id={p.slug}>
+          <p class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+          <div class="body">
+            <div class="head">
+              <h2 class="title serif">{p.name}</h2>
+              <p class="small muted">{pick(p.category, locale)} · [{p.years}]</p>
+            </div>
+            <p class="summary">{pick(p.summary, locale)}</p>
+            {pickList(p.details, locale).length > 0 && (
+              <ul class="details small">
+                {pickList(p.details, locale).map((d) => <li>{d}</li>)}
+              </ul>
+            )}
+            <dl class="facts small">
+              {p.stack.length > 0 && (
+                <div><dt class="muted">{ui.labels.built_with}</dt><dd>{p.stack.join(' / ')}</dd></div>
+              )}
+              {pick(p.status, locale) && (
+                <div><dt class="muted">{ui.labels.status}</dt><dd>{pick(p.status, locale)}</dd></div>
+              )}
+              {pick(p.disclosure, locale) && (
+                <div><dt class="muted">{ui.portfolio.disclosure}</dt><dd>{pick(p.disclosure, locale)}</dd></div>
+              )}
+            </dl>
+            <ProjectLinks project={p} locale={locale} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .page-sub { padding-block: calc(var(--u) * 3) calc(var(--u) * 2); max-width: 560px; }
+  .works { padding-bottom: calc(var(--u) * 12); }
+  .work { padding-block: calc(var(--u) * 6); border-bottom: var(--line); }
+  .work:first-child { border-top: var(--line); }
+  .num {
+    grid-column: 1 / span 2;
+    font-size: clamp(3rem, 7vw, 5.4rem);
+    line-height: 0.9;
+    opacity: 0.22;
+  }
+  .body { grid-column: 3 / span 8; min-width: 0; }
+  .body > * + * { margin-top: calc(var(--u) * 2); }
+  .title { font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.02em; }
+  .head .small { margin-top: 4px; }
+  .summary { font-size: 1.05rem; max-width: 40em; }
+  .details li { padding-left: 1.1em; position: relative; }
+  .details li::before { content: '—'; position: absolute; left: 0; opacity: var(--muted); }
+  .facts { display: grid; gap: 4px; }
+  .facts div { display: grid; grid-template-columns: 8em minmax(0, 1fr); gap: calc(var(--u) * 2); }
+  @media (max-width: 768px) {
+    .num { grid-column: 1 / -1; }
+    .body { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .facts div { grid-template-columns: 1fr; gap: 0; }
+    .title { font-size: 2rem; }
+  }
+</style>

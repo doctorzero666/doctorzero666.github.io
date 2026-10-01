@@ -1,0 +1,42 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { localePath, useUI } from '../i18n';
+
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const locale = post.data.lang;
+const ui = useUI(locale);
+const { Content } = await render(post);
+const fmt = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Base locale={locale} title={post.data.title} description={post.data.description}>
+  <article class="container post">
+    <div class="article">
+      <a class="micro link back" href={localePath(locale, 'blog')}>← {ui.blog.back}</a>
+      <p class="micro muted meta">{fmt.format(post.data.date)}</p>
+      <h1 class="ptitle serif">{post.data.title}</h1>
+      <p class="dek serif muted">{post.data.description}</p>
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .post { padding-block: calc(var(--u) * 6) calc(var(--u) * 12); }
+  .article { margin-inline: auto; }
+  .meta { margin-top: calc(var(--u) * 4); }
+  .ptitle { font-size: clamp(2.5rem, 6vw, 3.5rem); line-height: 1.1; margin-top: var(--u); letter-spacing: -0.02em; }
+  .dek { font-style: italic; font-size: 1.4rem; margin-top: var(--u); }
+  .prose { margin-top: calc(var(--u) * 5); line-height: 1.5; }
+  .prose :global(> * + *) { margin-top: calc(var(--u) * 3); }
+  .prose :global(h2), .prose :global(h3) { font-family: var(--font-display); font-weight: 400; line-height: 1.2; }
+  .prose :global(h2) { font-size: 2rem; margin-top: calc(var(--u) * 6); }
+  .prose :global(h3) { font-size: 1.5rem; margin-top: calc(var(--u) * 4); }
+  .prose :global(ul) { list-style: square; padding-left: 1.25em; }
+  .prose :global(ol) { list-style: decimal; padding-left: 1.25em; }
+  .prose :global(pre) { border: var(--line); padding: calc(var(--u) * 2); overflow-x: auto; font-size: 0.85rem; }
+  .prose :global(code) { font-family: var(--font-mono); font-size: 0.9em; }
+  .prose :global(img) { border: var(--line); }
+  .prose :global(blockquote) { border-left: var(--line); padding-left: calc(var(--u) * 2); font-family: var(--font-display); font-size: 1.25rem; }
+</style>

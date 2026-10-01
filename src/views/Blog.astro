@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { localePath, useUI } from '../i18n';
+import type { Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+const posts = (await getCollection('blog', (p) => p.data.lang === locale))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const fmt = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-AU', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<Base locale={locale} title={ui.sections.blog_title} description={ui.sections.blog_intro}>
+  <div class="container">
+    <header class="page-head">
+      <h1 class="display reveal">{ui.sections.blog_title}</h1>
+    </header>
+  </div>
+  <div class="rule-bleed"></div>
+  <div class="container posts-wrap">
+    <p class="sub small muted page-sub">{ui.sections.blog_intro}</p>
+    {posts.length === 0 ? (
+      <p class="empty serif reveal">{ui.sections.blog_empty}</p>
+    ) : (
+      <ul class="posts">
+        {posts.map((p) => (
+          <li class="reveal">
+            <a class="post grid-12" href={localePath(locale, `blog/${p.id}`)}>
+              <p class="micro muted meta">{fmt.format(p.data.date)}</p>
+              <div class="text">
+                <h2 class="ptitle serif">{p.data.title}</h2>
+                <p class="small muted">{p.data.description}</p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Base>
+
+<style>
+  .posts-wrap { padding-bottom: calc(var(--u) * 12); }
+  .page-sub { padding-block: calc(var(--u) * 3) calc(var(--u) * 4); }
+  .empty { font-size: 1.75rem; line-height: 1.3; padding-block: calc(var(--u) * 6); border-top: var(--line); border-bottom: var(--line); }
+  .posts { border-top: var(--line); }
+  .post { padding-block: calc(var(--u) * 3); border-bottom: var(--line); transition: opacity 0.3s ease; }
+  .post:hover { opacity: 0.7; }
+  .meta { grid-column: 1 / span 3; padding-top: 0.6em; }
+  .text { grid-column: 4 / -1; }
+  .ptitle { font-size: 2rem; line-height: 1.25; }
+  @media (max-width: 480px) { .meta, .text { grid-column: 1 / -1; } }
+</style>

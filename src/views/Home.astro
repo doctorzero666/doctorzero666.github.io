@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ProjectTable from '../components/ProjectTable.astro';
+import MoreWorks from '../components/MoreWorks.astro';
+import { useUI } from '../i18n';
+import { featuredProjects, moreProjects, pick, profile, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+// "[phrase]" in the intro is rendered as a bracketed, bold highlight.
+const introParts = pick(profile.intro, locale).split(/(\[[^\]]+\])/g).filter(Boolean);
+---
+<Base locale={locale}>
+  <Hero locale={locale} />
+  <section id="work" class="container grid-12 work">
+    <div class="intro reveal">
+      <p class="micro muted">{ui.sections.featured_intro}</p>
+      <p class="intro-text">
+        {introParts.map((part) => part.startsWith('[') ? <span class="hl">{part}</span> : part)}
+      </p>
+      <p class="hint micro muted">{ui.labels.hover_hint}</p>
+    </div>
+    <div class="table reveal">
+      <ProjectTable projects={featuredProjects} locale={locale} />
+    </div>
+  </section>
+  <MoreWorks projects={moreProjects} locale={locale} />
+</Base>
+
+<style>
+  .work {
+    padding-block: calc(var(--u) * 6) calc(var(--u) * 12);
+    row-gap: calc(var(--u) * 4);
+    scroll-margin-top: calc(var(--u) * 7);
+  }
+  .intro { grid-column: 1 / span 5; align-self: start; position: sticky; top: calc(var(--u) * 10); }
+  .table { grid-column: 6 / -1; min-width: 0; }
+  .intro-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-top: var(--u);
+    max-width: 18em;
+  }
+  .intro-text .hl { font-weight: 400; font-style: italic; }
+  .hint { margin-top: calc(var(--u) * 3); }
+  @media (max-width: 900px) {
+    .intro, .table { grid-column: 1 / -1; }
+    .intro { position: static; }
+  }
+  @media (hover: none) { .hint { display: none; } }
+</style>

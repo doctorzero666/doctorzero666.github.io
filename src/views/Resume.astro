@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import { useUI } from '../i18n';
+import { pick, pickList, resume, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const ui = useUI(locale);
+const r = resume;
+---
+<Base locale={locale} title={ui.sections.resume_title}>
+  <div class="container">
+    <header class="page-head">
+      <h1 class="display reveal">{ui.sections.resume_title}</h1>
+    </header>
+  </div>
+  <div class="rule-bleed"></div>
+  <div class="container">
+    <div class="article cv">
+      {pick(r.summary, locale) && (
+        <section class="block reveal">
+          <h2 class="micro muted">{ui.resume.summary}</h2>
+          <p class="lead">{pick(r.summary, locale)}</p>
+        </section>
+      )}
+
+      {r.experience.length > 0 && (
+        <section class="block reveal">
+          <h2 class="micro muted">{ui.resume.experience}</h2>
+          {r.experience.map((e) => (
+            <article class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">{pick(e.org, locale)}<span class="muted"> · {pick(e.role, locale)}</span></h3>
+                <p class="period small muted">{e.period}</p>
+              </div>
+              <ul class="bullets small">
+                {pickList(e.bullets, locale).map((b) => <li>{b}</li>)}
+              </ul>
+            </article>
+          ))}
+        </section>
+      )}
+
+      {r.education.length > 0 && (
+        <section class="block reveal">
+          <h2 class="micro muted">{ui.resume.education}</h2>
+          {r.education.map((e) => (
+            <article class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">{pick(e.school, locale)}<span class="muted"> · {pick(e.degree, locale)}</span></h3>
+                <p class="period small muted">{e.period}</p>
+              </div>
+              {pick(e.notes, locale) && <p class="small notes">{pick(e.notes, locale)}</p>}
+            </article>
+          ))}
+        </section>
+      )}
+
+      {r.awards.length > 0 && (
+        <section class="block reveal">
+          <h2 class="micro muted">{ui.resume.awards}</h2>
+          {r.awards.map((a) => (
+            <article class="entry">
+              <div class="entry-head">
+                <h3 class="entry-title">{pick(a.title, locale)}</h3>
+                <p class="period small muted">{a.date}</p>
+              </div>
+              {pick(a.notes, locale) && <p class="small notes">{pick(a.notes, locale)}</p>}
+            </article>
+          ))}
+        </section>
+      )}
+
+      {r.skills.length > 0 && (
+        <section class="block reveal">
+          <h2 class="micro muted">{ui.resume.skills}</h2>
+          <dl class="skills small">
+            {r.skills.map((s) => (
+              <div class="skill">
+                <dt>{pick(s.group, locale)}</dt>
+                <dd class="muted">{s.items.join(' / ')}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {r.pdf && (
+        <p class="block small"><a class="link bracket" href={r.pdf}>{ui.resume.download}</a></p>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .cv { padding-bottom: calc(var(--u) * 12); }
+  .block { padding-block: calc(var(--u) * 4); border-bottom: var(--line); }
+  .block > h2 { margin-bottom: calc(var(--u) * 2); font-weight: 400; }
+  .lead { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; }
+  .entry + .entry { margin-top: calc(var(--u) * 3); }
+  .entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: calc(var(--u) * 2); flex-wrap: wrap; }
+  .entry-title { font-size: 1rem; font-weight: 600; }
+  .entry-title .muted { font-weight: 400; }
+  .period { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .bullets, .notes { margin-top: var(--u); }
+  .bullets li { padding-left: 1.1em; position: relative; }
+  .bullets li::before { content: '—'; position: absolute; left: 0; opacity: var(--muted); }
+  .skills { display: grid; gap: var(--u); }
+  .skill { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: calc(var(--u) * 2); }
+  .skill dt { font-weight: 600; }
+  @media (max-width: 480px) { .skill { grid-template-columns: 1fr; gap: 0; } }
+</style>
