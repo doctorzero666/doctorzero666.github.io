@@ -16,6 +16,20 @@ npm run preview   # 本地预览 dist/
 npx astro check   # 类型检查
 ```
 
+### 版面检查（开发用）
+
+`scripts/check-layout.mjs` 用本机 Chrome（`puppeteer-core`，不下载 Chromium）检查全部 8 个页面在 390×844 和 1280×800 两种视口下是否横向溢出，并检查主页 hero 名字是否可见。
+
+```bash
+npm run build
+npx astro preview --port 4321      # 另开一个终端
+node scripts/check-layout.mjs      # 有溢出或名字不可见时以非 0 退出
+```
+
+- Chrome 路径默认是 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`，可用 `CHROME_PATH` 覆盖；站点地址可用 `BASE_URL` 覆盖。
+- 每行打印 `scrollWidth` 与 `innerWidth`。由于 `body` 设置了 `overflow-x: clip`，脚本还会列出越过视口右边缘的元素。
+- 注意：无头 Chrome 的窗口宽度最小为 500px，用 `--window-size=390,…` 截出的图其实是 500px 宽的版面裁成 390px，右侧会看起来被切掉。手机宽度请以本脚本为准，它通过 DevTools 设置真正的 390px 视口。
+
 ## 内容从哪里来
 
 页面上的文字全部来自数据文件，组件里不写正文。字段模式见 `content-schema.md` v1（存于 `~/claude-tmp/personal-site/content-schema.md`），键名不得增删改。

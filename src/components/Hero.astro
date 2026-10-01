@@ -84,16 +84,17 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   .scroll { white-space: nowrap; opacity: var(--muted); transition: opacity 0.3s ease; }
   .scroll:hover { opacity: 1; }
   .arrow { display: inline-block; }
-  /* One-off entrance for the name and a slow nudge on the scroll arrow. Off for reduced motion. */
+  /* One-off rise for the name and a slow nudge on the scroll arrow. Transform only:
+     the name is fully visible in its default state, with or without JS, animation
+     support or motion; the animation never hides it. Off for reduced motion. */
   @media (prefers-reduced-motion: no-preference) {
-    .first, .last { animation: rise 0.7s var(--reveal-curve) both; }
-    .first { animation-delay: 0.15s; }
-    .last { animation-delay: 0.27s; }
+    .first, .last { animation: rise 0.7s var(--reveal-curve); }
+    .last { animation-duration: 0.85s; }
     .arrow { animation: nudge 1.6s ease-in-out 1.2s infinite alternate; }
   }
   @keyframes rise {
-    from { opacity: 0; transform: translateY(0.25em); }
-    to { opacity: 1; transform: none; }
+    from { transform: translateY(0.18em); }
+    to { transform: none; }
   }
   @keyframes nudge {
     from { transform: translateY(-1px); }
