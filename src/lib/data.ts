@@ -20,7 +20,7 @@ export interface Profile {
   intro: Bi;
   lab_intro: Bi;
   hero_badges: Bi[];
-  human_intent: { line1: string; line2: string; note: Bi };
+  human_intent: { line1: string; line2: string };
   email: string;
   links: { id: string; label: string; url: string }[];
   seo: {

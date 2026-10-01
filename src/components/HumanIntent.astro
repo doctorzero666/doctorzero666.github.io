@@ -1,10 +1,9 @@
 ---
-import { pick, profile, type Locale } from '../lib/data';
+import { profile, type Locale } from '../lib/data';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const hi = profile.human_intent;
-const note = pick(hi?.note, locale);
 ---
 {hi && (
   <section class="human-intent container reveal" aria-label={`${hi.line1} → ${hi.line2}`}>
@@ -14,7 +13,6 @@ const note = pick(hi?.note, locale);
       <span class="hi-arrow">↓</span>
       <span class="hi-word">{hi.line2}</span>
     </p>
-    {note && <p class="hi-note small muted">{note}</p>}
   </section>
 )}
 
@@ -47,5 +45,4 @@ const note = pick(hi?.note, locale);
     letter-spacing: 0;
     color: var(--accent);
   }
-  .hi-note { margin-top: calc(var(--u) * 2); }
 </style>

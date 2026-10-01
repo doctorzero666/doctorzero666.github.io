@@ -20,7 +20,6 @@ hero_badges:
 human_intent:
   line1: "HUMAN INTENT"
   line2: "MACHINE EXECUTION"
-  note: {zh: "这是我一直感兴趣的人机接口。", en: "One interface I keep coming back to."}
 email: "zhichao.jiang42@gmail.com"
 links:
   - {id: github, label: "GitHub", url: "https://github.com/doctorzero666"}
