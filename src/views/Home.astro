@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import ProjectTable from '../components/ProjectTable.astro';
 import MoreWorks from '../components/MoreWorks.astro';
+import HumanIntent from '../components/HumanIntent.astro';
 import { useUI } from '../i18n';
 import { featuredProjects, moreProjects, pick, profile, type Locale } from '../lib/data';
 
@@ -30,6 +31,7 @@ const introParts = pick(profile.lab_intro, locale).split(/(\[[^\]]+\])/g).filter
     </div>
   </section>
   <MoreWorks projects={moreProjects} locale={locale} />
+  <HumanIntent locale={locale} />
 </Base>
 
 <style>

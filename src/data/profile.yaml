@@ -30,5 +30,4 @@ seo:
   home_description:
     zh: "把中二妄想编译成现实。Zhichao Jiang 的个人实验室，记录 AI、Agent、系统工程，以及其他值得动手验证的奇怪想法。"
     en: "Compiling wild ideas into reality. Zhichao Jiang's personal lab for AI, agents, systems engineering, and strange ideas worth testing."
-footer_plate: {zh: "HUMAN INTENT → MACHINE EXECUTION", en: "HUMAN INTENT → MACHINE EXECUTION"}
 copyright_name: {zh: "蒋志超", en: "Zhichao Jiang"}

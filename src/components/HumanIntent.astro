@@ -1,0 +1,51 @@
+---
+import { pick, profile, type Locale } from '../lib/data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const hi = profile.human_intent;
+const note = pick(hi?.note, locale);
+---
+{hi && (
+  <section class="human-intent container reveal" aria-label={`${hi.line1} → ${hi.line2}`}>
+    <p class="hi-lines" aria-hidden="true">
+      <span class="hi-word">{hi.line1}</span>
+      {/* Koulen has no arrow glyph, so the arrow is drawn in the body face. */}
+      <span class="hi-arrow">↓</span>
+      <span class="hi-word">{hi.line2}</span>
+    </p>
+    {note && <p class="hi-note small muted">{note}</p>}
+  </section>
+)}
+
+<style>
+  .human-intent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-block: calc(var(--u) * 4) calc(var(--u) * 10);
+  }
+  .hi-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--u) * 0.5);
+    font-family: var(--font-plate);
+    text-transform: uppercase;
+    color: var(--ink);
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+  }
+  .hi-word { white-space: nowrap; }
+  .hi-arrow {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8em;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--accent);
+  }
+  .hi-note { margin-top: calc(var(--u) * 2); }
+</style>

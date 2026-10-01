@@ -24,7 +24,6 @@ export interface Profile {
   email: string;
   links: { id: string; label: string; url: string }[];
   seo: { home_title: Bi; home_description: Bi };
-  footer_plate: Bi;
   copyright_name: Bi;
 }
 
