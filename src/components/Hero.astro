@@ -51,6 +51,7 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
     gap: calc(var(--u) * 6);
   }
   .headline { font-size: 0.95rem; font-weight: 500; letter-spacing: 0.08em; }
+  :global(:root[lang^="zh"]) .headline { letter-spacing: 0.04em; }
   .name {
     font-family: var(--font-hero);
     text-transform: uppercase;
