@@ -1,0 +1,113 @@
+# 占位数据（PS-WP-02）。键名与 content-schema.md v1 完全一致；五个固定 slug + 两条 featured: false 占位卡片。PS-WP-03 会整体覆盖。
+- slug: hirenet
+  name: "HireNet"
+  featured: true
+  order: 1
+  years: "2026–"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "占位：口径说明。", en: "Placeholder: scope note."}
+  image: ""
+- slug: htc-trading-core
+  name: "HTC Trading Core"
+  featured: true
+  order: 2
+  years: "2026–"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "", en: ""}
+  image: ""
+- slug: conclave
+  name: "Conclave"
+  featured: true
+  order: 3
+  years: "2025–2026"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "占位：口径说明。", en: "Placeholder: scope note."}
+  image: ""
+- slug: universal-smart-clothes
+  name: "Universal Smart Clothes"
+  featured: true
+  order: 4
+  years: "2025–2026"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "", en: ""}
+  image: ""
+- slug: wit-or-die
+  name: "Wit or Die"
+  featured: true
+  order: 5
+  years: "2025–2026"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "占位：口径说明。", en: "Placeholder: scope note."}
+  image: ""
+- slug: placeholder-card-1
+  name: "Placeholder Card One"
+  featured: false
+  order: 6
+  years: "2025"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "", en: ""}
+  image: ""
+- slug: placeholder-card-2
+  name: "Placeholder Card Two"
+  featured: false
+  order: 7
+  years: "2024"
+  category: {zh: "占位类别、占位标签", en: "Placeholder, category"}
+  summary: {zh: "占位：一句话说明这个项目做什么。", en: "Placeholder: one sentence on what this project does."}
+  details:
+    zh: ["占位要点一，含真实数字。", "占位要点二。", "占位要点三。"]
+    en: ["Placeholder point one, with real numbers.", "Placeholder point two.", "Placeholder point three."]
+  stack: ["TypeScript", "Python", "Placeholder"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666"}
+  status: {zh: "占位：当前状态一句话。", en: "Placeholder: current status."}
+  disclosure: {zh: "占位：口径说明。", en: "Placeholder: scope note."}
+  image: ""

@@ -1,0 +1,31 @@
+{
+  "nav": { "home": "主页", "resume": "简历", "portfolio": "作品集", "blog": "博客" },
+  "theme": { "light": "浅色", "dark": "深色" },
+  "lang": { "zh": "中", "en": "EN" },
+  "sections": {
+    "featured_intro": "精选项目",
+    "more_works": "更多作品",
+    "more_works_sub": "小工具、实验与旁支项目。",
+    "contact": "联系",
+    "blog_title": "博客",
+    "blog_intro": "关于智能体系统、产品与工程的笔记。",
+    "blog_empty": "还没有文章。第一篇正在写。",
+    "resume_title": "简历",
+    "portfolio_title": "作品集"
+  },
+  "labels": {
+    "demo": "演示",
+    "repo": "仓库",
+    "package": "包",
+    "status": "状态",
+    "scroll_down": "向下滚动",
+    "hover_hint": "悬停查看详情",
+    "built_with": "技术栈"
+  },
+  "table": { "name": "名称", "category": "类别", "years": "年份" },
+  "resume": { "summary": "概述", "education": "教育", "experience": "经历", "awards": "奖项", "skills": "技能", "download": "下载 PDF" },
+  "portfolio": { "intro": "按时间与重要性排列的五个项目，每个都写清楚做了什么、用了什么、现在在哪。", "disclosure": "口径说明" },
+  "blog": { "back": "返回博客" },
+  "meta": { "description": "个人网站：项目、简历与写作。", "theme_label": "颜色主题", "lang_label": "语言", "nav_label": "主导航", "clock_label": "当地时间" },
+  "footer": { "rights": "保留所有权利。" }
+}

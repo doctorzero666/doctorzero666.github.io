@@ -1,0 +1,13 @@
+# 占位数据（PS-WP-02）。键名与 content-schema.md v1 完全一致，PS-WP-03 会整体覆盖本文件。
+summary: {zh: "占位：两三句职业概述。", en: "Placeholder: a two or three sentence career summary."}
+education:
+  - {school: {zh: "占位大学", en: "Placeholder University"}, degree: {zh: "占位学位", en: "Placeholder Degree"}, period: "2024.02–2026.05", notes: {zh: "占位备注。", en: "Placeholder notes."}}
+experience:
+  - {org: {zh: "占位机构甲", en: "Placeholder Org A"}, role: {zh: "占位职位", en: "Placeholder Role"}, period: "2025–2026", bullets: {zh: ["占位要点一。", "占位要点二。"], en: ["Placeholder bullet one.", "Placeholder bullet two."]}}
+  - {org: {zh: "占位机构乙", en: "Placeholder Org B"}, role: {zh: "占位职位", en: "Placeholder Role"}, period: "2023–2024", bullets: {zh: ["占位要点一。"], en: ["Placeholder bullet one."]}}
+awards:
+  - {title: {zh: "占位奖项", en: "Placeholder Award"}, date: "2026-02", notes: {zh: "占位说明。", en: "Placeholder notes."}}
+skills:
+  - {group: {zh: "占位技能组", en: "Placeholder Group"}, items: ["TypeScript", "Python", "Astro"]}
+  - {group: {zh: "占位技能组二", en: "Placeholder Group Two"}, items: ["Agents", "RAG", "Evals"]}
+pdf: ""

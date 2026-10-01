@@ -1,0 +1,31 @@
+{
+  "nav": { "home": "Home", "resume": "Resume", "portfolio": "Portfolio", "blog": "Blog" },
+  "theme": { "light": "Light", "dark": "Dark" },
+  "lang": { "zh": "中", "en": "EN" },
+  "sections": {
+    "featured_intro": "Selected projects",
+    "more_works": "More work",
+    "more_works_sub": "Small tools, experiments and side projects.",
+    "contact": "Contact",
+    "blog_title": "Blog",
+    "blog_intro": "Notes on agent systems, product and engineering.",
+    "blog_empty": "No posts yet. The first one is being written.",
+    "resume_title": "Resume",
+    "portfolio_title": "Portfolio"
+  },
+  "labels": {
+    "demo": "Demo",
+    "repo": "Repo",
+    "package": "Package",
+    "status": "Status",
+    "scroll_down": "Scroll",
+    "hover_hint": "Hover a row for details",
+    "built_with": "Built with"
+  },
+  "table": { "name": "Name", "category": "Category", "years": "Years" },
+  "resume": { "summary": "Summary", "education": "Education", "experience": "Experience", "awards": "Awards", "skills": "Skills", "download": "Download PDF" },
+  "portfolio": { "intro": "Five projects, in order. Each states what was built, with what, and where it stands now.", "disclosure": "Scope note" },
+  "blog": { "back": "Back to blog" },
+  "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Local time" },
+  "footer": { "rights": "All rights reserved." }
+}

@@ -1,0 +1,126 @@
+/* ==========================================================================
+   Design tokens. Values follow the reference analysis (cream paper + warm
+   charcoal ink, one accent in the hero); the implementation is original.
+   ========================================================================== */
+:root {
+  --paper: #F3EEE4;
+  --paper-2: #E9E3D7;
+  --ink: #2B2926;
+  --ink-inverse: #F3EEE4;
+  --accent: #002FA7;          /* Klein blue, hero only */
+  --hero-ground: #F3EEE4;
+  --plate: #B23A2E;           /* footer plate, the single saturated block */
+  --plate-ink: #F6EBE3;
+  --muted: 0.6;
+
+  --font-cjk: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --font-display: "Instrument Serif", "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+  --font-body: "Geist Variable", var(--font-cjk);
+  --font-hero: "Rubik Variable", var(--font-body);
+  --font-plate: "Koulen", var(--font-cjk);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --container: 1200px;
+  --gutter: 24px;
+  --u: 8px;                   /* baseline unit; all spacing is a multiple */
+  --article: 792px;
+  --line: 1px solid var(--ink);
+
+  --reveal-shift: 16px;
+  --reveal-time: 420ms;
+  --reveal-curve: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #2B2926;
+  --paper-2: #37342F;
+  --ink: #F3EEE4;
+  --ink-inverse: #2B2926;
+  --accent: #C3FFFC;
+  --hero-ground: #0E0E0E;
+  color-scheme: dark;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; border-radius: 0; box-shadow: none; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: clip;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+main { flex: 1; }
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+ul, ol { list-style: none; }
+:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ---------- Layout primitives ---------- */
+.container {
+  width: min(var(--container), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+.article { max-width: var(--article); }
+.rule { border: 0; border-top: var(--line); }
+.rule-bleed { border-top: var(--line); width: 100%; }
+
+/* ---------- Type helpers ---------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 7.2vw, 5.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+.serif { font-family: var(--font-display); font-weight: 400; }
+.small { font-size: 0.85rem; }
+.micro { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.muted { opacity: var(--muted); }
+.bracket::before { content: "[\00a0"; }
+.bracket::after { content: "\00a0]"; }
+.hl { font-weight: 600; }
+
+/* Links: no colour change, an underline appears on hover. Nothing moves. */
+.link, .prose a {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.3s ease;
+}
+.link:hover, .prose a:hover, .link:focus-visible { text-decoration-color: currentColor; }
+.prose a { text-decoration-color: currentColor; }
+
+/* ---------- Page heads (inner pages) ---------- */
+.page-head { padding-top: calc(var(--u) * 12); }
+.page-head .display { padding-bottom: calc(var(--u) * 2); }
+.page-head .sub { padding-block: calc(var(--u) * 2) calc(var(--u) * 6); max-width: 560px; }
+
+/* ---------- Reveal (only when JS is present and motion is allowed) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(var(--reveal-shift));
+    transition: opacity var(--reveal-time) var(--reveal-curve), transform var(--reveal-time) var(--reveal-curve);
+  }
+  .js .reveal.is-in { opacity: 1; transform: none; }
+}
+
+/* Thin scrollbar */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ink) 40%, transparent) transparent; }
