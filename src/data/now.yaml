@@ -1,11 +1,82 @@
-# /now/ 页数据（PS-WP-09 最小版，2026-10-01）。英文页复用同一份数据。
+# /now/ 与 /en/now/ 共用（v2，2026-10-01）。每月更新：改 subtitle、last_updated 与各 section 文本即可。
+# 双语字段为 {zh, en}；纯字符串字段（标签、标题、英文原则）中英页同值。编号由组件生成。
 subtitle: "2026.10 / CURRENT STATE"
+
 building:
-  - "Agent Studio Pipeline"
-exploring:
-  - "Agent workflows"
-  - "Multi-LLM deliberation"
-  - "Verifiable AI systems"
-thinking:
-  - "How much autonomy should an agent have before a human must re-enter the loop?"
-last_updated: "2026.10"
+  label: "BUILDING / BOWERBIRD"
+  name: "BOWERBIRD"
+  tagline:
+    zh: "你的社会人档案，由你自己的 agent 维护。"
+    en: "Your life-admin record, maintained by your own agent."
+  body:
+    zh:
+      - "一个由用户拥有、用户运行的个人事务档案。把生活中那些“千万别忘了”的事情，变成人和 agent 都能读取、维护和验证的长期记录。"
+      - "让 AI 吸收生活事务消耗的注意力，而不是让另一个平台拥有更多关于你的数据。"
+    en:
+      - "A user-owned, user-run archive of personal affairs. It turns the things in life you must never forget into a long-term record that both humans and agents can read, maintain and verify."
+      - "Let AI absorb the attention that life administration consumes, and keep your personal context portable, instead of handing another platform more data about you."
+
+questions:
+  label: "THE QUESTIONS"
+  items:
+    - title: "WHAT SHOULD AN AGENT REMEMBER?"
+      body:
+        zh: "Agent 的 memory 是它对我的印象。但我的签证、合同、保险、义务和历史，应该属于我，而不是属于某个 agent 的 memory。"
+        en: "An agent's memory is its impression of me. But my visa, contracts, insurance, obligations and history should belong to me, not to some agent's memory."
+    - title: "WHO OWNS PERSONAL CONTEXT?"
+      body:
+        zh: "如果未来每个 AI 都需要“了解我”，我的上下文应该被锁在 Apple、Google、微信或某个 Agent 里，还是应该存在一个我自己拥有、任何 Agent 都能读取的中立层？"
+        en: "If every AI will need to \"know me\", should my context be locked inside Apple, Google, WeChat or a single agent, or live in a neutral layer that I own and any agent can read?"
+    - title: "HOW DO YOU TRUST AN AGENT WITHOUT TRUSTING THE MODEL?"
+      lines:            # 中英页都原样显示这四句英文
+        - "Put invariants in code."
+        - "Treat content as data, never instructions."
+        - "Keep secrets outside the agent."
+        - "Make every change traceable."
+
+bets:
+  label: "CURRENT BETS"
+  items:
+    - title: "USER-RUN > PLATFORM-OWNED"
+      body:
+        zh: "个人上下文应该由用户运行和拥有。"
+        en: "Personal context should be run and owned by the user."
+    - title: "ARCHIVE ≠ MEMORY"
+      body:
+        zh: "人的长期记录，不应该等于 Agent 对人的印象。"
+        en: "A person's long-term record is not the same thing as an agent's impression of them."
+    - title: "CODE > PROMPT"
+      body:
+        zh: "真正重要的不变量应该由代码执行，而不是靠提示词要求模型听话。"
+        en: "The invariants that really matter should be enforced by code, not by prompts asking the model to behave."
+    - title: "PORTABLE > LOCKED-IN"
+      body:
+        zh: "一个人的上下文应该能被不同 Agent 使用，而不是绑定某一个 Agent。"
+        en: "A person's context should work across different agents, not be bound to any single one."
+
+gate:
+  label: "CURRENT GATE"
+  now:
+    label: "01 / NOW"
+    title: "SCHEMA + CORE"
+    body:
+      zh: "定义数据模型、状态机、去重、审计和派生规则。"
+      en: "Define the data model, state machine, deduplication, audit and derivation rules."
+  next:
+    label: "02 / NEXT"
+    title: "DOGFOOD EVERYTHING"
+    body:
+      zh: "用 Bowerbird 管理我自己的全部事务。"
+      en: "Run all of my own affairs on Bowerbird."
+  success:
+    label: "SUCCESS CONDITION"
+    value: "MISSED OBLIGATIONS = 0"
+
+horizon:
+  label: "LONG HORIZON"
+  question: "What happens if personal agents can understand demand before markets do?"
+  body:
+    zh: "需求可以被聚合，但个人上下文不一定要被集中。"
+    en: "Demand may be aggregated. Personal context doesn't have to be centralized."
+
+last_updated: "LAST UPDATED / 2026.10"

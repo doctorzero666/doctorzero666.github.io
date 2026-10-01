@@ -65,11 +65,15 @@ export interface Resume {
   pdf: string;
 }
 
+export interface NowEntry { title: string; body?: Bi; lines?: string[] }
+export interface NowStep { label: string; title: string; body: Bi }
 export interface Now {
   subtitle: string;
-  building: string[];
-  exploring: string[];
-  thinking: string[];
+  building: { label: string; name: string; tagline: Bi; body: Bi<string[]> };
+  questions: { label: string; items: NowEntry[] };
+  bets: { label: string; items: NowEntry[] };
+  gate: { label: string; now: NowStep; next: NowStep; success: { label: string; value: string } };
+  horizon: { label: string; question: string; body: Bi };
   last_updated: string;
 }
 
