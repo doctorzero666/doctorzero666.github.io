@@ -48,7 +48,7 @@
   "blog": { "back": "返回通信" },
   "page_titles": { "portfolio": "魔王实验室", "blog": "通信", "now": "NOW", "resume": "简历" },
   "meta": { "description": "个人网站：项目、简历与写作。", "theme_label": "颜色主题", "lang_label": "语言", "nav_label": "主导航", "clock_label": "所在地与状态" },
-  "footer": { "rights": "保留所有权利。" },
+  "footer": { "rights": "保留所有权利。", "connect": "CONNECT", "invite": "有个值得做出来的怪想法？" },
   "header": { "status": "SYD // ONLINE" },
   "now": { "title": "NOW", "building": "BUILDING", "exploring": "EXPLORING", "thinking": "THINKING ABOUT", "last_updated": "LAST UPDATED" }
 }

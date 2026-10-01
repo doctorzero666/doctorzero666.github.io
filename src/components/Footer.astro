@@ -17,6 +17,8 @@ const year = new Date().getFullYear();
     <div class="ident reveal">
       {brand && <p class="f-brand" lang="zh-CN">{brand}</p>}
       <p class="f-name">{realName}{profile.handle && ` / ${profile.handle}`}</p>
+      <p class="f-connect micro muted">{ui.footer.connect}</p>
+      <p class="f-invite small">{ui.footer.invite}</p>
       <ul class="f-links micro">
         <li><a class="bracket" href={`mailto:${profile.email}`}>EMAIL</a></li>
         {links.map((l) => <li><a class="bracket" href={l.url} rel="me noopener" target="_blank">{l.label.toUpperCase()}</a></li>)}
@@ -51,7 +53,9 @@ const year = new Date().getFullYear();
     line-height: 1.1;
     letter-spacing: 0.05em;
   }
-  .f-links { display: flex; gap: calc(var(--u) * 3); margin-top: var(--u); letter-spacing: 0.08em; }
+  .f-connect { margin-top: calc(var(--u) * 3); }
+  .f-invite { overflow-wrap: anywhere; }
+  .f-links { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 3); margin-top: var(--u); letter-spacing: 0.08em; }
   .bottom {
     display: flex;
     justify-content: space-between;

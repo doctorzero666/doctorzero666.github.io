@@ -40,7 +40,7 @@
   "blog": { "back": "BACK TO TRANSMISSIONS" },
   "page_titles": { "portfolio": "THE LAB", "blog": "TRANSMISSIONS", "now": "NOW", "resume": "CV" },
   "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Location and status" },
-  "footer": { "rights": "All rights reserved." },
+  "footer": { "rights": "All rights reserved.", "connect": "CONNECT", "invite": "Got a strange idea worth building?" },
   "header": { "status": "SYD // ONLINE" },
   "now": { "title": "NOW", "building": "BUILDING", "exploring": "EXPLORING", "thinking": "THINKING ABOUT", "last_updated": "LAST UPDATED" }
 }
