@@ -33,10 +33,43 @@
     en: "Two-person hackathon project; I was team lead and technical owner and made 130 of 141 commits. All on-chain activity is on testnets."
   image: ""
 
+- slug: agent-studio-pipeline
+  name: "Agent Studio Pipeline"
+  featured: true
+  order: 2
+  years: "2026–"
+  category: {zh: "编码智能体、任务交接、命令行工具", en: "Coding agents, task handoffs, CLI"}
+  summary:
+    zh: "面向编码智能体的本地优先管线：任务卡、独立工作树、交接检查点与评审门禁。"
+    en: "A local-first pipeline for coding agents: task cards, isolated worktrees, handoff checkpoints and review gates."
+  details:
+    zh:
+      - "5 个命令行入口，覆盖建工作区与任务、启动 Agent、写检查点、目录检查和有界运行。"
+      - "支持 Claude Code、Codex、Hermes 3 种命令行；同一任务只有一个写入者，各任务用独立工作树并行。"
+      - "studio-run 前台有界执行，超时即停；额度错误后换用备用命令行须显式授权，且最多 1 次。"
+      - "349 个本地测试，用临时仓库和模拟命令行运行，不调用模型 API；CI 也只用合成 Agent。"
+      - "发布前经非作者评审，修复 4 项问题；主干强制 ci 检查，注入失败后合并接口返回 HTTP 405。"
+    en:
+      - "Five CLI entry points cover workspace and task setup, agent launch, checkpoints, workspace checks and bounded runs."
+      - "Supports three agent CLIs (Claude Code, Codex, Hermes); each task has one writer, and tasks run in parallel in isolated worktrees."
+      - "studio-run executes in the foreground and stops on timeout; switching to a fallback CLI after a quota error needs explicit opt-in and happens at most once."
+      - "349 local tests run against temporary repositories and synthetic CLIs without calling any model API; CI also uses synthetic agents only."
+      - "A non-author review before release found 4 issues, all fixed; main requires the ci check, and an injected failure made the merge API return HTTP 405."
+  stack: ["Python", "Git worktree", "uv", "just", "pytest", "ruff", "lefthook", "commitlint", "GitHub Actions"]
+  links:
+    - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/agent-studio-pipeline"}
+  status:
+    zh: "v0.1.0a1 早期 alpha，2026-09-30 在 GitHub Releases 发布 wheel，未发布到 PyPI。"
+    en: "v0.1.0a1, early alpha; the wheel was released on GitHub Releases on 2026-09-30 and is not on PyPI."
+  disclosure:
+    zh: "个人项目。从个人工作室内部流程抽出的独立开源版本，按文件白名单导出，不含原 Git 历史与内部任务卡。本地钩子只是辅助反馈，不是安全沙箱。"
+    en: "Personal project. An independent open-source extraction of my studio's internal workflow, exported from a file allowlist without the original Git history or internal task cards. Local hooks give advisory feedback and are not a security sandbox."
+  image: ""
+
 - slug: htc-trading-core
   name: "HTC Trading Core"
   featured: true
-  order: 2
+  order: 3
   years: "2026"
   category: {zh: "量化研究、风控、模拟盘", en: "Trading research, risk control, paper trading"}
   summary:
@@ -69,7 +102,7 @@
 - slug: conclave
   name: "Conclave"
   featured: true
-  order: 3
+  order: 4
   years: "2026"
   category: {zh: "多模型审议、命令行工具、开源包", en: "Multi-LLM deliberation, CLI, open-source package"}
   summary:
@@ -103,7 +136,7 @@
 - slug: universal-smart-clothes
   name: "Universal Smart Clothing"
   featured: true
-  order: 4
+  order: 5
   years: "2025"
   category: {zh: "可穿戴、ESP32、语音交互", en: "Wearables, ESP32, voice interaction"}
   summary:
@@ -137,7 +170,7 @@
 - slug: wit-or-die
   name: "Wit or Die"
   featured: true
-  order: 5
+  order: 6
   years: "2026"
   category: {zh: "实时对战、LLM 出题、链上奖池", en: "Real-time multiplayer, LLM questions, on-chain pool"}
   summary:
