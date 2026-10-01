@@ -19,6 +19,7 @@ const ui = useUI(locale);
     <p class="sub small muted page-sub">{ui.portfolio.intro}</p>
     <ol class="works">
       {featuredProjects.map((p, i) => (
+        <>
         <li class="work grid-12 reveal" id={p.slug}>
           <p class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
           <div class="body">
@@ -49,6 +50,8 @@ const ui = useUI(locale);
             <ProjectLinks project={p} locale={locale} />
           </div>
         </li>
+        {'\n'}
+        </>
       ))}
     </ol>
   </div>
@@ -57,7 +60,12 @@ const ui = useUI(locale);
 <style>
   .page-sub { padding-block: calc(var(--u) * 3) calc(var(--u) * 2); max-width: 560px; }
   .works { padding-bottom: calc(var(--u) * 12); }
-  .work { padding-block: calc(var(--u) * 6); border-bottom: var(--line); }
+  .work {
+    padding-block: calc(var(--u) * 6);
+    border-bottom: var(--line);
+    /* Anchor jumps from the home index land below the fixed header, not under it. */
+    scroll-margin-top: var(--header-h);
+  }
   .work:first-child { border-top: var(--line); }
   .num {
     grid-column: 1 / span 2;
