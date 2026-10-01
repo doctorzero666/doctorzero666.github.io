@@ -193,10 +193,11 @@
   links:
     - {label: {zh: "仓库", en: "Repo"}, url: "https://github.com/doctorzero666/Wit-or-die"}
     - {label: {zh: "参赛提交", en: "Submission"}, url: "https://github.com/CasualHackathon/SPARK-AI-Hackathon/tree/main/submissions/JadeTwinkle"}
+    - {label: {zh: "获奖公示", en: "Award announcement"}, url: "https://x.com/LXDAO_Official/status/2019009266594861098"}
   status:
     zh: "黑客松作品，完整对局只在本地联通；线上版本未接合约。"
     en: "Hackathon build; the full loop runs locally only, and the hosted build is not wired to the contract."
   disclosure:
-    zh: "4 人黑客松团队作品，本人负责开发，团队分工见仓库 README。"
-    en: "Four-person hackathon team project; I was responsible for development. See the repository README for the team roles."
+    zh: "4 人黑客松团队中唯一的开发者，前端、后端、LLM 适配层与合约代码均由本人编写。"
+    en: "The only developer in a four-person hackathon team; I wrote the frontend, backend, LLM adapter layer and contract code."
   image: ""

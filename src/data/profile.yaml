@@ -14,6 +14,6 @@ hero_badges:
 email: "zhichao.jiang42@gmail.com"
 links:
   - {id: github, label: "GitHub", url: "https://github.com/doctorzero666"}
-  - {id: linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/Zhichao-Jiang"}
-footer_plate: {zh: "CHECK THE SEAMS 蒋志超 SHOW THE SOURCE", en: "CHECK THE SEAMS 蒋志超 SHOW THE SOURCE"}
+  - {id: linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/zhichao-jiang-2146b82a0/"}
+footer_plate: {zh: "HUMAN INTENT → MACHINE EXECUTION", en: "HUMAN INTENT → MACHINE EXECUTION"}
 copyright_name: {zh: "蒋志超", en: "Zhichao Jiang"}

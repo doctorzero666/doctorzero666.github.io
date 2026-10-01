@@ -8,9 +8,14 @@ const { locale } = Astro.props;
 const ui = useUI(locale);
 const plate = pick(profile.footer_plate, locale);
 // Split the plate into Latin words and the CJK name so each can take its own colour.
+// The arrow is split out too: Koulen has no arrow glyph, so it gets its own span.
 const plateParts = plate
-  ? plate.split(/([\u3400-\u9fff\uf900-\ufaff]+)/).map((t) => t.trim()).filter(Boolean)
-      .map((text) => ({ text, cjk: /[\u3400-\u9fff\uf900-\ufaff]/.test(text) }))
+  ? plate.split(/([\u3400-\u9fff\uf900-\ufaff]+|\u2192)/).map((t) => t.trim()).filter(Boolean)
+      .map((text) => ({
+        text,
+        cjk: /[\u3400-\u9fff\uf900-\ufaff]/.test(text),
+        arrow: text === '\u2192',
+      }))
   : [];
 const links = profile.links.filter((l) => l.url && l.url.trim());
 const year = new Date().getFullYear();
@@ -21,7 +26,7 @@ const year = new Date().getFullYear();
     <div class="plate-wrap reveal">
       {plateParts.length > 0 && (
         <p class="plate">
-          {plateParts.map((part, i) => <>{i > 0 && ' '}<span class={part.cjk ? 'p-name' : 'p-word'}>{part.text}</span></>)}
+          {plateParts.map((part, i) => <>{i > 0 && ' '}<span class={part.arrow ? 'p-arrow' : part.cjk ? 'p-name' : 'p-word'} aria-hidden={part.arrow ? 'true' : undefined}>{part.text}</span></>)}
         </p>
       )}
     </div>
@@ -78,6 +83,15 @@ const year = new Date().getFullYear();
     outline-offset: 3px;
   }
   .p-word { white-space: nowrap; }
+  .p-arrow {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85em;
+    line-height: 1;
+    letter-spacing: 0;
+    align-self: center;
+    color: var(--plate-gold);
+  }
   .p-name {
     color: var(--plate-ink);
     font-family: var(--font-display);
