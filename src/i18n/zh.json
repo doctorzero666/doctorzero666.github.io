@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "主页", "portfolio": "实验室", "blog": "通信", "now": "现在", "resume": "简历" },
+  "nav": { "home": "主页", "portfolio": "实验室", "blog": "通信", "now": "NOW", "resume": "简历" },
   "theme": { "light": "浅色", "dark": "深色" },
   "lang": { "zh": "中", "en": "EN" },
   "sections": {

@@ -1,7 +1,7 @@
 # personal-site profile v2 — PS-WP-09 品牌重构（2026-10-01）。键名遵守 content-schema.md，增删须同步 schema。
 name: {zh: "蒋志超", en: "Zhichao Jiang"}
 brand: {zh: "中二大魔王", en: "中二大魔王"}
-brand_sub: "PERSONAL LAB"
+brand_sub: "PERSONAL LAB / EST. 2026"
 handle: "@doctorzero666"
 display: {first: "ZHICHAO", last: "JIANG."}
 headline: {zh: "中二大魔王 / PERSONAL LAB", en: "中二大魔王 / PERSONAL LAB"}
