@@ -7,14 +7,12 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const ui = useUI(locale);
 // Same single-column layout and 1px section rules as the resume page. Both locales read
-// the same now.yaml; the section labels are English in both.
-const sections = [
-  { label: ui.now.building, items: now.building },
-  { label: ui.now.exploring, items: now.exploring },
-  { label: ui.now.thinking, items: now.thinking },
-].filter((s) => s.items && s.items.length > 0);
+// the same now.yaml; section labels, titles and the four principles are English in both.
+const { building, questions, bets, gate, horizon } = now;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+const steps = [gate.now, gate.next];
 ---
-<Base locale={locale} fullTitle={brandTitle(ui.page_titles.now, locale)} description={now.subtitle}>
+<Base locale={locale} fullTitle={brandTitle(ui.page_titles.now, locale)} description={building.tagline[locale]}>
   <div class="container">
     <header class="page-head">
       <h1 class="display reveal">{ui.now.title}</h1>
@@ -24,15 +22,70 @@ const sections = [
   <div class="container">
     <div class="article now">
       <p class="sub small muted">{now.subtitle}</p>
-      {sections.map((s) => (
-        <section class="block reveal">
-          <h2 class="micro muted">{s.label}</h2>
-          <ul class="items">
-            {s.items.map((item) => <li class="lead">{item}</li>)}
-          </ul>
-        </section>
-      ))}
-      <p class="updated micro muted">{ui.now.last_updated} / {now.last_updated}</p>
+
+      <section class="block reveal">
+        <h2 class="micro muted">{building.label}</h2>
+        <h3 class="lead">{building.name}</h3>
+        <p class="tagline serif">{building.tagline[locale]}</p>
+        {building.body[locale].map((p) => <p class="body serif">{p}</p>)}
+      </section>
+
+      <section class="block reveal">
+        <h2 class="micro muted">{questions.label}</h2>
+        <ol class="entries">
+          {questions.items.map((q, i) => (
+            <li class="entry">
+              <h3 class="entry-head"><span class="n micro muted">{num(i)}</span><span class="t">{q.title}</span></h3>
+              {q.body && <p class="body serif">{q.body[locale]}</p>}
+              {q.lines && (
+                <ul class="lines" lang="en">
+                  {q.lines.map((l) => <li class="body serif">{l}</li>)}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="block reveal">
+        <h2 class="micro muted">{bets.label}</h2>
+        <ol class="entries">
+          {bets.items.map((b, i) => (
+            <li class="entry">
+              <h3 class="entry-head"><span class="n micro muted">{num(i)}</span><span class="t">{b.title}</span></h3>
+              {b.body && <p class="body serif">{b.body[locale]}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="block reveal">
+        <h2 class="micro muted">{gate.label}</h2>
+        <div class="flow">
+          {steps.map((s, i) => (
+            <Fragment>
+              {i > 0 && <p class="arrow" aria-hidden="true">↓</p>}
+              <div class="step">
+                <p class="micro muted">{s.label}</p>
+                <h3 class="entry-head"><span class="t">{s.title}</span></h3>
+                <p class="body serif">{s.body[locale]}</p>
+              </div>
+            </Fragment>
+          ))}
+        </div>
+        <div class="success">
+          <p class="micro muted">{gate.success.label}</p>
+          <p class="value">{gate.success.value}</p>
+        </div>
+      </section>
+
+      <section class="block reveal">
+        <h2 class="micro muted">{horizon.label}</h2>
+        <p class="lead" lang="en">{horizon.question}</p>
+        <p class="body serif">{horizon.body[locale]}</p>
+      </section>
+
+      <p class="updated micro muted">{now.last_updated}</p>
     </div>
   </div>
 </Base>
@@ -42,7 +95,33 @@ const sections = [
   .now > .sub { padding-block: calc(var(--u) * 2) calc(var(--u) * 2); font-variant-numeric: tabular-nums; }
   .block { padding-block: calc(var(--u) * 4); border-bottom: var(--line); }
   .block > h2 { margin-bottom: calc(var(--u) * 2); font-weight: 400; }
-  .items { display: grid; gap: var(--u); }
-  .lead { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; }
+  .lead { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; font-weight: 400; }
+  .tagline { font-size: 1.2rem; line-height: 1.4; margin-top: var(--u); }
+  .body { font-size: 1.05rem; line-height: 1.6; margin-top: var(--u); overflow-wrap: break-word; }
+  .tagline + .body { margin-top: calc(var(--u) * 2); }
+
+  /* Numbered title rows for questions and bets */
+  .entries { display: grid; gap: calc(var(--u) * 3); }
+  .entry-head {
+    display: flex; gap: calc(var(--u) * 2); align-items: baseline;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .entry-head .n { flex: none; font-variant-numeric: tabular-nums; }
+  .entry > .body, .entry > .lines { padding-left: calc(var(--u) * 4); }
+  .lines { display: grid; gap: calc(var(--u) / 2); margin-top: var(--u); }
+  .lines > li { margin-top: 0; }
+
+  /* Gate: vertical 01 / NOW -> 02 / NEXT flow, then the success value */
+  .flow { display: grid; }
+  .step .entry-head { margin-top: calc(var(--u) / 2); }
+  .arrow { font-family: var(--font-display); font-size: 1.5rem; line-height: 1; padding-block: calc(var(--u) * 2); opacity: var(--muted); }
+  .success { margin-top: calc(var(--u) * 4); padding-top: calc(var(--u) * 3); border-top: var(--line); }
+  .value {
+    font-family: var(--font-plate); color: var(--accent);
+    font-size: clamp(2rem, 7vw, 3.25rem); line-height: 1.1; letter-spacing: 0.02em;
+    margin-top: var(--u); overflow-wrap: anywhere;
+  }
+
   .updated { padding-top: calc(var(--u) * 4); font-variant-numeric: tabular-nums; }
 </style>
