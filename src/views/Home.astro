@@ -20,7 +20,7 @@ const introParts = pick(profile.intro, locale).split(/(\[[^\]]+\])/g).filter(Boo
       <p class="intro-text">
         {introParts.map((part) => part.startsWith('[') ? <span class="hl">{part}</span> : part)}
       </p>
-      <p class="hint micro muted">{ui.labels.hover_hint}</p>
+      <p class="hint micro muted">{ui.index.hint}</p>
     </div>
     <div class="table reveal">
       <ProjectTable projects={featuredProjects} locale={locale} />

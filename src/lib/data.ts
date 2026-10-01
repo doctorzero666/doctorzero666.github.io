@@ -68,3 +68,15 @@ export function pickList(value: Bi<string[]> | undefined, locale: Locale): strin
   const v = value[locale];
   return v && v.length ? v : value.zh ?? [];
 }
+
+/** The one link the home index shows: a live demo if there is one, else the repo, else the first link. */
+export function primaryLink(project: Project): Project['links'][number] | undefined {
+  const links = project.links.filter((l) => l.url && l.url.trim());
+  const is = (l: Project['links'][number], words: string[]) =>
+    words.some((w) => `${l.label.zh} ${l.label.en}`.toLowerCase().includes(w));
+  return (
+    links.find((l) => is(l, ['在线演示', 'live demo'])) ??
+    links.find((l) => is(l, ['仓库', 'repo'])) ??
+    links[0]
+  );
+}

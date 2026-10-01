@@ -1,39 +1,48 @@
 ---
-import ProjectLinks from './ProjectLinks.astro';
-import { useUI } from '../i18n';
-import { pick, pickList, type Locale, type Project } from '../lib/data';
+// Home-page index: name / category / years per row. Hover or focus reveals the one-line
+// summary and a single primary link; the whole row links to the full entry on /portfolio/.
+import { localePath, useUI } from '../i18n';
+import { pick, primaryLink, type Locale, type Project } from '../lib/data';
 
 interface Props { projects: Project[]; locale: Locale }
 const { projects, locale } = Astro.props;
 const ui = useUI(locale);
+const portfolio = localePath(locale, 'portfolio');
+const external = (url: string) => /^https?:\/\//.test(url);
 ---
 <div class="ptable" role="list">
   <div class="phead micro muted" aria-hidden="true">
     <span>{ui.table.name}</span><span>{ui.table.category}</span><span>{ui.table.years}</span>
   </div>
-  {projects.map((p) => (
-    <article class="prow" role="listitem" tabindex="0" aria-labelledby={`p-${p.slug}`}>
-      <div class="pline">
-        <h3 class="pname" id={`p-${p.slug}`}>{p.name}</h3>
-        <p class="pcat muted">{pick(p.category, locale)}</p>
-        <p class="pyear muted">[{p.years}]</p>
-      </div>
-      <div class="pmore">
-        <div class="pmore-inner">
-          <p class="psum">{pick(p.summary, locale)}</p>
-          {pickList(p.details, locale).length > 0 && (
-            <ul class="pdetails">
-              {pickList(p.details, locale).map((d) => <li>{d}</li>)}
-            </ul>
-          )}
-          {p.stack.length > 0 && (
-            <p class="pstack micro"><span class="muted">{ui.labels.built_with}:</span> {p.stack.join(' / ')}</p>
-          )}
-          <ProjectLinks project={p} locale={locale} />
+  {projects.map((p) => {
+    const link = primaryLink(p);
+    return (
+      <>
+      <article class="prow" role="listitem" aria-labelledby={`p-${p.slug}`}>
+        <div class="pline">
+          <h3 class="pname" id={`p-${p.slug}`}>
+            <a class="prow-link" href={`${portfolio}#${p.slug}`} title={ui.index.full_entry}>{p.name}</a>
+          </h3>
+          <p class="pcat muted">{pick(p.category, locale)}</p>
+          <p class="pyear muted">[{p.years}]</p>
         </div>
-      </div>
-    </article>
-  ))}
+        <div class="pmore">
+          <div class="pmore-inner">
+            <p class="psum">{pick(p.summary, locale)}</p>
+            {link && (
+              <p class="plink small">
+                <a class="link bracket" href={link.url} target={external(link.url) ? '_blank' : undefined} rel={external(link.url) ? 'noopener' : undefined}>
+                  {pick(link.label, locale)} ↗
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+      </article>
+      {'\n'}
+      </>
+    );
+  })}
 </div>
 
 <style>
@@ -45,7 +54,14 @@ const ui = useUI(locale);
     align-items: baseline;
   }
   .phead { padding-block: var(--u); border-bottom: var(--line); }
-  .prow { position: relative; border-bottom: var(--line); outline-offset: -1px; }
+  .prow { position: relative; border-bottom: var(--line); cursor: pointer; }
+  /* The name link stretches over the whole row, so any click on the row opens the full entry. */
+  .prow-link { color: inherit; text-decoration: none; }
+  .prow-link::after { content: ''; position: absolute; inset: 0; outline-offset: -1px; }
+  .prow-link:focus { outline: none; }
+  .prow-link:focus-visible::after { outline: 1px solid var(--ink); }
+  /* The primary link sits above the stretched row link so it stays clickable on its own. */
+  .plink { position: relative; z-index: 1; }
   /* Ruler tick on the active row: a 1px spine with 8px ticks, just left of the table. Fades only. */
   .prow::before {
     content: '';
@@ -77,21 +93,15 @@ const ui = useUI(locale);
   .pmore-inner > * + * { margin-top: var(--u); }
   .pmore-inner > :last-child { margin-bottom: calc(var(--u) * 3); }
   .psum { font-size: 0.85rem; line-height: 1.6; max-width: 36em; }
-  .psum, .pdetails, .pstack, .pcat { overflow-wrap: anywhere; }
-  .pdetails {
-    font-size: 0.8rem;
-    line-height: 1.6;
-    color: color-mix(in srgb, var(--ink) 60%, transparent);
-    max-width: 40em;
-    display: grid;
-    gap: 2px;
+  .psum, .pcat { overflow-wrap: anywhere; }
+  @media (prefers-reduced-motion: reduce) {
+    .prow::before, .pline, .pmore { transition: none; }
   }
-  .pdetails li { padding-left: 1.4em; position: relative; }
-  .pdetails li::before { content: '—'; position: absolute; left: 0; }
-  /* Touch screens have no hover: show everything. */
+  /* Touch screens have no hover: the summary is always shown and the row is a plain tap target. */
   @media (hover: none) {
     .pmore { grid-template-rows: 1fr; }
     .prow::before { display: none; }
+    .prow:focus-within .pline { padding-block: calc(var(--u) * 2); }
   }
   @media (max-width: 480px) {
     .phead { display: none; }
