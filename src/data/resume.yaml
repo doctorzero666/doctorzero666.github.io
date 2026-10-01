@@ -1,13 +1,52 @@
-# 占位数据（PS-WP-02）。键名与 content-schema.md v1 完全一致，PS-WP-03 会整体覆盖本文件。
-summary: {zh: "占位：两三句职业概述。", en: "Placeholder: a two or three sentence career summary."}
+# personal-site resume v1 — PS-WP-01 产出（2026-10-01）。数字来源见 claims.md。
+summary:
+  zh: "AI 产品工程师，做智能体系统与 LLM 应用工程。近期作品包括已部署的多 Agent 劳动力平台和一个黑客松 LLM 赛道第一名项目。我习惯把模型的不确定性挡在入库、结算和硬件这几道边界上，并用测试证明。"
+  en: "AI product engineer working on agent systems and LLM application engineering. Recent work includes a deployed multi-agent labour platform and a first-place hackathon LLM-track project. I keep model uncertainty out at the boundaries that matter, persistence, money and hardware, and prove it with tests."
 education:
-  - {school: {zh: "占位大学", en: "Placeholder University"}, degree: {zh: "占位学位", en: "Placeholder Degree"}, period: "2024.02–2026.05", notes: {zh: "占位备注。", en: "Placeholder notes."}}
+  - school: {zh: "悉尼大学", en: "The University of Sydney"}
+    degree: {zh: "计算机科学 硕士", en: "Master of Computer Science"}
+    period: "2024.02–2026.05"
+    notes:
+      zh: "核心课程：机器学习、深度学习、数据挖掘、统计建模、自然语言处理。毕业项目为 6 人团队的图神经网络推荐系统。"
+      en: "Coursework: machine learning, deep learning, data mining, statistical modelling, NLP. Capstone: a graph neural network recommender system built by a team of six."
+  - school: {zh: "江苏大学京江学院", en: "Jiangsu University, Jingjiang College"}
+    degree: {zh: "电子信息工程 学士", en: "B.Eng. in Electronic Information Engineering"}
+    period: "2017.09–2021.06"
+    notes:
+      zh: "方向：信号处理、通信系统、嵌入式实践（C / C++、MATLAB）。毕业论文：基于单片机的智能家居系统。"
+      en: "Focus: signal processing, communication systems, embedded practice (C/C++, MATLAB). Thesis: an MCU-based smart home system."
 experience:
-  - {org: {zh: "占位机构甲", en: "Placeholder Org A"}, role: {zh: "占位职位", en: "Placeholder Role"}, period: "2025–2026", bullets: {zh: ["占位要点一。", "占位要点二。"], en: ["Placeholder bullet one.", "Placeholder bullet two."]}}
-  - {org: {zh: "占位机构乙", en: "Placeholder Org B"}, role: {zh: "占位职位", en: "Placeholder Role"}, period: "2023–2024", bullets: {zh: ["占位要点一。"], en: ["Placeholder bullet one."]}}
+  - org: {zh: "南京八五一一研究所", en: "Nanjing 8511 Research Institute"}
+    role: {zh: "射频工程师", en: "RF Engineer"}
+    period: "2022.01–2023.03"
+    bullets:
+      zh:
+        - "建立分层排查路径，用二分法每次把故障范围缩小一半，单次故障定位由 5 小时降至 2 小时。"
+        - "为每次修复设计固定输入条件与判定阈值的复测方案；流程固定后 10 个月内同类问题没有复发。"
+        - "把实验步骤、输入条件与判定阈值整理为统一的测试记录模板，他人依据文档即可独立复现。"
+      en:
+        - "Built a layered fault-isolation path that halves the search space with each measurement, cutting a single fault isolation from 5 h to 2 h."
+        - "Added a retest procedure with fixed inputs and thresholds for every fix; no recurrence of the same fault class in the following 10 months."
+        - "Turned test steps, inputs and thresholds into a standard record template, so others could reproduce a test from the document alone."
 awards:
-  - {title: {zh: "占位奖项", en: "Placeholder Award"}, date: "2026-02", notes: {zh: "占位说明。", en: "Placeholder notes."}}
+  - title: {zh: "SPARK AI Hackathon SpoonOS LLM 应用赛道第一名", en: "1st place, SpoonOS LLM Application Track, SPARK AI Hackathon"}
+    date: "2026-02"
+    notes:
+      zh: "作品 Wit or Die；赛程 2026-01-26 至 02-01，共 52 个提交项目。"
+      en: "Project: Wit or Die. Held 2026-01-26 to 02-01 with 52 submitted projects."
+  - title: {zh: "江苏大学 优秀毕业生", en: "Outstanding Graduate, Jiangsu University"}
+    date: "2021-06"
+    notes: {zh: "", en: ""}
+  - title: {zh: "江苏大学 学习优秀奖学金二等奖", en: "Academic Excellence Scholarship (2nd class), Jiangsu University"}
+    date: "2020-11"
+    notes: {zh: "2019–2020 学年。", en: "2019–2020 academic year."}
 skills:
-  - {group: {zh: "占位技能组", en: "Placeholder Group"}, items: ["TypeScript", "Python", "Astro"]}
-  - {group: {zh: "占位技能组二", en: "Placeholder Group Two"}, items: ["Agents", "RAG", "Evals"]}
+  - group: {zh: "工程", en: "Engineering"}
+    items: ["Python", "C/C++", "Flask", "FastAPI", "REST API", "SQL", "WebSocket", "pytest", "Git", "CI"]
+  - group: {zh: "AI 与大模型", en: "AI & LLM"}
+    items: ["LLM API", "Agent orchestration", "MCP", "JSON Schema validation", "RAG / Embedding", "PyTorch"]
+  - group: {zh: "Web3", en: "Web3"}
+    items: ["Solidity", "Hardhat", "x402", "wagmi / viem"]
+  - group: {zh: "嵌入式", en: "Embedded"}
+    items: ["ESP32", "Arduino C++", "Bluetooth serial", "Sensors & actuators", "Finite state machines"]
 pdf: ""

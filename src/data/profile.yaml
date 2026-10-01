@@ -1,17 +1,19 @@
-# 占位数据（PS-WP-02）。键名与 content-schema.md v1 完全一致，PS-WP-03 会整体覆盖本文件。
+# personal-site profile v1 — PS-WP-01 产出（2026-10-01）。键名遵守 content-schema.md，不得增删。
 name: {zh: "蒋志超", en: "Zhichao Jiang"}
 display: {first: "ZHICHAO", last: "JIANG."}
 headline: {zh: "AI 产品工程师 · 智能体系统", en: "AI Product Engineer · Agent Systems"}
-tagline: {zh: "模型很少是问题，系统死在接缝处。", en: ""}
+tagline: {zh: "模型很少是问题，系统死在接缝处。", en: "The model is rarely the problem. Systems die at the seams."}
 location: {city: {zh: "悉尼", en: "Sydney"}, timezone: "Australia/Sydney"}
-intro: {zh: "占位：我构建 [智能体系统]，从协议到产品。这里写两到三句自我介绍。", en: "Placeholder: I build [agent systems], from protocol to product. Two or three sentences go here."}
+intro:
+  zh: "我构建 [智能体系统]，从协议、结算到上线的产品。我关心模型之外的部分：校验、降级、对账和测试。现居悉尼。"
+  en: "I build [agent systems], from protocol and settlement to shipped product. I care about what surrounds the model: validation, fallbacks, reconciliation and tests. Based in Sydney."
 hero_badges:
-  - {zh: "占位标签一", en: "Placeholder one"}
-  - {zh: "占位标签二", en: "Placeholder two"}
-  - {zh: "占位标签三", en: "Placeholder three"}
+  - {zh: "智能体编排与结算", en: "Agent orchestration & settlement"}
+  - {zh: "黑客松 LLM 赛道第一", en: "1st place, hackathon LLM track"}
+  - {zh: "每个数字都可查", en: "Every number is checkable"}
 email: "zhichao.jiang42@gmail.com"
 links:
   - {id: github, label: "GitHub", url: "https://github.com/doctorzero666"}
-  - {id: linkedin, label: "LinkedIn", url: ""}
-footer_plate: {zh: "占位 BUILT 志超 REAL", en: "PLACEHOLDER BUILT 志超 REAL"}
+  - {id: linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/Zhichao-Jiang"}
+footer_plate: {zh: "CHECK THE SEAMS 蒋志超 SHOW THE SOURCE", en: "CHECK THE SEAMS 蒋志超 SHOW THE SOURCE"}
 copyright_name: {zh: "蒋志超", en: "Zhichao Jiang"}
