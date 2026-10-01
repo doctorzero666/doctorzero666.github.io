@@ -163,8 +163,8 @@
     zh: "课程原型，仓库已在 2026-08-10 公开，不再推进。"
     en: "Course prototype; the repository was made public on 2026-08-10 and is no longer under development."
   disclosure:
-    zh: "悉尼大学 ELEC5047 课程 4 人团队项目。电子件未做防水，加热无独立温度切断。"
-    en: "Four-person team project for ELEC5047 at the University of Sydney. Electronics are not waterproof and heating has no independent thermal cutoff."
+    zh: "悉尼大学 ELEC5047 课程 4 人团队项目。"
+    en: "Four-person team project for ELEC5047 at the University of Sydney."
   image: ""
 
 - slug: wit-or-die
