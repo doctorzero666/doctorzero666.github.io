@@ -52,8 +52,7 @@ export const resume = parse(resumeSrc) as Resume;
 
 export const featuredProjects = projects
   .filter((p) => p.featured)
-  .sort((a, b) => a.order - b.order)
-  .slice(0, 5);
+  .sort((a, b) => a.order - b.order);
 export const moreProjects = projects.filter((p) => !p.featured).sort((a, b) => a.order - b.order);
 
 /** Pick the localized string; zh is the source of truth, so an empty en falls back to zh. */
