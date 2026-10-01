@@ -29,7 +29,7 @@
     "hover_hint": "悬停查看详情"
   },
   "table": { "name": "名称", "category": "类别", "years": "年份" },
-  "index": { "hint": "悬停看简介，点击看全文", "full_entry": "查看详情" },
+  "index": { "full_entry": "查看详情" },
   "resume": { "summary": "概述", "education": "教育", "experience": "经历", "awards": "奖项", "skills": "技能", "download": "下载 PDF" },
   "portfolio": {
     "title": "魔王实验室",

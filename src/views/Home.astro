@@ -25,7 +25,6 @@ const introParts = pick(profile.lab_intro, locale).split(/(\[[^\]]+\])/g).filter
       <p class="intro-text">
         {introParts.map((part) => part.startsWith('[') ? <span class="hl">{part}</span> : part)}
       </p>
-      <p class="hint micro muted">{ui.index.hint}</p>
     </div>
     <div class="table reveal">
       <ProjectTable projects={featuredProjects} locale={locale} />
@@ -57,10 +56,8 @@ const introParts = pick(profile.lab_intro, locale).split(/(\[[^\]]+\])/g).filter
     max-width: 34em;
   }
   .intro-text .hl { color: var(--ink); font-weight: 600; }
-  .hint { margin-top: calc(var(--u) * 3); }
   @media (max-width: 900px) {
     .intro, .table { grid-column: 1 / -1; }
     .intro { position: static; }
   }
-  @media (hover: none) { .hint { display: none; } }
 </style>

@@ -21,7 +21,7 @@
     "hover_hint": "Hover a row for details"
   },
   "table": { "name": "Name", "category": "Category", "years": "Years" },
-  "index": { "hint": "Hover for a summary, click for the full entry", "full_entry": "Full entry" },
+  "index": { "full_entry": "Full entry" },
   "resume": { "summary": "Summary", "education": "Education", "experience": "Experience", "awards": "Awards", "skills": "Skills", "download": "Download PDF" },
   "portfolio": {
     "title": "THE LAB",
