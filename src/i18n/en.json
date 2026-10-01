@@ -24,7 +24,7 @@
   },
   "table": { "name": "Name", "category": "Category", "years": "Years" },
   "resume": { "summary": "Summary", "education": "Education", "experience": "Experience", "awards": "Awards", "skills": "Skills", "download": "Download PDF" },
-  "portfolio": { "intro": "Five projects, in order. Each states what was built, with what, and where it stands now.", "disclosure": "Scope note" },
+  "portfolio": { "intro": "Six projects, ordered by importance. Each one says what it does, what it is built with and where it stands now.", "disclosure": "Scope note" },
   "blog": { "back": "Back to blog" },
   "meta": { "description": "Personal site: projects, resume and writing.", "theme_label": "Color theme", "lang_label": "Language", "nav_label": "Main navigation", "clock_label": "Local time" },
   "footer": { "rights": "All rights reserved." }
