@@ -1,6 +1,6 @@
 # personal-site
 
-蒋志超的中英双语个人网站。Astro 静态站，部署到 GitHub Pages（https://doctorzero666.github.io）。
+蒋志超的中英双语个人网站。Astro 静态站，部署到 GitHub Pages https://doctorzero666.github.io。
 
 中文在 `/`，英文在 `/en/`。四个页面：主页、简历（`/resume/`）、作品集（`/portfolio/`）、博客（`/blog/`）。
 
