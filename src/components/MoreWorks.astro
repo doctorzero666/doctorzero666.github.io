@@ -1,12 +1,14 @@
 ---
 import { useUI } from '../i18n';
 import { pick, type Locale, type Project } from '../lib/data';
+import { projectLinkAttrs } from '../lib/analytics-links';
 
 interface Props { projects: Project[]; locale: Locale }
 const { projects, locale } = Astro.props;
 const ui = useUI(locale);
 // With no non-featured projects the whole section (title, cards, spacing) is omitted.
-const firstUrl = (p: Project) => p.links.find((l) => l.url && l.url.trim())?.url;
+// A card opens the project's first link, so it is tracked as a click on that link.
+const firstLink = (p: Project) => p.links.find((l) => l.url && l.url.trim());
 ---
 {projects.length > 0 && (
 <section class="more container" aria-labelledby="more-title">
@@ -16,11 +18,13 @@ const firstUrl = (p: Project) => p.links.find((l) => l.url && l.url.trim())?.url
   </h2>
     <ul class="cards">
       {projects.map((p) => {
-        const url = firstUrl(p);
+        const link = firstLink(p);
+        const url = link?.url;
         const Tag = url ? 'a' : 'div';
+        const ga = link ? projectLinkAttrs(p, link) : {};
         return (
           <li class="reveal">
-            <Tag class="card" href={url} target={url ? '_blank' : undefined} rel={url ? 'noopener' : undefined}>
+            <Tag class="card" href={url} target={url ? '_blank' : undefined} rel={url ? 'noopener' : undefined} {...ga}>
               <span class="mark" aria-hidden="true">{p.name.slice(0, 1)}</span>
               <span class="cname">{p.name}</span>
               <span class="ccat muted">{pick(p.category, locale)}</span>

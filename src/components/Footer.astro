@@ -1,6 +1,7 @@
 ---
 import { useUI } from '../i18n';
 import { pick, profile, type Locale } from '../lib/data';
+import { gaAttrs, profileLinkAttrs } from '../lib/analytics-links';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -20,8 +21,8 @@ const year = new Date().getFullYear();
       <p class="f-connect micro muted">{ui.footer.connect}</p>
       <p class="f-invite small">{ui.footer.invite}</p>
       <ul class="f-links micro">
-        <li><a class="bracket" href={`mailto:${profile.email}`}>EMAIL</a></li>
-        {links.map((l) => <li><a class="bracket" href={l.url} rel="me noopener" target="_blank">{l.label.toUpperCase()}</a></li>)}
+        <li><a class="bracket" href={`mailto:${profile.email}`} {...gaAttrs('contact_click', { contact_type: 'email' })}>EMAIL</a></li>
+        {links.map((l) => <li><a class="bracket" href={l.url} rel="me noopener" target="_blank" {...profileLinkAttrs(l.id)}>{l.label.toUpperCase()}</a></li>)}
       </ul>
     </div>
   </div>

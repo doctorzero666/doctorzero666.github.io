@@ -1,6 +1,7 @@
 ---
 import { localePath, pageFromPath, useUI } from '../i18n';
 import { pick, profile, type Locale } from '../lib/data';
+import { gaAttrs } from '../lib/analytics-links';
 
 interface Props {
   locale: Locale;
@@ -12,12 +13,13 @@ const ui = useUI(locale);
 const page = pageFromPath(Astro.url.pathname);
 const section = page.split('/')[0];
 // Display order only; the URLs stay /, /portfolio/, /blog/, /now/, /resume/.
+// `ga` is the stable analytics id (the English label), sent as nav_item.
 const nav = [
-  { key: '', label: ui.nav.home },
-  { key: 'portfolio', label: ui.nav.portfolio },
-  { key: 'blog', label: ui.nav.blog },
-  { key: 'now', label: ui.nav.now },
-  { key: 'resume', label: ui.nav.resume },
+  { key: '', label: ui.nav.home, ga: 'index' },
+  { key: 'portfolio', label: ui.nav.portfolio, ga: 'lab' },
+  { key: 'blog', label: ui.nav.blog, ga: 'transmissions' },
+  { key: 'now', label: ui.nav.now, ga: 'now' },
+  { key: 'resume', label: ui.nav.resume, ga: 'cv' },
 ] as const;
 // Blog posts only exist in one language, so switching from a post goes to the blog index.
 const switchPage = switchHome ? '' : page.startsWith('blog/') ? 'blog' : page;
@@ -26,7 +28,7 @@ const switchPage = switchHome ? '' : page.startsWith('blog/') ? 'blog' : page;
   <div class="container bar small">
     <div class="left">
       <!-- The brand is never translated, so it is marked zh-CN on the English pages too. -->
-      <a class="brand" href={localePath(locale)} lang="zh-CN">{pick(profile.brand, locale)}</a>
+      <a class="brand" href={localePath(locale)} lang="zh-CN" {...gaAttrs('nav_click', { nav_item: 'brand' })}>{pick(profile.brand, locale)}</a>
       <div class="switches">
         <span class="group" role="group" aria-label={ui.meta.theme_label}>
           <span aria-hidden="true">[</span>
@@ -37,9 +39,9 @@ const switchPage = switchHome ? '' : page.startsWith('blog/') ? 'blog' : page;
         </span>
         <span class="group" role="group" aria-label={ui.meta.lang_label}>
           <span aria-hidden="true">[</span>
-          <a class="opt" href={localePath('en', switchPage)} hreflang={switchHome ? undefined : 'en'} lang="en" aria-current={locale === 'en' ? 'true' : undefined}>{ui.lang.en}</a>
+          <a class="opt" href={localePath('en', switchPage)} hreflang={switchHome ? undefined : 'en'} lang="en" aria-current={locale === 'en' ? 'true' : undefined} {...gaAttrs('language_switch', { to_language: 'en' })}>{ui.lang.en}</a>
           <span aria-hidden="true">|</span>
-          <a class="opt" href={localePath('zh', switchPage)} hreflang={switchHome ? undefined : 'zh-CN'} lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined}>{ui.lang.zh}</a>
+          <a class="opt" href={localePath('zh', switchPage)} hreflang={switchHome ? undefined : 'zh-CN'} lang="zh-CN" aria-current={locale === 'zh' ? 'true' : undefined} {...gaAttrs('language_switch', { to_language: 'zh' })}>{ui.lang.zh}</a>
           <span aria-hidden="true">]</span>
         </span>
       </div>
@@ -47,7 +49,7 @@ const switchPage = switchHome ? '' : page.startsWith('blog/') ? 'blog' : page;
     <p class="status" aria-label={ui.meta.clock_label}>{ui.header.status}</p>
     <nav class="nav" aria-label={ui.meta.nav_label}>
       {nav.map((item) => (
-        <a class="bracket" href={localePath(locale, item.key)} aria-current={section === item.key ? 'page' : undefined}>{item.label}</a>
+        <a class="bracket" href={localePath(locale, item.key)} aria-current={section === item.key ? 'page' : undefined} {...gaAttrs('nav_click', { nav_item: item.ga })}>{item.label}</a>
       ))}
     </nav>
   </div>

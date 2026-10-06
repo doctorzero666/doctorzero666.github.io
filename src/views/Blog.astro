@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import { localePath, useUI } from '../i18n';
 import { brandTitle, type Locale } from '../lib/data';
 import { getNumberedPosts } from '../lib/blog';
+import { gaAttrs } from '../lib/analytics-links';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -29,7 +30,7 @@ const fmt = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-AU', { year:
       <ul class="posts">
         {posts.map(({ post: p, tx }) => (
           <li class="reveal">
-            <a class="post grid-12" href={localePath(locale, `blog/${p.id}`)}>
+            <a class="post grid-12" href={localePath(locale, `blog/${p.id}`)} {...gaAttrs('transmission_click', { article_id: p.id, article_title: p.data.title })}>
               <p class="micro muted meta"><span class="tx">{tx}</span><br />{fmt.format(p.data.date)}</p>
               <div class="text">
                 <h2 class="ptitle serif">{p.data.title}</h2>

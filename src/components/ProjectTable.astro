@@ -3,6 +3,7 @@
 // summary and a single primary link; the whole row links to the full entry on /portfolio/.
 import { localePath, useUI } from '../i18n';
 import { pick, primaryLink, type Locale, type Project } from '../lib/data';
+import { projectEntryAttrs, projectLinkAttrs } from '../lib/analytics-links';
 
 interface Props { projects: Project[]; locale: Locale }
 const { projects, locale } = Astro.props;
@@ -20,7 +21,7 @@ const external = (url: string) => /^https?:\/\//.test(url);
       <article class="prow" role="listitem" aria-labelledby={`p-${p.slug}`}>
         <div class="pline">
           <h3 class="pname" id={`p-${p.slug}`}>
-            <a class="prow-link" href={`${portfolio}#${p.slug}`} title={ui.index.full_entry}>{p.name}</a>
+            <a class="prow-link" href={`${portfolio}#${p.slug}`} title={ui.index.full_entry} {...projectEntryAttrs(p, 'index_row')}>{p.name}</a>
           </h3>
           <p class="pcat muted">{pick(p.category, locale)}</p>
           <p class="pyear muted">[{p.years}]</p>
@@ -30,7 +31,7 @@ const external = (url: string) => /^https?:\/\//.test(url);
             <p class="psum">{pick(p.summary, locale)}</p>
             {link && (
               <p class="plink small">
-                <a class="link bracket" href={link.url} target={external(link.url) ? '_blank' : undefined} rel={external(link.url) ? 'noopener' : undefined}>
+                <a class="link bracket" href={link.url} target={external(link.url) ? '_blank' : undefined} rel={external(link.url) ? 'noopener' : undefined} {...projectLinkAttrs(p, link)}>
                   {pick(link.label, locale)} ↗
                 </a>
               </p>

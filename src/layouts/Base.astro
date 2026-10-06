@@ -126,6 +126,7 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
     </main>
     <Footer locale={locale} />
     <script>
+      import { initAnalytics } from '../lib/analytics';
       // Fade-and-rise reveal. Skipped entirely when the user prefers reduced motion.
       const items = document.querySelectorAll<HTMLElement>('.reveal');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -145,6 +146,8 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
         );
         items.forEach((el) => io.observe(el));
       }
+      // Click events (data-ga-* attributes); a no-op in dev and when GA is not loaded.
+      initAnalytics();
     </script>
   </body>
 </html>

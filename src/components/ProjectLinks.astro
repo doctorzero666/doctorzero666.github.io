@@ -1,5 +1,6 @@
 ---
 import { pick, type Locale, type Project } from '../lib/data';
+import { projectLinkAttrs } from '../lib/analytics-links';
 interface Props { project: Project; locale: Locale }
 const { project, locale } = Astro.props;
 const links = project.links.filter((l) => l.url && l.url.trim());
@@ -9,7 +10,7 @@ const external = (url: string) => /^https?:\/\//.test(url);
   <ul class="plinks small">
     {links.map((l) => (
       <li>
-        <a class="link bracket" href={l.url} target={external(l.url) ? '_blank' : undefined} rel={external(l.url) ? 'noopener' : undefined}>
+        <a class="link bracket" href={l.url} target={external(l.url) ? '_blank' : undefined} rel={external(l.url) ? 'noopener' : undefined} {...projectLinkAttrs(project, l)}>
           {pick(l.label, locale)} ↗
         </a>
       </li>
