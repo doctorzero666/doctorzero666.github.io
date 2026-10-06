@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 // GitHub Pages user site: https://doctorzero666.github.io (served from root, no base path).
@@ -17,5 +17,11 @@ export default defineConfig({
     defaultLocale: 'zh',
     locales: ['zh', 'en'],
     routing: { prefixDefaultLocale: false },
+  },
+  // GA4 Measurement ID (G-...). Set in .env locally and as a repository variable in CI.
+  env: {
+    schema: {
+      PUBLIC_GA_MEASUREMENT_ID: envField.string({ context: 'client', access: 'public', optional: true }),
+    },
   },
 });

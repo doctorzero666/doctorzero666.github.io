@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { htmlLang, localePath, pageFromPath, useUI } from '../i18n';
 import { firstSentence, pick, profile, type Locale } from '../lib/data';
+import { PUBLIC_GA_MEASUREMENT_ID } from 'astro:env/client';
 
 interface Props {
   locale: Locale;
@@ -46,6 +47,10 @@ const personLd = page === '' && person
       alumniOf: person.alumni.map((n) => ({ '@type': 'CollegeOrUniversity', name: n })),
       knowsAbout: person.knows_about.slice(0, 5),
     })
+  : '';
+// GA4: emitted only in production builds with a well-formed ID; dev builds get nothing.
+const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/.test(PUBLIC_GA_MEASUREMENT_ID)
+  ? PUBLIC_GA_MEASUREMENT_ID
   : '';
 ---
 <!doctype html>
@@ -93,6 +98,26 @@ const personLd = page === '' && person
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
+    {gaId && (
+      <>
+        <!-- GA4. Guard 1 (build time): only in production builds with PUBLIC_GA_MEASUREMENT_ID set.
+             Guard 2 (runtime): skip on localhost / 127.0.0.1 / ::1 so `astro preview` sends no hits. -->
+        <script is:inline define:vars={{ gaId }}>
+          (function () {
+            var h = location.hostname;
+            if (h === 'localhost' || h === '127.0.0.1' || h === '[::1]' || h === '::1') return;
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', gaId);
+          })();
+        </script>
+      </>
+    )}
   </head>
   <body>
     <Header locale={locale} switchHome={noindex} />

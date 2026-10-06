@@ -77,6 +77,14 @@ description: "一句话摘要，用于列表与 SEO"
 
 `astro.config.mjs` 里的 `site` 用于生成 canonical 与 hreflang 链接。
 
+## 统计（Analytics）
+
+GA4 衡量 ID 只从环境变量 `PUBLIC_GA_MEASUREMENT_ID` 读取，源码里不写死。
+
+- 本地：复制 `.env.example` 为 `.env` 并填入 ID（`.env` 已被 git 忽略）。
+- GitHub：Settings → Secrets and variables → Actions → Variables，新建仓库变量 `PUBLIC_GA_MEASUREMENT_ID`。
+- `npm run dev` 不输出统计代码；生产构建在 localhost / 127.0.0.1 / ::1 上运行时也不加载 gtag.js，所以 `npm run preview` 不会产生数据。
+
 ## 设计
 
 - 色板：亮色背景 `#F3EEE4`、墨色 `#2B2926`、hero 强调色 Klein 蓝 `#002FA7`；暗色背景 `#2B2926`、文字 `#F3EEE4`、强调色 `#C3FFFC`。token 在 `src/styles/global.css` 顶部。
