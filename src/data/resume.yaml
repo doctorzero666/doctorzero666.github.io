@@ -16,7 +16,7 @@ education:
       zh: "方向：信号处理、通信系统、嵌入式实践（C / C++、MATLAB）。毕业论文：基于单片机的智能家居系统。"
       en: "Focus: signal processing, communication systems, embedded practice (C/C++, MATLAB). Thesis: an MCU-based smart home system."
 experience:
-  - org: {zh: "南京八五一一研究所", en: "Nanjing 8511 Research Institute"}
+  - org: {zh: "南京八五一一研究所", en: "Nanjing Technology Co. LTD"}
     role: {zh: "射频工程师", en: "RF Engineer"}
     period: "2022.01–2023.03"
     bullets:
