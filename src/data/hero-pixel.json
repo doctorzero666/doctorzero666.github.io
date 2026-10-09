@@ -1,0 +1,117 @@
+{
+  "schema": "pixel-hero-tuner/v1",
+  "preset": "poster",
+  "presetLabel": "海报原版",
+  "source": {
+    "file": "source.jpg",
+    "sampleWidthPx": 710,
+    "sampleHeightPx": 1000
+  },
+  "mask": {
+    "method": "edge-flood-fill",
+    "whiteTolerance": 35,
+    "fringeCleanup": true,
+    "holeMinAreaPct": 0.3,
+    "extraSeeds": [],
+    "minCoveragePct": 30,
+    "erodeCells": 0,
+    "featherCells": 1
+  },
+  "grid": {
+    "tilePx": 6,
+    "gapPx": 2,
+    "shape": "rounded",
+    "cornerRadiusPct": 30
+  },
+  "placement": {
+    "desktop": {
+      "centerXPct": 83,
+      "heightPct": 99,
+      "bottomOffsetPct": 4,
+      "cropBottom": true,
+      "bottomDissolvePct": 0,
+      "textGuardXPct": 0
+    },
+    "mobile": {
+      "centerXPct": 62,
+      "heightPct": 50,
+      "bottomOffsetPct": -46,
+      "cropBottom": false,
+      "bottomDissolvePct": 25,
+      "textGuardXPct": 0
+    }
+  },
+  "preprocess": {
+    "brightness": 0,
+    "contrast": 0,
+    "gamma": 1,
+    "saturation": 1,
+    "equalizeMix": 0,
+    "lumaCutoff": 0.05
+  },
+  "color": {
+    "mode": "gradient",
+    "quantizeK": 6,
+    "gradientStops": [
+      { "pos": 0.07, "color": "#22187e" },
+      { "pos": 0.17, "color": "#6a4ae6" },
+      { "pos": 0.3, "color": "#e04a90" },
+      { "pos": 0.56, "color": "#eba96a" },
+      { "pos": 0.88, "color": "#f7e2bf" }
+    ],
+    "duotone": {
+      "shadowColor": "#2b2926",
+      "highlightColor": "#f3eee4"
+    },
+    "background": {
+      "mode": "solid",
+      "color": "#f3eee4"
+    },
+    "accent": {
+      "color": "#c3fffc",
+      "ratioPct": 0
+    }
+  },
+  "text": {
+    "inkColor": "#2b2926",
+    "accentColor": "#012fa6"
+  },
+  "interaction": {
+    "scatterRadiusPx": 90,
+    "impulsePxPerS": 650,
+    "followPointerVelocity": true,
+    "velocityDirectionMix": 0.45,
+    "trailMs": 180,
+    "driftAngleDeg": 112,
+    "gravityPxPerS2": 800,
+    "dampingPerS": 6,
+    "springStiffness": 70,
+    "returnDelayMs": 600,
+    "autoPulse": false,
+    "autoPulseIntervalS": 4,
+    "autoPulseRadiusPx": 110
+  },
+  "idle": {
+    "intro": {
+      "enabled": true,
+      "style": "scatter",
+      "durationMs": 1800,
+      "spreadPx": 420
+    },
+    "wind": {
+      "enabled": true,
+      "amplitudePx": 1.6,
+      "speed": 0.6,
+      "capeBias": 0.75
+    },
+    "twinkle": {
+      "enabled": true,
+      "ratioPct": 3,
+      "frequencyHz": 1.2,
+      "strength": 0.4
+    }
+  },
+  "render": {
+    "dprMax": 2
+  }
+}
