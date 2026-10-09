@@ -1,0 +1,9 @@
+# Doctor Zero personal website
+
+## Blog
+
+- [秋招不顺，赛博算命](https://doctorzero666.github.io/blog/ai-bazi-experiment/): Chinese article about an AI fortune-telling experiment and reflections on learning from experience.
+- [Article JSON](https://doctorzero666.github.io/blog/ai-bazi-experiment.json): Full Markdown, figure URLs, sources, review status, and license metadata.
+- [JSON Feed](https://doctorzero666.github.io/feed.json): Blog summaries and canonical links.
+
+No reuse license has been specified for this article. Linked third-party materials retain their own terms.

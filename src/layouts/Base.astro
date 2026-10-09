@@ -28,6 +28,7 @@ const fullTitle = fullTitleProp || (title ? `${title} · ${siteName}` : pick(pro
 // cannot leak into sub-page metadata.
 const desc = description || firstSentence(pick(profile.intro, locale)) || ui.meta.description;
 const page = pageFromPath(Astro.url.pathname);
+const isPost = page.startsWith('blog/');
 const canonical = new URL(localePath(locale, page), Astro.site);
 const altZh = new URL(localePath('zh', page), Astro.site);
 const altEn = new URL(localePath('en', page), Astro.site);
@@ -77,12 +78,14 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
     {!noindex && (
       <>
         <link rel="canonical" href={canonical.href} />
-        <link rel="alternate" hreflang="zh-CN" href={altZh.href} />
-        <link rel="alternate" hreflang="en" href={altEn.href} />
-        <link rel="alternate" hreflang="x-default" href={altZh.href} />
+        {!isPost && <>
+          <link rel="alternate" hreflang="zh-CN" href={altZh.href} />
+          <link rel="alternate" hreflang="en" href={altEn.href} />
+          <link rel="alternate" hreflang="x-default" href={altZh.href} />
+        </>}
       </>
     )}
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={isPost ? 'article' : 'website'} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical.href} />
@@ -97,6 +100,7 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
     <meta name="theme-color" content="#F3EEE4" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/feed+json" title="Blog" href="/feed.json" />
     <meta name="generator" content={Astro.generator} />
     {gaId && (
       <>
