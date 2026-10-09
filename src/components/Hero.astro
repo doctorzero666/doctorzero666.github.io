@@ -25,7 +25,7 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
       <ul class="badges small">
         {badges.map((b) => <li>{b}</li>)}
       </ul>
-      <a class="scroll small" href="#work">{ui.labels.scroll_down} <span class="arrow" aria-hidden="true">↓</span></a>
+      <a class="scroll small" href="#work"><span class="scroll-label">{ui.labels.scroll_down} <span class="arrow" aria-hidden="true">↓</span></span></a>
     </div>
   </div>
 </section>
@@ -82,8 +82,12 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
   .badges { display: flex; flex-wrap: wrap; gap: var(--u) calc(var(--u) * 3); }
   .badges li { display: inline-flex; align-items: center; gap: var(--u); }
   .badges li::before { content: ''; width: 7px; height: 7px; background: currentColor; flex: none; }
-  .scroll { white-space: nowrap; opacity: var(--muted); transition: opacity 0.3s ease; }
-  .scroll:hover { opacity: 1; }
+  /* The label sits on a patch of hero ground so the pixel figure behind it never muddies it.
+     The patch's padding is cancelled by an equal negative margin: the label does not move.
+     Only the label fades, so the patch stays solid. */
+  .scroll { white-space: nowrap; background: var(--hero-ground); padding: 2px 8px; margin: -2px -8px; }
+  .scroll-label { opacity: var(--muted); transition: opacity 0.3s ease; }
+  .scroll:hover .scroll-label { opacity: 1; }
   .arrow { display: inline-block; }
   /* One-off rise for the name and a slow nudge on the scroll arrow. Transform only:
      the name is fully visible in its default state, with or without JS, animation
