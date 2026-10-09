@@ -90,7 +90,21 @@ GA4 衡量 ID 只从环境变量 `PUBLIC_GA_MEASUREMENT_ID` 读取，源码里�
 - 色板：亮色背景 `#F3EEE4`、墨色 `#2B2926`、hero 强调色 Klein 蓝 `#002FA7`；暗色背景 `#2B2926`、文字 `#F3EEE4`、强调色 `#C3FFFC`。token 在 `src/styles/global.css` 顶部。
 - 主题手动切换（`<html data-theme>`），选择存 `localStorage`；首次访问按系统偏好取初值。切换脚本内联在 `<head>`，首绘前执行，无闪烁。
 - 1200px 容器、24px 侧边距、12 列栅格、8px 基线；文章单栏 792px。零圆角、零阴影、1px 细线。
-- 动效只有滚动淡入上浮（`prefers-reduced-motion` 时关闭）和链接悬停下划线。hero 背景是原创的 canvas 网点场，无 JS 时退为静态 CSS 网点。
+- 动效只有滚动淡入上浮（`prefers-reduced-motion` 时关闭）、链接悬停下划线和 hero 的像素人物（见下节）。
+
+## Hero 像素人物
+
+hero 右侧是一个由小圆角方块拼成的人物：入场时方块聚拢，平时随微风轻摆、偶尔闪烁，鼠标划过会把方块冲散，随后弹回原位；触屏按下时冲散一次，不影响页面滚动。`prefers-reduced-motion` 时只画静止的人物。无 JS 时只显示 hero 底色。
+
+- 参数：`src/data/hero-pixel.json`，由调参页（`~/claude-tmp/personal-site/pixel-tuner/`）导出，原样存放。改效果就改这个文件，代码里不写数值。渐变色在深浅两种主题下相同；`color.background` 与 `text.*` 只用于调参页预览，站点不读（canvas 透明，文字沿用站点 token）。桌面 / 窄屏的摆放以 900px 为界。
+- 运行时：`src/lib/hero-pixel.ts`，在 `Hero.astro` 中挂载。尺寸变化时才重新采样与着色，每帧只画。hero 不在视口内或标签页隐藏时停帧。
+- 避让名字（只在桌面摆放下）：人物最左侧的方块与名字两行中较宽一行的字形右缘至少隔 2 个网格步距（16px，即 `hero-pixel.ts` 里的 `TEXT_CLEARANCE_CELLS`）。不够时人物按比例缩小，`centerXPct` 和底边位置不变；够的视口与参数原样一致。尺寸变化和网页字体加载完成后重算，不重播入场。这个间距是代码常量，不在 `hero-pixel.json` 里。
+- 抠图是离线做的。原图不在仓库里，本地副本在 `~/claude-tmp/personal-site/pixel-tuner/source.jpg`；生成的透明底图 `src/assets/hero/portrait.webp` 提交在仓库中，构建时打包进 `dist/_astro/`。改了原图或 `mask.*` 后重新生成并提交：
+
+  ```bash
+  node scripts/build-hero-portrait.mjs ~/claude-tmp/personal-site/pixel-tuner/source.jpg
+  # 不给路径会报错退出；也可用 HERO_SOURCE=<路径>。用本机 Chrome 解码和编码，同样输入得到同一个文件，会打印 sha256
+  ```
 
 ## 字体与许可
 
@@ -109,9 +123,11 @@ GA4 衡量 ID 只从环境变量 `PUBLIC_GA_MEASUREMENT_ID` 读取，源码里�
 
 ```
 src/
-  data/          三个 YAML 数据文件
+  data/          YAML 数据文件；hero-pixel.json 是像素人物参数
   i18n/          界面文字与语言工具函数
   lib/data.ts    读取 YAML、类型定义、取当前语言文本
+  lib/hero-pixel.ts  hero 像素人物（采样、着色、粒子动画）
+  assets/hero/   抠好的 hero 人物透明底图（原图不入库）
   styles/        全局 token 与基础样式
   layouts/       Base.astro（head、主题脚本、SEO、reveal）
   components/    Header、Footer、Hero、ProjectTable、MoreWorks、ProjectLinks、Icon
