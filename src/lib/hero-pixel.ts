@@ -9,7 +9,8 @@
 // - the canvas is never filled, so the hero ground shows through (color.background and text.*
 //   only styled the tuner's preview);
 // - desktop / mobile placement follows the site's 900px breakpoint;
-// - a touch press sends one pulse, because a touch drag belongs to page scrolling.
+// - a touch press sends one pulse, because a touch drag belongs to page scrolling;
+// - with the desktop placement the figure shrinks when needed to stay clear of the name.
 // Sampling and colouring rerun only when the hero's size changes; frames only draw.
 import type paramsJson from '../data/hero-pixel.json';
 
@@ -76,9 +77,12 @@ export interface Tiles {
   lookup: { i0: number; j0: number; cols: number; rows: number; idx: Int32Array };
 }
 
-/** Lattice cells over the placed figure that pass the coverage test, with their mean colour. */
-export function buildTiles(src: Source, P: HeroPixelParams, pl: Placement, W: number, H: number): Tiles | null {
-  const figH = H * pl.heightPct / 100, figW = figH * src.w / src.h;
+/**
+ * Lattice cells over the placed figure that pass the coverage test, with their mean colour.
+ * `scale` shrinks the figure about its anchors (centerXPct and the bottom edge); 1 = as tuned.
+ */
+export function buildTiles(src: Source, P: HeroPixelParams, pl: Placement, W: number, H: number, scale = 1): Tiles | null {
+  const figH = H * pl.heightPct / 100 * scale, figW = figH * src.w / src.h;
   const cx = W * pl.centerXPct / 100;
   let bottom = H * (1 + pl.bottomOffsetPct / 100);
   if (!pl.cropBottom) bottom = Math.min(bottom, H);
@@ -331,6 +335,43 @@ export function colorTiles(T: Tiles, P: HeroPixelParams) {
   T.palette = palette;
 }
 
+/** Gap kept between the name and the figure (desktop placement), in lattice steps: 2 x 8px = 16px. */
+const TEXT_CLEARANCE_CELLS = 2;
+
+/** Left edge (hero px) of the leftmost drawn tile at rest. */
+function leftEdge(T: Tiles) {
+  let x = Infinity;
+  for (let o = 0; o < T.drawN; o++) { const v = T.hx[T.order[o]]; if (v < x) x = v; }
+  return x - T.tile / 2;
+}
+
+/**
+ * Coloured tiles for one placement. With `clearRight` (the name's ink right edge in hero px)
+ * the figure shrinks, keeping its anchors, until its leftmost drawn tile is at least
+ * TEXT_CLEARANCE_CELLS lattice steps right of it. A layout that already clears the name keeps
+ * the first pass untouched, so it is tile-for-tile the tuned figure.
+ */
+export function placeTiles(src: Source, P: HeroPixelParams, pl: Placement, W: number, H: number, clearRight: number | null) {
+  let scale = 1;
+  let T = buildTiles(src, P, pl, W, H, scale);
+  if (T) colorTiles(T, P);
+  if (clearRight === null || !T) return { tiles: T, scale };
+  const limit = clearRight + TEXT_CLEARANCE_CELLS * T.pitch;
+  const cx = W * pl.centerXPct / 100;
+  for (let pass = 0; pass < 8 && T && T.drawN; pass++) {
+    const left = leftEdge(T);
+    if (left >= limit) break;
+    // Distances from cx scale with the figure. Later passes aim a little further right in
+    // case the lattice snaps the edge back past the limit.
+    const want = cx - limit - pass * T.pitch / 2;
+    if (want <= 0) return { tiles: null, scale: 0 };
+    scale *= want / (cx - left);
+    T = buildTiles(src, P, pl, W, H, scale);
+    if (T) colorTiles(T, P);
+  }
+  return { tiles: T, scale };
+}
+
 /** Start offsets and delays for the entrance (deterministic, so a replay looks the same). */
 function initIntro(T: Tiles, P: HeroPixelParams, heroH: number) {
   const id = P.idle.intro, D = id.durationMs / 1000, per = D * 0.55, spread = id.spreadPx;
@@ -357,28 +398,46 @@ function initIntro(T: Tiles, P: HeroPixelParams, heroH: number) {
 /**
  * Mounts the effect on a canvas that fills `host`. The portrait image loads in the
  * background; until it is sampled the canvas stays clear and the hero shows as usual.
+ * `mobileQuery` selects the mobile placement; with the desktop placement the figure keeps
+ * clear of the ink of `clearOf` (the name's lines).
  */
-export function mountHeroPixel(canvas: HTMLCanvasElement, host: HTMLElement, imageUrl: string, P: HeroPixelParams, mobileQuery: string) {
+export function mountHeroPixel(
+  canvas: HTMLCanvasElement, host: HTMLElement, imageUrl: string, P: HeroPixelParams,
+  opts: { mobileQuery: string; clearOf: Element[] },
+) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const mobile = window.matchMedia(mobileQuery);
+  const mobile = window.matchMedia(opts.mobileQuery);
   const canRound = typeof ctx.roundRect === 'function';
   let src: Source | null = null;
   let T: Tiles | null = null;
-  let W = 0, H = 0, dpr = 1, pxk = 1, wasMobile: boolean | null = null;
+  let W = 0, H = 0, dpr = 1, pxk = 1, wasMobile: boolean | null = null, lastClear: number | null = null;
   const intro = { active: false, start: 0, dur: 1.8, per: 1 };
   let pendingIntro = false;
 
-  // ---- sizing, sampling, colouring (only when the hero's size or placement changes) ----
+  // Ink right edge of the widest `clearOf` line, in hero px (null: nothing to clear).
+  const measureClear = () => {
+    if (!opts.clearOf.length) return null;
+    const left = host.getBoundingClientRect().left;
+    let right = -Infinity;
+    for (const el of opts.clearOf) {
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      right = Math.max(right, r.getBoundingClientRect().right - left);
+    }
+    return right;
+  };
+
+  // ---- sizing, sampling, colouring (only when the hero's size, placement or name width changes) ----
   const rebuild = () => {
     if (!src) return;
     const isMobile = mobile.matches;
     // A new placement replays the entrance, as switching viewports did in the tuner.
     if (wasMobile !== null && isMobile !== wasMobile) pendingIntro = true;
     wasMobile = isMobile;
-    T = buildTiles(src, P, isMobile ? P.placement.mobile : P.placement.desktop, W, H);
-    if (T) colorTiles(T, P);
+    lastClear = isMobile ? null : measureClear();
+    T = placeTiles(src, P, isMobile ? P.placement.mobile : P.placement.desktop, W, H, lastClear).tiles;
     if (T && intro.active) Object.assign(intro, initIntro(T, P, H));
   };
   const resize = () => {
@@ -573,6 +632,14 @@ export function mountHeroPixel(canvas: HTMLCanvasElement, host: HTMLElement, ima
   const refresh = () => { resize(); if (reduce) draw(0, true); };
 
   new ResizeObserver(refresh).observe(host);
+  // Web fonts change the name's width without resizing the hero: resample (no entrance replay).
+  const onFonts = () => {
+    if (!src || mobile.matches || measureClear() === lastClear) return;
+    rebuild();
+    if (reduce) draw(0, true);
+  };
+  document.fonts.ready.then(onFonts);
+  document.fonts.addEventListener('loadingdone', onFonts);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); }).observe(host);
   document.addEventListener('visibilitychange', start);
   if (!reduce) {
