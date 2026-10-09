@@ -98,7 +98,7 @@ hero 右侧是一个由小圆角方块拼成的人物：入场时方块聚拢，
 
 - 参数：`src/data/hero-pixel.json`，由调参页（`~/claude-tmp/personal-site/pixel-tuner/`）导出，原样存放。改效果就改这个文件，代码里不写数值。渐变色在深浅两种主题下相同；`color.background` 与 `text.*` 只用于调参页预览，站点不读（canvas 透明，文字沿用站点 token）。桌面 / 窄屏的摆放以 900px 为界。
 - 运行时：`src/lib/hero-pixel.ts`，在 `Hero.astro` 中挂载。尺寸变化时才重新采样与着色，每帧只画。hero 不在视口内或标签页隐藏时停帧。
-- 避让名字（只在桌面摆放下）：人物最左侧的方块与名字两行中较宽一行的字形右缘至少隔 2 个网格步距（16px，即 `hero-pixel.ts` 里的 `TEXT_CLEARANCE_CELLS`）。不够时人物按比例缩小，`centerXPct` 和底边位置不变；够的视口与参数原样一致。尺寸变化和网页字体加载完成后重算，不重播入场。这个间距是代码常量，不在 `hero-pixel.json` 里。
+- 人物在所有视口都按参数原样绘制，不为文字让位。部分桌面尺寸下人物左缘会碰到或压住名字末尾，文字始终在 canvas 之上。
 - 抠图是离线做的。原图不在仓库里，本地副本在 `~/claude-tmp/personal-site/pixel-tuner/source.jpg`；生成的透明底图 `src/assets/hero/portrait.webp` 提交在仓库中，构建时打包进 `dist/_astro/`。改了原图或 `mask.*` 后重新生成并提交：
 
   ```bash
