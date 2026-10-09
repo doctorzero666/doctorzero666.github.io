@@ -120,17 +120,11 @@ const badges = profile.hero_badges.map((b) => pick(b, locale)).filter(Boolean);
 
 <script>
   // Pixel portrait (src/lib/hero-pixel.ts) with the tuned values in src/data/hero-pixel.json.
-  // Placement switches at the site's 900px breakpoint (global.css); on desktop the figure
-  // keeps clear of the name's two lines.
+  // Placement switches at the site's 900px breakpoint (global.css).
   import params from '../data/hero-pixel.json';
   import { mountHeroPixel } from '../lib/hero-pixel';
 
   const canvas = document.querySelector<HTMLCanvasElement>('[data-field]');
   const host = canvas?.parentElement;
-  if (canvas && host && canvas.dataset.src) {
-    mountHeroPixel(canvas, host, canvas.dataset.src, params, {
-      mobileQuery: '(max-width: 900px)',
-      clearOf: [...host.querySelectorAll('#hero-name .first, #hero-name .last')],
-    });
-  }
+  if (canvas && host && canvas.dataset.src) mountHeroPixel(canvas, host, canvas.dataset.src, params, '(max-width: 900px)');
 </script>
