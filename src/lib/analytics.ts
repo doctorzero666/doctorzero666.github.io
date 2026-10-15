@@ -48,6 +48,7 @@ export const ANALYTICS_EVENTS = [
   'contact_click',
   'social_click',
   'language_switch',
+  'lang_route',
   'transmission_click',
 ] as const;
 
@@ -63,6 +64,8 @@ export const EVENT_PARAMS: Record<AnalyticsEventName, readonly string[]> = {
   contact_click: ['contact_type', 'page_path'],
   social_click: ['platform', 'page_path'],
   language_switch: ['from_language', 'to_language', 'page_path'],
+  // lang_route is not click-driven: reportLangRoute() sends the auto-routing decision below.
+  lang_route: ['from_language', 'to_language', 'source', 'redirected'],
   transmission_click: ['article_id', 'article_title'],
 };
 
@@ -152,4 +155,48 @@ export function initAnalytics(): void {
   installed = true;
   // Capture phase, so a handler that stops propagation further down cannot hide a click.
   document.addEventListener('click', onClick, true);
+  // The language-routing script runs before first paint and may settle after this module has
+  // already run its one-shot reportLangRoute() below; the event covers that second case.
+  window.addEventListener('lang-route', reportLangRoute);
+}
+
+const LANG_ROUTE_KEY = 'lang-route';
+/** A record older than this is stale (e.g. a first visit that never ran the landing page). */
+const LANG_ROUTE_MAX_AGE = 15000;
+
+type LangRoute = { from?: string; to?: string; source?: string; redirected?: number; ts?: number };
+
+const asLocale = (v: unknown): string | undefined => (v === 'zh' || v === 'en' ? v : undefined);
+
+/**
+ * Reports the auto language routing decision (lang_route). The inline script in Base.astro
+ * writes it to sessionStorage before first paint, because a redirect aborts the rest of the
+ * page — reporting from the destination page is the only way the redirect case is seen at all.
+ * Called by Base.astro on every page; clears the record so a decision is reported once.
+ */
+export function reportLangRoute(): void {
+  if (typeof window === 'undefined') return;
+  let raw: string | null = null;
+  try {
+    raw = window.sessionStorage.getItem(LANG_ROUTE_KEY);
+    if (raw !== null) window.sessionStorage.removeItem(LANG_ROUTE_KEY);
+  } catch {
+    return;
+  }
+  if (!raw) return;
+  try {
+    const route = JSON.parse(raw) as LangRoute;
+    if (!route.ts || Date.now() - route.ts > LANG_ROUTE_MAX_AGE) return;
+    const from = asLocale(route.from);
+    const to = asLocale(route.to);
+    if (!from || !to) return;
+    trackEvent('lang_route', {
+      from_language: from,
+      to_language: to,
+      source: typeof route.source === 'string' ? route.source : undefined,
+      redirected: route.redirected === 1 ? 1 : 0,
+    });
+  } catch {
+    /* a corrupt record must never break the page */
+  }
 }

@@ -29,6 +29,20 @@ node scripts/check-layout.mjs      # 有溢出或名字不可见时以非 0 退�
 - Chrome 路径默认是 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`，可用 `CHROME_PATH` 覆盖；站点地址可用 `BASE_URL` 覆盖。
 - 每行打印 `scrollWidth` 与 `innerWidth`。由于 `body` 设置了 `overflow-x: clip`，脚本还会列出越过视口右边缘的元素。
 - 注意：无头 Chrome 的窗口宽度最小为 500px，用 `--window-size=390,…` 截出的图其实是 500px 宽的版面裁成 390px，右侧会看起来被切掉。手机宽度请以本脚本为准，它通过 DevTools 设置真正的 390px 视口。
+- 脚本在每个页打开前把 `lang` 存成该页语言的已选值（`/en/…` 存 en，其余存 zh），自动语言判断（见下）因此在检查中不会跳转，任何一个页面都不会跑到另一种语言去。
+
+### 语言判断检查（开发用）
+
+`scripts/check-lang-detect.mjs` 用请求拦截模拟三个 IP 查询服务，覆盖各地理归属、查询失败与超时回退、已存选择、每标签页最多一跳、爬虫 UA、博客与 404 例外、上报恰好一次，以及任何结果下页面都不会一直隐藏（`data-lang-pending` 一定被清掉）。
+
+```bash
+npm run build
+npx astro preview --port 4321        # 另开一个终端
+node scripts/check-lang-detect.mjs   # 任一场景不符即以非 0 退出
+```
+
+- 每个场景开一个全新的浏览器上下文（等同于一位从未访问过的访客，存储为空）。
+- 新加场景：往 `scenarios` 数组里加一条，`steps` 可在同一个标签页里跑多次加载。
 
 ## 内容从哪里来
 
@@ -85,6 +99,16 @@ GA4 衡量 ID 只从环境变量 `PUBLIC_GA_MEASUREMENT_ID` 读取，源码里�
 - GitHub：Settings → Secrets and variables → Actions → Variables，新建仓库变量 `PUBLIC_GA_MEASUREMENT_ID`。
 - `npm run dev` 不输出统计代码；生产构建在 localhost / 127.0.0.1 / ::1 上运行时也不加载 gtag.js，所以 `npm run preview` 不会产生数据。
 
+## 自动语言判断（按 IP）
+
+访客首次进入时按 IP 归属地选语言：属于中文地区（`src/data/lang.yaml` 的 `zh_regions`，默认 CN / HK / TW / MO）留在中文站，其余地区跳到英文站。只跳到同一页面的另一种语言（`/resume/` ↔ `/en/resume/`），前后查询参数与锚点保留。
+
+- **流程**：`localStorage.lang` 里已有选择 → 直接用，不查询、不隐藏页面；没有选择 → 页面先不绘制（`html[data-lang-pending]`，规则在 `global.css`），按顺序请求 `lang.yaml` 里的查询服务（Cloudflare Trace → ipwho.is → get.geojs.io），拿到国家代码后决定、把结果写回 `lang` 再跳转。查询全部失败或超过 `deadline_ms`（默认 1500ms）→ 退回浏览器语言（首选 zh 用中文，否则英文），页面一定会显示。查询只在没有已存选择时做一次；`Do Not Track` 为 1 时直接走浏览器语言。
+- **手动优先**：页头 `[中 | EN]` 一点就把选择写进 `lang`，自动判断从此停止；每个标签页最多自动跳一次（sessionStorage `lang-hop`），不会被反复弹走。
+- **例外**：404 页（没有对应语言版本）和博客文章（一篇文章只有一种语言）从不自动跳转。爬虫与链接预览（UA 含 bot / crawl / spider / facebookexternalhit 等）既不跳转也不查询，SEO 与分享卡片不受影响；没有 JS 时页面照常显示（隐藏规则由 JS 添加）。
+- **统计**：每次自动决定发一个 `lang_route` 事件，参数 `from_language`、`to_language`、`source`（`ip`｜`fallback`｜`stored`）、`redirected`（0/1）。决定在首绘前写进 sessionStorage，由落地页的 `reportLangRoute()`（`src/lib/analytics.ts`）上报，跳转场景也不会丢。
+- **本地验证**：用无痕窗口打开（没有 `lang` 存储）；清掉 `localStorage.lang` 可重看自动判断。改完 `lang.yaml` 重启 dev 服务器。
+
 ## 设计
 
 - 色板：亮色背景 `#F3EEE4`、墨色 `#2B2926`、hero 强调色 Klein 蓝 `#002FA7`；暗色背景 `#2B2926`、文字 `#F3EEE4`、强调色 `#C3FFFC`。token 在 `src/styles/global.css` 顶部。
@@ -123,7 +147,7 @@ hero 右侧是一个由小圆角方块拼成的人物：入场时方块聚拢，
 
 ```
 src/
-  data/          YAML 数据文件；hero-pixel.json 是像素人物参数
+  data/          YAML 数据文件；hero-pixel.json 是像素人物参数，lang.yaml 是自动语言判断参数
   i18n/          界面文字与语言工具函数
   lib/data.ts    读取 YAML、类型定义、取当前语言文本
   lib/hero-pixel.ts  hero 像素人物（采样、着色、粒子动画）

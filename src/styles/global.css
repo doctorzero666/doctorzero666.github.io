@@ -49,7 +49,7 @@
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; padding: 0; border-radius: 0; box-shadow: none; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--paper); }
 body {
   background: var(--paper);
   color: var(--ink);
@@ -125,6 +125,11 @@ ul, ol { list-style: none; }
   }
   .js .reveal.is-in { opacity: 1; transform: none; }
 }
+
+/* Auto language routing: while the first-visit country lookup runs (see Base.astro) the
+   page is laid out but not painted. The attribute is set and removed by JS only, so a
+   no-JS visit is never hidden, and every outcome — jump, stay, deadline — removes it. */
+html[data-lang-pending] body { visibility: hidden; }
 
 /* Thin scrollbar */
 * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ink) 40%, transparent) transparent; }

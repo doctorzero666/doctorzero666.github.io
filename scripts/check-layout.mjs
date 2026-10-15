@@ -20,6 +20,11 @@ try {
   for (const vp of VIEWPORTS) {
     const page = await browser.newPage();
     await page.setViewport(vp);
+    // Pin the language so auto routing (Base.astro) can never redirect mid-check: the stored
+    // choice matches the locale of the path about to be opened, so no lookup and no hide run.
+    await page.evaluateOnNewDocument(() => {
+      try { localStorage.setItem('lang', /^\/en(\/|$)/.test(location.pathname) ? 'en' : 'zh'); } catch { /* storage unavailable */ }
+    });
     for (const path of PAGES) {
       await page.goto(BASE + path, { waitUntil: 'networkidle0' });
       const isHome = path === '/' || path === '/en/';

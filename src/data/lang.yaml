@@ -1,0 +1,18 @@
+# 自动语言判断（按访客 IP 的国家/地区）参数。改行为改这里，不改代码。
+# 用法与例外见 README「自动语言判断（按 IP）」。
+
+# IP 属于这些国家/地区 → 中文站；其余一律英文站。
+zh_regions: [CN, HK, TW, MO]
+
+# 首次访问等待查询的上限（毫秒）。到点即退回浏览器语言并显示页面，页面不会被一直藏着。
+deadline_ms: 1500
+
+# 查询服务，按顺序尝试；失败或超时就换下一个，全部失败则退回浏览器语言。
+# format: text → 在响应里找 `loc=XX` 行；json → 读 country_code 字段。
+providers:
+  - url: https://www.cloudflare.com/cdn-cgi/trace
+    format: text
+  - url: https://ipwho.is/
+    format: json
+  - url: https://get.geojs.io/v1/ip/geo.json
+    format: json

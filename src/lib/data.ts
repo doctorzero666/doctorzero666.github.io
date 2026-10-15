@@ -4,6 +4,7 @@ import profileSrc from '../data/profile.yaml?raw';
 import projectsSrc from '../data/projects.yaml?raw';
 import resumeSrc from '../data/resume.yaml?raw';
 import nowSrc from '../data/now.yaml?raw';
+import langSrc from '../data/lang.yaml?raw';
 
 export type Locale = 'zh' | 'en';
 export type Bi<T = string> = { zh: T; en: T };
@@ -77,10 +78,18 @@ export interface Now {
   last_updated: string;
 }
 
+/** Auto language routing parameters (src/data/lang.yaml); read by Base.astro. */
+export interface LangConfig {
+  zh_regions: string[];
+  deadline_ms: number;
+  providers: { url: string; format: 'text' | 'json' }[];
+}
+
 export const profile = parse(profileSrc) as Profile;
 export const projects = ((parse(projectsSrc) as Project[] | null) ?? []).slice();
 export const resume = parse(resumeSrc) as Resume;
 export const now = parse(nowSrc) as Now;
+export const lang = parse(langSrc) as LangConfig;
 
 export const featuredProjects = projects
   .filter((p) => p.featured)

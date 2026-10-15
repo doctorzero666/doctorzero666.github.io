@@ -6,7 +6,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { htmlLang, localePath, pageFromPath, useUI } from '../i18n';
-import { firstSentence, pick, profile, type Locale } from '../lib/data';
+import { firstSentence, lang, pick, profile, type Locale } from '../lib/data';
 import { PUBLIC_GA_MEASUREMENT_ID } from 'astro:env/client';
 
 interface Props {
@@ -34,6 +34,10 @@ const altZh = new URL(localePath('zh', page), Astro.site);
 const altEn = new URL(localePath('en', page), Astro.site);
 const siteRoot = new URL('/', Astro.site).href;
 const brand = pick(profile.brand, locale);
+// Auto language routing (see README). Off on the 404 page (no locale twin) and on blog
+// posts (single-language); parameters live in src/data/lang.yaml.
+const langDetect = !noindex && !isPost;
+const langCfg = { zhRegions: lang.zh_regions, deadlineMs: lang.deadline_ms, providers: lang.providers };
 const shareImage = profile.seo.share_image ? new URL(profile.seo.share_image, Astro.site).href : '';
 // Structured identity, home pages only (zh and en); sub-pages do not repeat it.
 const person = profile.seo.person;
@@ -122,6 +126,126 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
         </script>
       </>
     )}
+    {langDetect && (
+      <>
+        <!-- Auto language routing (see README). Runs before first paint: a saved choice is
+             applied straight away; on a first visit the page stays hidden until the country
+             lookup answers or langCfg.deadlineMs passes. Path helpers mirror src/i18n — keep
+             in sync. Stored keys: lang (the choice, localStorage; also written by the header
+             switcher), lang-hop (one automatic jump per tab), lang-route (the decision, read
+             by reportLangRoute() in src/lib/analytics.ts on the landing page). -->
+        <script is:inline define:vars={{ langCfg }}>
+          (function () {
+            var root = document.documentElement;
+            var local = window.localStorage;
+            var sess = window.sessionStorage;
+            var CHOICE = 'lang';
+
+            function read(area, key) { try { return area.getItem(key); } catch (e) { return null; } }
+            function write(area, key, value) { try { area.setItem(key, value); } catch (e) {} }
+
+            // Locale and page part of the current URL; mirrors localeFromPath / pageFromPath.
+            var here = /^\/en(\/|$)/.test(location.pathname) ? 'en' : 'zh';
+            var page = location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '');
+
+            function twin(locale) {
+              var prefix = locale === 'en' ? '/en' : '';
+              return (page ? prefix + '/' + page : prefix) + '/' + location.search + location.hash;
+            }
+
+            function rememberRoute(to, source, canJump) {
+              write(sess, 'lang-route', JSON.stringify({ from: here, to: to, source: source, redirected: canJump ? 1 : 0, ts: Date.now() }));
+              // analytics.ts may already be listening (decision after it loaded) or may read
+              // the record on load (decision before, or a redirect landing). Exactly one wins.
+              try { window.dispatchEvent(new Event('lang-route')); } catch (e) {}
+            }
+
+            var shown = false;
+            function reveal() {
+              if (shown) return;
+              shown = true;
+              root.removeAttribute('data-lang-pending');
+            }
+
+            // At most one automatic jump per tab, so a visitor is never bounced twice.
+            function hop(to, source) {
+              var canJump = !read(sess, 'lang-hop');
+              rememberRoute(to, source, canJump);
+              if (!canJump) { reveal(); return; }
+              write(sess, 'lang-hop', '1');
+              location.replace(twin(to));
+            }
+
+            function browserLocale() {
+              var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+              return /^zh\b/i.test(first) ? 'zh' : 'en';
+            }
+
+            var settled = false;
+            function decide(to, source) {
+              if (settled) return;
+              settled = true;
+              if (to !== 'zh' && to !== 'en') to = browserLocale();
+              // The decision is remembered, so the next page load needs no lookup at all.
+              // Clicking the header switcher overwrites it and wins from then on.
+              write(local, CHOICE, to);
+              if (to === here) { rememberRoute(to, source, false); reveal(); return; }
+              hop(to, source);
+            }
+
+            // A bfcache restore can only be a complete page: show it.
+            window.addEventListener('pageshow', function (e) { if (e.persisted) reveal(); });
+
+            // Crawlers and link unfurlers never get redirected, hidden or reported.
+            if (/bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|discord|linkedin|embedly|pinterest|applebot|petal|yandex|baidu|sogou|bytespider|semrush|ahrefs|mj12|dotbot/i.test(navigator.userAgent)) return;
+            // No fetch or no AbortController (very old browser): behave like a crawler.
+            if (!window.fetch || !window.AbortController) return;
+
+            // A saved choice wins, now and on every later visit.
+            var choice = read(local, CHOICE);
+            if (choice === 'zh' || choice === 'en') {
+              if (choice !== here) hop(choice, 'stored');
+              return; // matches: nothing to do — no lookup, no hiding
+            }
+
+            // Do Not Track: skip the third-party lookup, decide from the browser language.
+            if (navigator.doNotTrack === '1' || navigator.doNotTrack === 'yes') { decide(null, 'fallback'); return; }
+
+            // First visit: hold the paint (html[data-lang-pending] in global.css) and ask the
+            // providers in order. The deadline always fires a decision, so nothing stays hidden.
+            root.setAttribute('data-lang-pending', '');
+            var t0 = Date.now();
+            setTimeout(function () { decide(null, 'fallback'); }, langCfg.deadlineMs);
+            ask(0);
+
+            function ask(i) {
+              if (settled) return;
+              var left = langCfg.deadlineMs - (Date.now() - t0);
+              if (i >= langCfg.providers.length || left < 250) { decide(null, 'fallback'); return; }
+              var provider = langCfg.providers[i];
+              var ctrl = new AbortController();
+              var timer = setTimeout(function () { ctrl.abort(); }, Math.min(800, left - 150));
+              fetch(provider.url, { signal: ctrl.signal, cache: 'no-store' })
+                .then(function (res) {
+                  if (!res.ok) throw new Error(String(res.status));
+                  return res.text();
+                })
+                .then(function (body) {
+                  clearTimeout(timer);
+                  if (settled) return;
+                  var code = provider.format === 'text'
+                    ? (/^loc=(.+)$/m.exec(body) || [])[1]
+                    : (JSON.parse(body).country_code || '');
+                  code = String(code || '').trim().toUpperCase();
+                  if (!code) throw new Error('no country');
+                  decide(langCfg.zhRegions.indexOf(code) > -1 ? 'zh' : 'en', 'ip');
+                })
+                .catch(function () { clearTimeout(timer); ask(i + 1); });
+            }
+          })();
+        </script>
+      </>
+    )}
   </head>
   <body>
     <Header locale={locale} switchHome={noindex} />
@@ -130,7 +254,7 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
     </main>
     <Footer locale={locale} />
     <script>
-      import { initAnalytics } from '../lib/analytics';
+      import { initAnalytics, reportLangRoute } from '../lib/analytics';
       // Fade-and-rise reveal. Skipped entirely when the user prefers reduced motion.
       const items = document.querySelectorAll<HTMLElement>('.reveal');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -152,6 +276,8 @@ const gaId = import.meta.env.PROD && PUBLIC_GA_MEASUREMENT_ID && /^G-[A-Z0-9]+$/
       }
       // Click events (data-ga-* attributes); a no-op in dev and when GA is not loaded.
       initAnalytics();
+      // Hand over the routing decision made before first paint (see the inline script above).
+      reportLangRoute();
     </script>
   </body>
 </html>
